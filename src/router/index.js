@@ -6,10 +6,14 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/',
     component: () => import('../views/Index.vue'),
     children: [
       {
-        path: '/',
+        path: '/suppliers',
         // name: 'suppliers',
         component: () => import('../views/base/Suppliers.vue'),
         meta: ['基础数据', '供应商管理']
