@@ -54,7 +54,7 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="header">
-        <a-breadcrumb style="margin: 16px 0">
+        <a-breadcrumb>
           <a-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{ item }}</a-breadcrumb-item>
         </a-breadcrumb>
       </a-layout-header>
@@ -106,6 +106,9 @@ export default {
       font-weight: bold;
     }
     .header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
       background: #fff;
     }
     .content {

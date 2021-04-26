@@ -117,16 +117,17 @@ export default {
     }
   },
   computed: {
-    // formItemLayout () {
-    //   const { formLayout } = this
-    //   return formLayout === 'horizontal' ? { labelCol: { span: 4 }, wrapperCol: { span: 14 } } : {}
-    // }
+    //
   },
   mounted () {
     this.getList()
-    // this.showLogin = true
+    // this.findList()
   },
   methods: {
+    async findList () {
+      const res = await this.$http.get('/data/supplier/find')
+      console.log(res)
+    },
     deleteSuppliers () {
       this.$confirm({
         title: '删除提示',
@@ -209,6 +210,5 @@ export default {
 
 <style lang="less">
   .page-wrapper {
-    // padding: 30px;
   }
 </style>
