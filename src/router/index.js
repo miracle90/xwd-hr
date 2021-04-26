@@ -19,6 +19,12 @@ const routes = [
         meta: ['基础数据', '供应商管理']
       },
       {
+        path: '/addsuppliers',
+        name: 'addsuppliers',
+        component: () => import('../views/base/AddSuppliers.vue'),
+        meta: ['基础数据', '供应商管理']
+      },
+      {
         path: '/customer',
         component: () => import('../views/base/Customer.vue'),
         meta: ['基础数据', '客户管理']

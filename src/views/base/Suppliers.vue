@@ -4,19 +4,19 @@
       <a-col>
         <a-input
           placeholder="关键词搜索"
-          v-decorator="['loginName']"
+          v-model="keyword"
           style="margin-right: 20px; width: 300px;"
         />
       </a-col>
       <a-col>
-        <a-button type="primary">查询</a-button>
+        <a-button type="primary" @click="query">查询</a-button>
       </a-col>
     </a-row>
     <a-row type="flex" style="margin-bottom: 20px;">
       <a-col>
-        <a-button type="" style="margin-right: 20px;">新增</a-button>
-        <a-button type="" style="margin-right: 20px;">修改</a-button>
-        <a-button type="" style="margin-right: 20px;">删除</a-button>
+        <a-button @click="add" type="primary" style="margin-right: 20px;">新增</a-button>
+        <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-right: 20px;">修改</a-button>
+        <a-button @click="deleteSuppliers" :disabled="!selectedIds.length" type="danger" style="margin-right: 20px;">删除</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -25,12 +25,20 @@
           :pagination="false"
           :columns="columns"
           :data-source="data"
-          :row-selection="rowSelection"
+          :row-selection="{
+            selectedRowKeys,
+            selectedRows,
+            onChange: (selectedRowKeys, selectedRows) => onSelectChange(selectedRowKeys, selectedRows)
+          }"
           :rowKey="(record, index) => index"
-        />
-        <!-- <a-table :columns="columns" :data-source="data" :row-selection="rowSelection">
-          <a slot="name" slot-scope="text">{{ text || '-' }}</a>
-        </a-table> -->
+        >
+          <router-link
+            slot="supplierName"
+            slot-scope="text, record"
+            style="color: #1890ff"
+            :to="{ path: '/addsuppliers', query: { id: record.id, type: 0 }}"
+          >{{ text }}</router-link>
+        </a-table>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -42,6 +50,7 @@
           show-size-changer
           show-quick-jumper
           :page-size="limit"
+          :show-total="total => `共${total}条记录`"
           @showSizeChange="onShowSizeChange"
           @change="onChange"
         >
@@ -56,18 +65,6 @@
 </template>
 
 <script>
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows)
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows)
-  }
-}
-
 const columns = [
   {
     title: '供应商编码',
@@ -77,7 +74,10 @@ const columns = [
   {
     title: '供应商名称',
     dataIndex: 'supplierName',
-    key: 'supplierName'
+    key: 'supplierName',
+    scopedSlots: { customRender: 'supplierName' }
+    // slots: { title: 'customTitle' },
+    // scopedSlots: { customRender: 'name' },
   },
   {
     title: '联系人',
@@ -104,13 +104,15 @@ const columns = [
 export default {
   data () {
     return {
+      selectedRowKeys: [],
+      selectedRows: [],
+      selectedIds: [],
       total: 0,
       pageSizeOptions: ['10', '20', '30', '40', '50'],
       page: 1,
       limit: 10,
       keyword: '',
       data: [],
-      rowSelection,
       columns
     }
   },
@@ -125,6 +127,60 @@ export default {
     // this.showLogin = true
   },
   methods: {
+    deleteSuppliers () {
+      this.$confirm({
+        title: '删除提示',
+        content: '确定要删除所勾选的记录吗？',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk: async () => {
+          if (this.selectedIds.length === 1) {
+            const id = this.selectedIds[0]
+            const res = await this.$http.post(`/data/supplier/delete/${id}`)
+            if (res) {
+              this.selectedIds = []
+              this.selectedRowKeys = []
+              this.selectedRows = []
+              this.$message.success('删除供应商成功!')
+              this.getList()
+            }
+          } else {
+            const res = await this.$http.post('/data/supplier/batchDel', {
+              idsArr: this.selectedIds
+            })
+            if (res) {
+              this.selectedIds = []
+              this.selectedRowKeys = []
+              this.selectedRows = []
+              this.$message.success('批量删除供应商成功!')
+              this.getList()
+            }
+          }
+        },
+        onCancel: () => {
+          console.log('Cancel')
+        }
+      })
+    },
+    modify () {
+      const id = this.selectedIds[0]
+      // 修改type为1，详情type为0
+      this.$router.push({ path: '/addsuppliers', query: { id, type: 1 } })
+    },
+    onSelectChange (selectedRowKeys, selectedRows) {
+      console.log('onSelectChange')
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+      this.selectedIds = selectedRows.map(item => item.id)
+    },
+    add () {
+      this.$router.push('/addsuppliers')
+    },
+    query () {
+      this.page = 1
+      this.getList()
+    },
     onChange (page) {
       this.page = page
       this.getList()
@@ -153,6 +209,6 @@ export default {
 
 <style lang="less">
   .page-wrapper {
-    padding: 30px;
+    // padding: 30px;
   }
 </style>

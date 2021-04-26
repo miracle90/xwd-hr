@@ -1,13 +1,13 @@
 import axios from 'axios'
+import Router from '../router/index.js'
 import { message } from 'ant-design-vue'
 
 axios.defaults.baseURL = 'http://hrsys.zero-yun.cn:7001'
 
-const token = window.localStorage.getItem('token')
-
 // request拦截器
 axios.interceptors.request.use(
   config => {
+    const token = window.localStorage.getItem('token')
     if (token) {
       config.headers.token = token
     }
@@ -17,6 +17,16 @@ axios.interceptors.request.use(
     return Promise.reject(err)
   }
 )
+
+// token过期，重新登录
+axios.interceptors.response.use(response => {
+  if (response.status === 200 && response.data.code === '1001') {
+    Router.push({ path: '/' })
+    return response
+  } else {
+    return response
+  }
+})
 
 const http = {
   get: function (url, params) {

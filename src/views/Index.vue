@@ -12,7 +12,7 @@
         <a-sub-menu key="sub1">
           <span slot="title"><a-icon type="mail" /><span>基础数据</span></span>
           <a-menu-item key="suppliers">
-            <router-link to="/">供应商管理</router-link>
+            <router-link to="/suppliers">供应商管理</router-link>
           </a-menu-item>
           <a-menu-item key="customer">
             <router-link to="/customer">客户管理</router-link>
@@ -93,6 +93,9 @@ export default {
 </script>
 
 <style lang="less">
+  .ant-layout-content {
+    min-height: auto !important;
+  }
   .index {
     height: 100%;
     .title {
@@ -107,7 +110,10 @@ export default {
     }
     .content {
       margin: 20px;
+      padding: 20px;
+      // min-height: 100%;
       background: #fff;
+      box-sizing: border-box;
     }
   }
 </style>

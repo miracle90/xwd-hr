@@ -20,7 +20,7 @@
             :wrapper-col="formItemLayout.wrapperCol"
           >
             <a-input
-              type="loginPassword"
+              type="password"
               placeholder="请输入密码"
               v-decorator="['loginPassword', { rules: [{ required: true, message: '请输入密码!' }] }]"
             />
