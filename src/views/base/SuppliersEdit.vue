@@ -361,6 +361,8 @@ export default {
           if (res) {
             const { id } = res.data
             this.handleFile(id, !!this.id)
+          } else {
+            this.spinning = false
           }
         }
       })

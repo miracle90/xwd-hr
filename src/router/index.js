@@ -46,6 +46,12 @@ const routes = [
         meta: ['供需协同', '需求计划-编辑']
       },
       {
+        path: '/planaudit',
+        name: 'planaudit',
+        component: () => import('../views/demand/PlanAudit.vue'),
+        meta: ['供需协同', '需求计划-审核']
+      },
+      {
         path: '/feedback',
         component: () => import('../views/demand/Feedback.vue'),
         meta: ['供需协同', '需求反馈']

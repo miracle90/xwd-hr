@@ -330,8 +330,6 @@ export default {
     },
     handleReset () {
       this.form.resetFields()
-      this.selectedRowKeys = []
-      this.selectedRows = []
     },
     cancel () {
       this.$router.back()

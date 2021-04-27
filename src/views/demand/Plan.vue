@@ -22,9 +22,9 @@
     <a-row type="flex" style="margin-bottom: 20px;">
       <a-col>
         <a-button @click="add" type="primary" style="margin-right: 20px;">新增</a-button>
-        <a-button @click="submit" type="primary" style="margin-right: 20px;">提交</a-button>
+        <!-- <a-button @click="submit" type="primary" style="margin-right: 20px;">提交</a-button> -->
         <!-- <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-right: 20px;">修改</a-button> -->
-        <a-button @click="deletePlan" :disabled="!selectedIds.length" type="danger" style="margin-right: 20px;">批量删除</a-button>
+        <a-button @click="deletePlan" :disabled="!selectedIds.length" type="danger" style="margin-right: 20px;">删除</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -40,12 +40,17 @@
           }"
           :rowKey="(record, index) => index"
         >
+          <span slot="status" slot-scope="record">
+            {{ ['待提交', '待回复', '已回复', '已确认'][record.status] }}
+          </span>
           <span slot="action" slot-scope="record">
-            <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">查看</router-link>
-            <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">修改</router-link>
-            <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">审核</router-link>
+            <router-link style="color: #1890ff" :to="{ path: '/planedit', query: { id: record.id, type: 0 }}">查看</router-link>
+            <a-divider v-if="record.status === 0" type="vertical" />
+            <router-link v-if="record.status === 0" style="color: #1890ff" :to="{ path: '/planedit', query: { id: record.id, type: 1 }}">修改</router-link>
+            <a-divider v-if="record.status === 0" type="vertical" />
+            <a v-if="record.status === 0" style="color: #1890ff">提交</a>
+            <a-divider v-if="record.status === 2" type="vertical" />
+            <router-link v-if="record.status === 2" style="color: #1890ff" :to="{ path: '/planaudit', query: { id: record.id, type: 0 }}">审核</router-link>
           </span>
           <!-- <router-link
             slot="supplierName"
@@ -90,8 +95,8 @@ const columns = [
   },
   {
     title: '客户名称',
-    dataIndex: 'supplierCode',
-    key: 'supplierCode'
+    dataIndex: 'customerId',
+    key: 'customerId'
   },
   {
     title: '需求事业部',
@@ -130,13 +135,13 @@ const columns = [
   },
   {
     title: '可供应数量',
-    dataIndex: 'dispatchEndDate',
-    key: 'dispatchEndDate'
+    dataIndex: 'replyPersionTotal',
+    key: 'replyPersionTotal'
   },
   {
     title: '状态',
-    dataIndex: 'status',
-    key: 'status'
+    key: 'status',
+    scopedSlots: { customRender: 'status' }
   },
   {
     title: '操作',
@@ -150,8 +155,6 @@ export default {
     return {
       locale,
       rangePicker: null,
-      demandBeginDate: '',
-      demandEndDate: '',
       status: '',
       spinning: false,
       delayTime: 500,
@@ -171,9 +174,15 @@ export default {
   },
   mounted () {
     this.getList()
-    // this.findList()
+    this.findCustomerList()
   },
   methods: {
+    async findCustomerList () {
+      const res = await this.$http.get('/data/customer/find')
+      if (res) {
+        this.customerList = res.data
+      }
+    },
     onPickerChange (date, dateString) {
       console.log(date, dateString)
     },
@@ -181,10 +190,11 @@ export default {
       //
     },
     reset () {
-      //
+      this.status = ''
+      this.rangePicker = null
     },
     async findList () {
-      const res = await this.$http.get('/data/supplier/find')
+      const res = await this.$http.get('/data/customer/find')
       console.log(res)
     },
     deletePlan () {
@@ -197,23 +207,23 @@ export default {
         onOk: async () => {
           if (this.selectedIds.length === 1) {
             const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/supplier/delete/${id}`)
+            const res = await this.$http.post(`/data/demand/delete/${id}`)
             if (res) {
               this.selectedIds = []
               this.selectedRowKeys = []
               this.selectedRows = []
-              this.$message.success('删除供应商成功!')
+              this.$message.success('删除需求计划成功!')
               this.getList()
             }
           } else {
-            const res = await this.$http.post('/data/supplier/batchDel', {
+            const res = await this.$http.post('/data/demand/batchDel', {
               idsArr: this.selectedIds
             })
             if (res) {
               this.selectedIds = []
               this.selectedRowKeys = []
               this.selectedRows = []
-              this.$message.success('批量删除供应商成功!')
+              this.$message.success('批量删除需求计划成功!')
               this.getList()
             }
           }
@@ -252,12 +262,12 @@ export default {
     },
     async getList () {
       this.spinning = true
-      const { page, limit, demandBeginDate, demandEndDate, status } = this
+      const { page, limit, rangePicker, status } = this
       const res = await this.$http.get('/data/demand/list', {
         page,
         limit,
-        demandBeginDate,
-        demandEndDate,
+        demandBeginDate: rangePicker ? rangePicker[0].format('YYYY-MM-DD') : null,
+        demandEndDate: rangePicker ? rangePicker[1].format('YYYY-MM-DD') : null,
         status
       })
       this.spinning = false
