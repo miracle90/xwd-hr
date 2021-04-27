@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper">
+  <a-spin class="page-wrapper" :spinning="spinning">
     <a-row type="flex" style="margin-bottom: 20px;">
       <a-col>
         <a-input
@@ -36,7 +36,7 @@
             slot="supplierName"
             slot-scope="text, record"
             style="color: #1890ff"
-            :to="{ path: '/addsuppliers', query: { id: record.id, type: 0 }}"
+            :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}"
           >{{ text }}</router-link>
         </a-table>
       </a-col>
@@ -61,7 +61,7 @@
         </a-pagination>
       </a-col>
     </a-row>
-  </div>
+  </a-spin>
 </template>
 
 <script>
@@ -104,6 +104,8 @@ const columns = [
 export default {
   data () {
     return {
+      spinning: false,
+      delayTime: 500,
       selectedRowKeys: [],
       selectedRows: [],
       selectedIds: [],
@@ -167,7 +169,7 @@ export default {
     modify () {
       const id = this.selectedIds[0]
       // 修改type为1，详情type为0
-      this.$router.push({ path: '/addsuppliers', query: { id, type: 1 } })
+      this.$router.push({ path: '/suppliersedit', query: { id, type: 1 } })
     },
     onSelectChange (selectedRowKeys, selectedRows) {
       console.log('onSelectChange')
@@ -176,7 +178,7 @@ export default {
       this.selectedIds = selectedRows.map(item => item.id)
     },
     add () {
-      this.$router.push('/addsuppliers')
+      this.$router.push('/suppliersedit')
     },
     query () {
       this.page = 1
@@ -192,12 +194,14 @@ export default {
       this.getList()
     },
     async getList () {
+      this.spinning = true
       const { page, limit, keyword } = this
       const res = await this.$http.get('/data/supplier/list', {
         keyword,
         limit,
         page
       })
+      this.spinning = false
       if (res) {
         const { count, data } = res
         this.data = data

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper">
+  <a-spin class="page-wrapper" :spinning="spinning">
     <a-row>
       <a-col>
         <a-form class="ant-advanced-search-form" :form="form" @submit="handleSearch" layout="horizontal">
@@ -113,19 +113,30 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item label="附件" :label-col="{ span: 5 }">
-                <!-- <a-input
-                  v-decorator="[`field`, {
-                    rules: [{ required: true, message: 'Input something!'}]
-                  }]"
-                  placeholder="placeholder"
-                /> -->
+            <a-col :span="24">
+              <a-form-item label="附件" :label-col="{ span: 2 }">
+                <a-upload
+                  list-type="picture-card"
+                  :file-list="fileList"
+                  :remove="handleRemove"
+                  :before-upload="beforeUpload"
+                  @preview="handlePreview"
+                  @change="handleChange"
+                >
+                  <div v-if="fileList.length < 5">
+                    <a-icon type="plus" />
+                    <div class="ant-upload-text">上传</div>
+                  </div>
+                </a-upload>
+                <p style="color: red;">最多5个附件，单个文件小于5M</p>
+                <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+                  <img alt="example" style="width: 100%" :src="previewImage" />
+                </a-modal>
               </a-form-item>
             </a-col>
           </a-row>
           <a-row style="margin-bottom: 20px;">
-            <a-col :span="24" style="margin-top: 30px; font-size: 16px; font-weight: bold;">开票信息</a-col>
+            <a-col :span="24" style="font-size: 16px; font-weight: bold;">开票信息</a-col>
           </a-row>
           <a-row :gutter="24" style="margin-bottom: 20px;">
             <a-col :span="12">
@@ -148,7 +159,7 @@
             </a-col>
           </a-row>
           <a-row style="margin-bottom: 20px;">
-            <a-col :span="24" style="margin-top: 30px; font-size: 16px; font-weight: bold;">收款信息</a-col>
+            <a-col :span="24" style="font-size: 16px; font-weight: bold;">收款信息</a-col>
           </a-row>
           <a-row :gutter="24" style="margin-bottom: 20px;">
             <a-col :span="12">
@@ -191,15 +202,28 @@
         </a-form>
       </a-col>
     </a-row>
-  </div>
+  </a-spin>
 </template>
 
 <script>
 import Moment from 'moment'
 
+function getBase64 (file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
+}
+
 export default {
   data () {
     return {
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
+      spinning: false,
       type: '1', // 新增、修改type为1，查看详情type为0
       id: '',
       form: this.$form.createForm(this, { name: 'advanced_search' })
@@ -217,9 +241,40 @@ export default {
     }
   },
   methods: {
+    handleCancel () {
+      this.previewVisible = false
+    },
+    async handlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.previewImage = file.url || file.preview
+      this.previewVisible = true
+    },
+    handleChange ({ fileList }) {
+      fileList = fileList.filter(file => {
+        const { size } = file
+        if (size > 5 * 1024 * 1024) {
+          this.$message.error('单个文件小于5M!')
+          return false
+        }
+        return true
+      })
+      this.fileList = fileList
+    },
+    beforeUpload (file) {
+      return false
+    },
+    handleRemove (file) {
+      const index = this.fileList.indexOf(file)
+      const newFileList = this.fileList.slice()
+      newFileList.splice(index, 1)
+      this.fileList = newFileList
+    },
     async queryDetail (id) {
+      this.spinning = true
       const res = await this.$http.get(`/data/supplier/get/${id}`)
-      console.log(res)
+      this.spinning = false
       if (res) {
         const {
           supplierCode,
@@ -270,29 +325,46 @@ export default {
             dispatchBeginDate: dispatchBeginDate ? (typeof dispatchBeginDate === 'string' ? dispatchBeginDate : dispatchBeginDate.format('YYYY-MM-DD')) : null,
             dispatchEndDate: dispatchEndDate ? (typeof dispatchEndDate === 'string' ? dispatchEndDate : dispatchEndDate.format('YYYY-MM-DD')) : null
           }
-          if (this.id) {
-            param.id = this.id
-            const res = await this.$http.post('/data/supplier/update', param)
-            if (res) {
-              this.$message.success('供应商信息修改成功！')
-              this.$router.back()
-            }
-          } else {
-            const res = await this.$http.post('/data/supplier/add', param)
-            if (res) {
-              this.$message.success('新增供应商成功！')
-              this.$router.back()
-            }
+          this.spinning = true
+          if (this.id) param.id = this.id
+          const res = await this.$http.post(`/data/supplier/${this.id ? 'update' : 'add'}`, param)
+          if (res) {
+            const { id } = res.data
+            this.handleFile(id, !!this.id)
           }
         }
       })
     },
+    async handleFile (id, isUpdate) {
+      if (this.fileList.length) {
+        console.log(1)
+        const res = await Promise.all(this.fileList.map(async file => {
+          const { originFileObj } = file
+          const formData = new FormData()
+          formData.append('file', originFileObj)
+          formData.append('id', id)
+          await this.$http.post(`/data/supplier/uploadFile/${id}`, formData)
+          console.log(2)
+        }))
+        console.log(3)
+        console.log(res)
+
+        // for (let i = 0; i < this.fileList.length; i++) {
+        //   const file = this.fileList[i]
+        //   const { originFileObj } = file
+        //   const formData = new FormData()
+        //   formData.append('file', originFileObj)
+        //   formData.append('id', id)
+        //   await this.$http.post(`/data/supplier/uploadFile/${id}`, formData)
+        // }
+      }
+      console.log(4)
+      this.spinning = false
+      this.$message.success(`${isUpdate ? '供应商信息修改成功！' : '新增供应商成功！'}`)
+      // this.$router.back()
+    },
     handleReset () {
       this.form.resetFields()
-    },
-
-    resetForm () {
-      this.$refs.ruleForm.resetFields()
     },
     cancel () {
       this.$router.back()
@@ -305,8 +377,15 @@ export default {
   .ant-advanced-search-form .ant-form-item {
     display: flex;
   }
-
   .ant-advanced-search-form .ant-form-item-control-wrapper {
     flex: 1;
+  }
+  .ant-upload-select-picture-card i {
+    font-size: 32px;
+    color: #999;
+  }
+  .ant-upload-select-picture-card .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
   }
 </style>

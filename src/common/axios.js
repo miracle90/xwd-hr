@@ -2,7 +2,8 @@ import axios from 'axios'
 import Router from '../router/index.js'
 import { message } from 'ant-design-vue'
 
-axios.defaults.baseURL = 'http://hrsys.zero-yun.cn:7001'
+axios.defaults.baseURL = 'http://hrsys.zero-yun.cn'
+// axios.defaults.baseURL = 'http://hrsys.zero-yun.cn:7001'
 
 // request拦截器
 axios.interceptors.request.use(

@@ -19,10 +19,10 @@ const routes = [
         meta: ['基础数据', '供应商管理']
       },
       {
-        path: '/addsuppliers',
-        name: 'addsuppliers',
-        component: () => import('../views/base/AddSuppliers.vue'),
-        meta: ['基础数据', '供应商管理']
+        path: '/suppliersedit',
+        name: 'suppliersedit',
+        component: () => import('../views/base/SuppliersEdit.vue'),
+        meta: ['基础数据', '供应商管理-编辑']
       },
       {
         path: '/customer',
@@ -30,13 +30,25 @@ const routes = [
         meta: ['基础数据', '客户管理']
       },
       {
-        path: '/feedback',
-        component: () => import('../views/demand/Feedback.vue'),
-        meta: ['供需协同', '需求计划']
+        path: '/customeredit',
+        name: 'customeredit',
+        component: () => import('../views/base/CustomerEdit.vue'),
+        meta: ['基础数据', '客户管理-编辑']
       },
       {
         path: '/plan',
         component: () => import('../views/demand/Plan.vue'),
+        meta: ['供需协同', '需求计划']
+      },
+      {
+        path: '/planedit',
+        name: 'planedit',
+        component: () => import('../views/demand/PlanEdit.vue'),
+        meta: ['供需协同', '需求计划-编辑']
+      },
+      {
+        path: '/feedback',
+        component: () => import('../views/demand/Feedback.vue'),
         meta: ['供需协同', '需求反馈']
       },
       {
