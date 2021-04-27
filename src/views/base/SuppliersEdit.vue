@@ -116,6 +116,7 @@
             <a-col :span="24">
               <a-form-item label="附件" :label-col="{ span: 2 }">
                 <a-upload
+                  :disabled="type === '0'"
                   list-type="picture-card"
                   :file-list="fileList"
                   :remove="handleRemove"
@@ -238,9 +239,25 @@ export default {
       this.id = id
       this.type = type
       this.queryDetail(id)
+      this.queryAttachment(id)
     }
   },
   methods: {
+    async queryAttachment (id) {
+      const res = await this.$http.get(`/data/supplier/findFile/${id}`)
+      if (res) {
+        const fileList = res.data.map(file => {
+          return {
+            uid: file.id,
+            name: file.fileName,
+            status: 'done',
+            url: file.fileUrl,
+            thumbUrl: file.fileUrl
+          }
+        })
+        this.fileList = fileList
+      }
+    },
     handleCancel () {
       this.previewVisible = false
     },
@@ -265,11 +282,24 @@ export default {
     beforeUpload (file) {
       return false
     },
-    handleRemove (file) {
+    /**
+     * 删除
+     * 1、如果是已经上传的附件，调用删除接口
+     * 2、如果是还未上传的附件，直接从数组中去掉
+     */
+    async handleRemove (file) {
       const index = this.fileList.indexOf(file)
       const newFileList = this.fileList.slice()
       newFileList.splice(index, 1)
       this.fileList = newFileList
+      // 如果是已经上传的附件
+      if (!file.originFileObj) {
+        const { uid } = file
+        const res = await this.$http.get(`/data/supplier/deleteFile/${uid}`)
+        if (res) {
+          this.$message.success('删除远程附件成功')
+        }
+      }
     },
     async queryDetail (id) {
       this.spinning = true
@@ -335,33 +365,25 @@ export default {
         }
       })
     },
+    /**
+     * 上传附件
+     * 如果是已经上传过的，过滤掉
+     */
     async handleFile (id, isUpdate) {
       if (this.fileList.length) {
-        console.log(1)
-        const res = await Promise.all(this.fileList.map(async file => {
+        await Promise.all(this.fileList.map(async file => {
           const { originFileObj } = file
-          const formData = new FormData()
-          formData.append('file', originFileObj)
-          formData.append('id', id)
-          await this.$http.post(`/data/supplier/uploadFile/${id}`, formData)
-          console.log(2)
+          if (originFileObj) {
+            const formData = new FormData()
+            formData.append('file', originFileObj)
+            formData.append('id', id)
+            await this.$http.post(`/data/supplier/uploadFile/${id}`, formData)
+          }
         }))
-        console.log(3)
-        console.log(res)
-
-        // for (let i = 0; i < this.fileList.length; i++) {
-        //   const file = this.fileList[i]
-        //   const { originFileObj } = file
-        //   const formData = new FormData()
-        //   formData.append('file', originFileObj)
-        //   formData.append('id', id)
-        //   await this.$http.post(`/data/supplier/uploadFile/${id}`, formData)
-        // }
       }
-      console.log(4)
       this.spinning = false
       this.$message.success(`${isUpdate ? '供应商信息修改成功！' : '新增供应商成功！'}`)
-      // this.$router.back()
+      this.$router.back()
     },
     handleReset () {
       this.form.resetFields()
