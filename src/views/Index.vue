@@ -30,10 +30,10 @@
         <a-sub-menu key="sub3">
           <span slot="title"><a-icon type="appstore" /><span>员工管理</span></span>
           <a-menu-item key="31"><router-link to="/archives">员工档案</router-link></a-menu-item>
-          <a-menu-item key="32"><router-link to="/feedback">月考勤数据</router-link></a-menu-item>
-          <a-menu-item key="33"><router-link to="/feedback">日考勤数据</router-link></a-menu-item>
-          <a-menu-item key="34"><router-link to="/feedback">工资核算</router-link></a-menu-item>
-          <a-menu-item key="35"><router-link to="/feedback">借支管理</router-link></a-menu-item>
+          <a-menu-item key="32"><router-link to="/month">月考勤数据</router-link></a-menu-item>
+          <a-menu-item key="33"><router-link to="/day">日考勤数据</router-link></a-menu-item>
+          <a-menu-item key="34"><router-link to="/salary">工资核算</router-link></a-menu-item>
+          <a-menu-item key="35"><router-link to="/borrow">借支管理</router-link></a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub4">
           <span slot="title"><a-icon type="mail" /><span>返费管理</span></span>

@@ -14,7 +14,6 @@ const routes = [
     children: [
       {
         path: '/suppliers',
-        // name: 'suppliers',
         component: () => import('../views/base/Suppliers.vue'),
         meta: ['基础数据', '供应商管理']
       },
@@ -55,6 +54,26 @@ const routes = [
         path: '/archives',
         component: () => import('../views/staff/Archives.vue'),
         meta: ['员工管理', '员工档案']
+      },
+      {
+        path: '/month',
+        component: () => import('../views/staff/Month.vue'),
+        meta: ['员工管理', '月考勤数据']
+      },
+      {
+        path: '/day',
+        component: () => import('../views/staff/Day.vue'),
+        meta: ['员工管理', '日考勤数据']
+      },
+      {
+        path: '/salary',
+        component: () => import('../views/staff/Salary.vue'),
+        meta: ['员工管理', '工资核算']
+      },
+      {
+        path: '/borrow',
+        component: () => import('../views/staff/Borrow.vue'),
+        meta: ['员工管理', '借支管理']
       }
     ]
   }
