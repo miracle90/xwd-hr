@@ -40,6 +40,9 @@
           }"
           :rowKey="(record, index) => index"
         >
+          <span slot="customerId" slot-scope="record">
+            {{ customerList.find(item => item.id === record.customerId) ? customerList.find(item => item.id === record.customerId).customerName : '' }}
+          </span>
           <span slot="status" slot-scope="record">
             {{ ['待提交', '待回复', '已回复', '已确认'][record.status] }}
           </span>
@@ -48,16 +51,12 @@
             <a-divider v-if="record.status === 0" type="vertical" />
             <router-link v-if="record.status === 0" style="color: #1890ff" :to="{ path: '/planedit', query: { id: record.id, type: 1 }}">修改</router-link>
             <a-divider v-if="record.status === 0" type="vertical" />
-            <a v-if="record.status === 0" style="color: #1890ff">提交</a>
+            <a v-if="record.status === 0" @click="submit(record)" style="color: #1890ff">提交</a>
+            <a-divider v-if="record.status === 1" type="vertical" />
+            <router-link v-if="record.status === 1" style="color: #1890ff" :to="{ path: '/planaudit', query: { id: record.id, type: 0 }}">审核</router-link>
             <a-divider v-if="record.status === 2" type="vertical" />
             <router-link v-if="record.status === 2" style="color: #1890ff" :to="{ path: '/planaudit', query: { id: record.id, type: 0 }}">审核</router-link>
           </span>
-          <!-- <router-link
-            slot="supplierName"
-            slot-scope="text, record"
-            style="color: #1890ff"
-            :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}"
-          >{{ text }}</router-link> -->
         </a-table>
       </a-col>
     </a-row>
@@ -95,8 +94,8 @@ const columns = [
   },
   {
     title: '客户名称',
-    dataIndex: 'customerId',
-    key: 'customerId'
+    key: 'customerId',
+    scopedSlots: { customRender: 'customerId' }
   },
   {
     title: '需求事业部',
@@ -153,6 +152,7 @@ const columns = [
 export default {
   data () {
     return {
+      customerList: [],
       locale,
       rangePicker: null,
       status: '',
@@ -186,8 +186,51 @@ export default {
     onPickerChange (date, dateString) {
       console.log(date, dateString)
     },
-    submit () {
-      //
+    async submit (record) {
+      console.log(record)
+      const {
+        id,
+        customerId,
+        deptName,
+        contactName,
+        contactPhone,
+        demandPersions,
+        demandTrade,
+        demandBeginDate,
+        demandEndDate,
+        demandRatio,
+        demandAge,
+        replyEndDate,
+        remark
+      } = record
+      this.spinning = true
+      // 根据id查询该需求下选中的供应商
+      const res = await this.$http.get(`/data/demand/findSupplier/${id}`)
+      if (res) {
+        const param = {
+          id,
+          customerId,
+          deptName,
+          contactName,
+          contactPhone,
+          demandPersions,
+          demandTrade,
+          demandBeginDate,
+          demandEndDate,
+          demandRatio,
+          demandAge,
+          replyEndDate,
+          remark,
+          supplierIdsArr: res.data.map(item => item.supplierId)
+        }
+        // 提交
+        const result = await this.$http.post('/data/demand/submit', param)
+        if (result) {
+          this.$message.success('需求提交成功!')
+          this.getList()
+        }
+      }
+      this.spinning = false
     },
     reset () {
       this.status = ''

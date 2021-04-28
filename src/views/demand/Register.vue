@@ -5,18 +5,13 @@
         <a-form class="ant-advanced-search-form" :form="form" layout="horizontal">
           <a-row style="margin-bottom: 20px;">
             <a-col :span="24">
-              <a-button type="primary" @click="handleSearch" style="margin-right: 20px;">审核</a-button>
-              <!-- <a-button v-if="type === '1'" @click="handleSearch(2)" style="margin-right: 20px;">保存</a-button> -->
-              <!-- <a-button v-if="type === '1'" @click="handleReset" style="margin-right: 20px;">重置</a-button> -->
-              <a-button @click="cancel">取消</a-button>
+              <a-button v-if="type === '1'" type="primary" @click="handleSearch" style="margin-right: 20px;">提交</a-button>
+              <a-button v-if="type === '1'" @click="handleReset" style="margin-right: 20px;">重置</a-button>
+              <a-button @click="cancel">{{ type !== '1' ? '返回' : '取消' }}</a-button>
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item label="需求编号" :label-col="{ span: 2 }">
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
+             <a-col :span="12">
               <a-form-item label="公司名称" :label-col="{ span: 5 }">
                 <a-select
                   :disabled="type === '0'"
@@ -138,31 +133,73 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+          <a-row :gutter="24" style="margin-top: 30px;">
             <a-col :span="12">
-              <a-form-item label="备注" :label-col="{ span: 5 }">
+              <a-form-item label="回复人数" :label-col="{ span: 5 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`remark`]"
-                  placeholder="请输入备注"
+                  v-decorator="[`replyPersions`, {
+                    rules: [{ required: true, message: '请输入回复人数!'}]
+                  }]"
+                  placeholder="请输入回复人数"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
-              <a-form-item label="发送" :label-col="{ span: 2 }">
-                <a-table
-                  :pagination="false"
-                  :columns="columns"
-                  :data-source="supplierList"
-                  :rowKey="(record, index) => index"
-                >
-                  <span slot="action" slot-scope="record">
-                    <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">查看</router-link>
-                    <a-divider type="vertical" />
-                    <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">修改</router-link>
-                    <a-divider type="vertical" />
-                    <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">审核</router-link>
-                  </span>
-                </a-table>
+            <a-col :span="12">
+              <a-form-item label="收费标准(元/工时)" :label-col="{ span: 5 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`chargeStandard`, {
+                    rules: [{ required: true, message: '请输入收费标准(元/工时)!'}]
+                  }]"
+                  placeholder="请输入收费标准(元/工时)"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="回复年龄" :label-col="{ span: 5 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`replyAge`]"
+                  placeholder="请输入回复年龄"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="回复比例" :label-col="{ span: 5 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`replyRatio`]"
+                  placeholder="请输入回复比例"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="资源来源地" :label-col="{ span: 5 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`resourceOrigin`]"
+                  placeholder="请输入资源来源地"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="民族" :label-col="{ span: 5 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`nation`]"
+                  placeholder="请输入民族"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="回复备注" :label-col="{ span: 5 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`replyRemark`]"
+                  placeholder="请输入回复备注"
+                />
               </a-form-item>
             </a-col>
           </a-row>
@@ -212,8 +249,8 @@ export default {
   },
   mounted () {
     const { id, type } = this.$route.query
-    this.findCustomerList()
-    this.findSuppliersList()
+    // this.findCustomerList()
+    // this.findSuppliersList()
     if (id) {
       this.id = id
       this.type = type
@@ -270,7 +307,7 @@ export default {
     },
     async queryDetail (id) {
       this.spinning = true
-      const res = await this.$http.get(`/data/demand/get/${id}`)
+      const res = await this.$http.get(`/data/demand/getRecordSelfInfo/${id}`)
       this.spinning = false
       if (res) {
         const {
@@ -304,24 +341,17 @@ export default {
       }
     },
     handleSearch () {
-      // 1 提交，/data/demand/submit
-      // 2 保存，/data/demand/saveOrUpdate
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const { demandBeginDate, demandEndDate, replyEndDate } = values
           const param = {
-            ...values,
-            supplierIdsArr: this.selectedRows.map(item => item.id),
-            demandBeginDate: demandBeginDate ? (typeof demandBeginDate === 'string' ? demandBeginDate : demandBeginDate.format('YYYY-MM-DD')) : null,
-            demandEndDate: demandEndDate ? (typeof demandEndDate === 'string' ? demandEndDate : demandEndDate.format('YYYY-MM-DD')) : null,
-            replyEndDate: replyEndDate ? (typeof replyEndDate === 'string' ? replyEndDate : replyEndDate.format('YYYY-MM-DD')) : null
+            ...values
           }
           if (this.id) param.id = this.id
           this.spinning = true
-          const res = await this.$http.post('/data/demand/auditor', param)
+          const res = await this.$http.post('/data/demand/recordSelf', param)
           this.spinning = false
           if (res) {
-            this.$message.success('需求审核成功')
+            this.$message.success('需求登记配置成功！')
             this.$router.back()
           }
         }
@@ -329,8 +359,6 @@ export default {
     },
     handleReset () {
       this.form.resetFields()
-      this.selectedRowKeys = []
-      this.selectedRows = []
     },
     cancel () {
       this.$router.back()
