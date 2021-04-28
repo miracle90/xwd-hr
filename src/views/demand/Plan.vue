@@ -52,8 +52,6 @@
             <router-link v-if="record.status === 0" style="color: #1890ff" :to="{ path: '/planedit', query: { id: record.id, type: 1 }}">修改</router-link>
             <a-divider v-if="record.status === 0" type="vertical" />
             <a v-if="record.status === 0" @click="submit(record)" style="color: #1890ff">提交</a>
-            <a-divider v-if="record.status === 1" type="vertical" />
-            <router-link v-if="record.status === 1" style="color: #1890ff" :to="{ path: '/planaudit', query: { id: record.id, type: 0 }}">审核</router-link>
             <a-divider v-if="record.status === 2" type="vertical" />
             <router-link v-if="record.status === 2" style="color: #1890ff" :to="{ path: '/planaudit', query: { id: record.id, type: 0 }}">审核</router-link>
           </span>

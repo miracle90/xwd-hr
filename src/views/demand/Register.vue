@@ -249,7 +249,7 @@ export default {
   },
   mounted () {
     const { id, type } = this.$route.query
-    // this.findCustomerList()
+    this.findCustomerList()
     // this.findSuppliersList()
     if (id) {
       this.id = id
@@ -343,15 +343,56 @@ export default {
     handleSearch () {
       this.form.validateFields(async (error, values) => {
         if (!error) {
+          const {
+            customerId,
+            deptName,
+            contactName,
+            contactPhone,
+            demandPersions,
+            demandTrade,
+            demandBeginDate,
+            demandEndDate,
+            demandRatio,
+            demandAge,
+            replyEndDate,
+            replyPersions,
+            chargeStandard,
+            replyAge,
+            replyRatio,
+            resourceOrigin,
+            nation,
+            replyRemark
+          } = values
           const param = {
-            ...values
+            demandParam: {
+              customerId,
+              deptName,
+              contactName,
+              contactPhone,
+              demandPersions,
+              demandTrade,
+              demandRatio,
+              demandAge,
+              demandBeginDate: demandBeginDate ? (typeof demandBeginDate === 'string' ? demandBeginDate : demandBeginDate.format('YYYY-MM-DD')) : null,
+              demandEndDate: demandEndDate ? (typeof demandEndDate === 'string' ? demandEndDate : demandEndDate.format('YYYY-MM-DD')) : null,
+              replyEndDate: replyEndDate ? (typeof replyEndDate === 'string' ? replyEndDate : replyEndDate.format('YYYY-MM-DD')) : null
+            },
+            demandReply: {
+              replyPersions,
+              chargeStandard,
+              replyAge,
+              replyRatio,
+              resourceOrigin,
+              nation,
+              replyRemark
+            }
           }
-          if (this.id) param.id = this.id
+          if (this.id) param.demandParam.id = this.id
           this.spinning = true
           const res = await this.$http.post('/data/demand/recordSelf', param)
           this.spinning = false
           if (res) {
-            this.$message.success('需求登记配置成功！')
+            this.$message.success('需求登记成功！')
             this.$router.back()
           }
         }

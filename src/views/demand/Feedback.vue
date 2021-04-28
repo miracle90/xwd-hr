@@ -2,11 +2,9 @@
   <a-spin class="page-wrapper" :spinning="spinning">
     <a-row type="flex" style="margin-bottom: 20px;">
       <a-col style="display: flex; align-items: center;">需求日期：</a-col>
-      <a-col><a-range-picker v-model="rangePicker" @change="onPickerChange" :locale="locale" /></a-col>
-    </a-row>
-    <a-row type="flex" style="margin-bottom: 20px;">
+      <a-col style="margin-right: 30px;"><a-range-picker v-model="rangePicker" @change="onPickerChange" :locale="locale" /></a-col>
       <a-col style="display: flex; align-items: center;">状态：</a-col>
-      <a-col style="margin-right: 200px;">
+      <a-col>
         <a-radio-group v-model="status" button-style="solid">
           <!-- <a-radio-button value="0">待提交</a-radio-button> -->
           <a-radio-button value="1">待回复</a-radio-button>
@@ -14,10 +12,12 @@
           <a-radio-button value="3">已确认</a-radio-button>
         </a-radio-group>
       </a-col>
+    </a-row>
+    <a-row type="flex" style="margin-bottom: 20px;">
       <a-col>
         <a-button type="primary" @click="query" style="margin-right: 20px;">查询</a-button>
         <a-button @click="reset" style="margin-right: 20px;">重置</a-button>
-        <!-- <a-button @click="add" style="margin-right: 20px;">需求登记</a-button> -->
+        <a-button @click="add" style="margin-right: 20px;">需求登记</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -38,13 +38,24 @@
             {{ ['待提交', '待回复', '已回复', '已确认'][record.status] }}
           </span>
           <span slot="action" slot-scope="record">
-            <router-link style="color: #1890ff" :to="{ path: '/register', query: { id: record.id, type: 0 }}">查看</router-link>
-            <a-divider v-if="record.status === 0" type="vertical" />
-            <router-link v-if="record.status === 0" style="color: #1890ff" :to="{ path: '/register', query: { id: record.id, type: 1 }}">修改</router-link>
+            <router-link
+              style="color: #1890ff"
+              :to="{ path: '/register', query: { id: record.id, type: 0 }}"
+            >查看</router-link>
             <a-divider v-if="record.status === 1" type="vertical" />
-            <router-link v-if="record.status === 1" style="color: #1890ff" :to="{ path: '/reply', query: { id: record.id, type: 1 }}">回复</router-link>
-            <!-- <a-divider v-if="record.status === 2" type="vertical" />
-            <router-link v-if="record.status === 2" style="color: #1890ff" :to="{ path: '/planaudit', query: { id: record.id, type: 0 }}">审核</router-link> -->
+            <router-link
+              v-if="record.status === 1"
+              style="color: #1890ff"
+              :to="{ path: '/reply', query: { demandId: record.demandId, supplierId: record.supplierId, type: 1 }}"
+            >回复</router-link>
+            <a-divider v-if="record.demandType === '自行登记'" type="vertical" />
+            <router-link
+              v-if="record.demandType === '自行登记'"
+              style="color: #1890ff"
+              :to="{ path: '/register', query: { id: record.id, type: 1 }}"
+            >修改</router-link>
+            <a-divider v-if="record.demandType === '自行登记'" type="vertical" />
+            <a v-if="record.demandType === '自行登记'" @click="deleteDemand(record.demandId)" style="color: red">删除</a>
           </span>
         </a-table>
       </a-col>
@@ -191,6 +202,22 @@ export default {
     this.findCustomerList()
   },
   methods: {
+    deleteDemand (id) {
+      this.$confirm({
+        title: '删除提示',
+        content: '确定要删除所勾选的记录吗？',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk: async () => {
+          const res = await this.$http.post(`/data/demand/delete/${id}`)
+          if (res) {
+            this.$message.success('需求删除成功!')
+            this.getList()
+          }
+        }
+      })
+    },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')
       if (res) {
@@ -277,8 +304,7 @@ export default {
     async getList () {
       this.spinning = true
       const { page, limit, rangePicker, status } = this
-      const res = await this.$http.get('/data/demand/list', {
-        minStatus: 1,
+      const res = await this.$http.get('/data/demand/list4Reply', {
         page,
         limit,
         demandBeginDate: rangePicker ? rangePicker[0].format('YYYY-MM-DD') : null,

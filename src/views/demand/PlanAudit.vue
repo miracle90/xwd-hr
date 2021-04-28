@@ -12,10 +12,11 @@
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item label="需求编号" :label-col="{ span: 2 }">
-              </a-form-item>
+            <a-col :span="12" style="font-weight: bold;">
+              <a-form-item label="需求编号" :label-col="{ span: 5 }">{{ demandCode }}</a-form-item>
             </a-col>
+          </a-row>
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item label="公司名称" :label-col="{ span: 5 }">
                 <a-select
@@ -147,23 +148,23 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+          <a-row>
             <a-col :span="24">
-              <a-form-item label="发送" :label-col="{ span: 2 }">
-                <a-table
-                  :pagination="false"
-                  :columns="columns"
-                  :data-source="supplierList"
-                  :rowKey="(record, index) => index"
-                >
-                  <span slot="action" slot-scope="record">
-                    <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">查看</router-link>
-                    <a-divider type="vertical" />
-                    <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">修改</router-link>
-                    <a-divider type="vertical" />
-                    <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">审核</router-link>
-                  </span>
-                </a-table>
-              </a-form-item>
+              <a-table
+                :pagination="false"
+                :columns="columns"
+                :data-source="distributeSupplierList"
+                :rowKey="(record, index) => index"
+              >
+                <!-- <span slot="action" slot-scope="record">
+                  <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">查看</router-link>
+                  <a-divider type="vertical" />
+                  <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">修改</router-link>
+                  <a-divider type="vertical" />
+                  <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">审核</router-link>
+                </span> -->
+              </a-table>
             </a-col>
           </a-row>
         </a-form>
@@ -190,16 +191,55 @@ const columns = [
     title: '电话',
     dataIndex: 'contactPhone',
     key: 'contactPhone'
+  },
+  {
+    title: '回复人数',
+    dataIndex: 'replyPersions',
+    key: 'replyPersions'
+  },
+  {
+    title: '收费标准（元/人/工时）',
+    dataIndex: 'chargeStandard',
+    key: 'chargeStandard'
+  },
+  {
+    title: '回复比例',
+    dataIndex: 'replyRatio',
+    key: 'replyRatio'
+  },
+  {
+    title: '回复年龄',
+    dataIndex: 'replyAge',
+    key: 'replyAge'
+  },
+  {
+    title: '来源',
+    dataIndex: 'resourceOrigin',
+    key: 'resourceOrigin'
+  },
+  {
+    title: '民族',
+    dataIndex: 'nation',
+    key: 'nation'
+  },
+  {
+    title: '回复备注',
+    dataIndex: 'replyRemark',
+    key: 'replyRemark'
+  },
+  {
+    title: '分配人数',
+    key: 'dispatchPersions'
   }
 ]
 
 export default {
   data () {
     return {
+      demandCode: '',
       customerList: [],
-      selectedRowKeys: [],
-      selectedRows: [],
       supplierList: [],
+      findSupplierList: [],
       columns,
       spinning: false,
       type: '1', // 新增、修改type为1，查看详情type为0
@@ -208,7 +248,12 @@ export default {
     }
   },
   computed: {
-    //
+    distributeSupplierList () {
+      if (this.findSuppliersList.length && this.supplierList.length) {
+        return this.supplierList.filter(item => this.findSuppliersList.includes(item.id))
+      }
+      return []
+    }
   },
   mounted () {
     const { id, type } = this.$route.query
@@ -218,26 +263,15 @@ export default {
       this.id = id
       this.type = type
       this.queryDetail(id)
-      // this.findSupplier(id)
     }
   },
   methods: {
     async findSupplier (id) {
       const res = await this.$http.get(`/data/demand/findSupplier/${id}`)
       if (res) {
-        const selectedRowKeys = []
-        const selectedRows = []
-        const list = res.data.map(item => item.supplierId)
+        const list = res.data && res.data.length ? res.data.map(item => item.supplierId) : []
         console.log(list)
-        console.log(this.supplierList)
-        this.supplierList.forEach((item, index) => {
-          if (list.includes(item.id)) {
-            selectedRowKeys.push(index)
-            selectedRows.push(item)
-          }
-        })
-        this.selectedRowKeys = selectedRowKeys
-        this.selectedRows = selectedRows
+        this.findSuppliersList = list
       }
     },
     customerIdChange (id) {
@@ -274,6 +308,7 @@ export default {
       this.spinning = false
       if (res) {
         const {
+          demandCode,
           customerId,
           deptName,
           contactName,
@@ -287,6 +322,7 @@ export default {
           demandAge,
           remark
         } = res.data
+        this.demandCode = demandCode
         this.form.setFieldsValue({
           customerId,
           deptName,

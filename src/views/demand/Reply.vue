@@ -90,11 +90,13 @@
 export default {
   data () {
     return {
-      customerList: [],
-      supplierList: [],
+      demandId: '',
+      supplierId: '',
+      // customerList: [],
+      // supplierList: [],
       spinning: false,
       type: '1', // 新增、修改type为1，查看详情type为0
-      id: '',
+      // id: '',
       form: this.$form.createForm(this, { name: 'advanced_search' })
     }
   },
@@ -102,62 +104,57 @@ export default {
     //
   },
   mounted () {
-    const { id } = this.$route.query
+    const { demandId, supplierId } = this.$route.query
+    this.demandId = demandId || ''
+    this.supplierId = supplierId || ''
     // this.findCustomerList()
     // this.findSuppliersList()
-    if (id) {
-      this.id = id
-      // this.queryDetail(id)
-      // this.findSupplier(id)
-    }
+    // if (id) {
+    //   this.id = id
+    //   // this.queryDetail(id)
+    //   // this.findSupplier(id)
+    // }
   },
   methods: {
-    async findSupplier (id) {
-      const res = await this.$http.get(`/data/demand/findSupplier/${id}`)
-      if (res) {
-        const selectedRowKeys = []
-        const selectedRows = []
-        const list = res.data.map(item => item.supplierId)
-        console.log(list)
-        console.log(this.supplierList)
-        this.supplierList.forEach((item, index) => {
-          if (list.includes(item.id)) {
-            selectedRowKeys.push(index)
-            selectedRows.push(item)
-          }
-        })
-        this.selectedRowKeys = selectedRowKeys
-        this.selectedRows = selectedRows
-      }
-    },
-    customerIdChange (id) {
-      const deptName = id ? this.customerList.find(item => item.id === id).bussinessUnit : ''
-      this.form.setFieldsValue({
-        deptName
-      })
-    },
-    async findCustomerList () {
-      const res = await this.$http.get('/data/customer/find')
-      if (res) {
-        this.customerList = res.data
-      }
-    },
-    async findSuppliersList () {
-      const res = await this.$http.get('/data/supplier/find')
-      if (res) {
-        this.supplierList = res.data
-        if (this.id) {
-          this.findSupplier(this.id)
-        }
-      }
-    },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      if (this.type === '0') {
-        return
-      }
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
+    // async findSupplier (id) {
+    //   const res = await this.$http.get(`/data/demand/findSupplier/${id}`)
+    //   if (res) {
+    //     const selectedRowKeys = []
+    //     const selectedRows = []
+    //     const list = res.data.map(item => item.supplierId)
+    //     console.log(list)
+    //     console.log(this.supplierList)
+    //     this.supplierList.forEach((item, index) => {
+    //       if (list.includes(item.id)) {
+    //         selectedRowKeys.push(index)
+    //         selectedRows.push(item)
+    //       }
+    //     })
+    //     this.selectedRowKeys = selectedRowKeys
+    //     this.selectedRows = selectedRows
+    //   }
+    // },
+    // customerIdChange (id) {
+    //   const deptName = id ? this.customerList.find(item => item.id === id).bussinessUnit : ''
+    //   this.form.setFieldsValue({
+    //     deptName
+    //   })
+    // },
+    // async findCustomerList () {
+    //   const res = await this.$http.get('/data/customer/find')
+    //   if (res) {
+    //     this.customerList = res.data
+    //   }
+    // },
+    // async findSuppliersList () {
+    //   const res = await this.$http.get('/data/supplier/find')
+    //   if (res) {
+    //     this.supplierList = res.data
+    //     if (this.id) {
+    //       this.findSupplier(this.id)
+    //     }
+    //   }
+    // },
     // async queryDetail (id) {
     //   this.spinning = true
     //   const res = await this.$http.get(`/data/demand/get/${id}`)
@@ -196,12 +193,14 @@ export default {
     handleSearch (type) {
       // 1 提交，/data/demand/submit
       // 2 保存，/data/demand/saveOrUpdate
+      if (!this.demandId || !this.supplierId) return
       this.form.validateFields(async (error, values) => {
         if (!error) {
           const param = {
-            ...values
+            ...values,
+            demandId: this.demandId,
+            supplierId: this.supplierId
           }
-          if (this.id) param.id = this.id
           this.spinning = true
           const res = await this.$http.post('/data/demand/reply/', param)
           this.spinning = false
