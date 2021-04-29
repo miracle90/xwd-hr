@@ -38,7 +38,8 @@
         <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button>
         <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
         <a-upload
-          :action="`${$http.baseURL}/data/employee/import`"
+          :action="`${$http.baseURL}/data/monthAttence/import`"
+          :headers="headers"
           :showUploadList="false"
           name="file"
           :before-upload="beforeUpload"
@@ -64,7 +65,7 @@
           }"
           :rowKey="(record, index) => index"
         >
-          <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span>
+          <!-- <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span> -->
           <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工'][text] }}</span>
           <span slot="action" slot-scope="record">
             <router-link style="color: #1890ff" :to="{ path: '/monthedit', query: { id: record.id, type: 1 }}">修改</router-link>
@@ -106,9 +107,8 @@ const columns = [
   },
   {
     title: '所属公司',
-    dataIndex: 'customerId',
-    key: 'customerId',
-    scopedSlots: { customRender: 'customerId' }
+    dataIndex: 'customerName',
+    key: 'customerName'
   },
   {
     title: '部门',
@@ -180,6 +180,9 @@ const columns = [
 export default {
   data () {
     return {
+      headers: {
+        token: window.localStorage.getItem('token')
+      },
       customerList: [],
       supplierList: [],
       locale,
@@ -223,13 +226,11 @@ export default {
         onOk: async () => {
           this.form.validateFields(async (error, values) => {
             if (!error) {
-              const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+              const { date, queryEmployeeNumber, queryEmployeeName } = values
               const param = {
                 queryEmployeeNumber,
                 queryEmployeeName,
-                queryEmployState,
-                queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-                queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+                yearMonth: date ? date.format('YYYY-MM') : null
               }
               this.spinning = true
               const res = await this.$http.get('/data/monthAttence/export', param)
@@ -386,24 +387,24 @@ export default {
         onOk: async () => {
           if (this.selectedIds.length === 1) {
             const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/supplier/delete/${id}`)
+            const res = await this.$http.post(`/data/monthAttence/delete/${id}`)
             if (res) {
               this.selectedIds = []
               this.selectedRowKeys = []
               this.selectedRows = []
-              this.$message.success('删除供应商成功!')
-              this.getList()
+              this.$message.success('删除考勤数据成功!')
+              this.handleSearch()
             }
           } else {
-            const res = await this.$http.post('/data/supplier/batchDel', {
+            const res = await this.$http.post('/data/monthAttence/batchDel', {
               idsArr: this.selectedIds
             })
             if (res) {
               this.selectedIds = []
               this.selectedRowKeys = []
               this.selectedRows = []
-              this.$message.success('批量删除供应商成功!')
-              this.getList()
+              this.$message.success('批量删除考勤数据成功!')
+              this.handleSearch()
             }
           }
         },
@@ -454,19 +455,17 @@ export default {
       if (e) e.preventDefault()
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+          const { date, queryEmployeeNumber, queryEmployeeName } = values
           const { page, limit } = this
           const param = {
             page,
             limit,
             queryEmployeeNumber,
             queryEmployeeName,
-            queryEmployState,
-            queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-            queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+            yearMonth: date ? date.format('YYYY-MM') : null
           }
           this.spinning = true
-          const res = await this.$http.get('/data/employee/list', param)
+          const res = await this.$http.get('/data/monthAttence/list', param)
           this.spinning = false
           if (res) {
             const { count, data } = res

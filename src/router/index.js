@@ -139,7 +139,7 @@ const routes = [
         meta: {
           openKey: 'sub3',
           selectKey: '/month',
-          bread: ['员工管理', '月考勤数据']
+          bread: ['员工管理', '月考勤数据-编辑']
         }
       },
       {
@@ -161,12 +161,30 @@ const routes = [
         }
       },
       {
+        path: '/salaryedit',
+        component: () => import('../views/staff/SalaryEdit.vue'),
+        meta: {
+          openKey: 'sub3',
+          selectKey: '/salary',
+          bread: ['员工管理', '工资核算-编辑']
+        }
+      },
+      {
         path: '/borrow',
         component: () => import('../views/staff/Borrow.vue'),
         meta: {
           openKey: 'sub3',
           selectKey: '/borrow',
           bread: ['员工管理', '借支管理']
+        }
+      },
+      {
+        path: '/borrowedit',
+        component: () => import('../views/staff/BorrowEdit.vue'),
+        meta: {
+          openKey: 'sub3',
+          selectKey: '/borrow',
+          bread: ['员工管理', '借支管理-编辑']
         }
       }
     ]

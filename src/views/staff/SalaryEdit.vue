@@ -12,6 +12,18 @@
             </a-col>
           </a-row>
           <a-row :gutter="12">
+            <a-col :span="12">
+              <a-form-item label="月份" :label-col="{ span: 6 }">
+                <a-month-picker
+                  :disabled="type === '0'"
+                  v-decorator="[`date`, {
+                    rules: [{ required: true, message: '请选择月份!'}]
+                  }]"
+                  :locale="locale"
+                  placeholder="请选择月份"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="8">
               <a-form-item label="工号" :label-col="{ span: 9 }">
                 <a-input
@@ -38,19 +50,10 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="所属公司" :label-col="{ span: 6 }">
+              <a-form-item label="供应商" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="true"
-                  v-decorator="[`customerName`]"
-                  placeholder="输入工号进行查询"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="部门" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="true"
-                  v-decorator="[`department`]"
+                  v-decorator="[`supplierName`]"
                   placeholder="输入工号进行查询"
                 />
               </a-form-item>
@@ -74,27 +77,80 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="扣除迟到早退（时）" :label-col="{ span: 6 }">
+              <a-form-item label="所属公司" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`workAbnormalHours`]"
-                  placeholder="请输入扣除迟到早退（时）"
+                  :disabled="true"
+                  v-decorator="[`customerName`]"
+                  placeholder="输入工号进行查询"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="结算工时" :label-col="{ span: 6 }">
+              <a-form-item label="部门" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="true"
+                  v-decorator="[`department`]"
+                  placeholder="输入工号进行查询"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item label="工资卡" :label-col="{ span: 3 }">
+                <a-input
+                  :disabled="true"
+                  v-decorator="[`payrollCardInfo`]"
+                  placeholder="输入工号进行查询"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="应发合计" :label-col="{ span: 12 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`settlementHours`, {
-                    rules: [{ required: true, message: '请输入结算工时!'}]
+                  v-decorator="[`shouldBePay`, {
+                    rules: [{ required: true, message: '请输入应发合计!'}]
                   }]"
-                  placeholder="请输入结算工时"
+                  placeholder="请输入应发合计"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item label="水电扣费" :label-col="{ span: 6 }">
+            <a-col :span="6">
+              <a-form-item label="总工时" :label-col="{ span: 12 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`totalHours`, {
+                    rules: [{ required: true, message: '请输入总工时!'}]
+                  }]"
+                  placeholder="请输入总工时"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="单价" :label-col="{ span: 12}">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`price`, {
+                    rules: [{ required: true, message: '请输入单价!'}]
+                  }]"
+                  placeholder="请输入单价"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="12">
+            <a-col :span="6">
+              <a-form-item label="应扣合计" :label-col="{ span: 12 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`shouldBeDeduct`, {
+                    rules: [{ required: true, message: '请输入应扣合计!'}]
+                  }]"
+                  placeholder="请输入应扣合计"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="水电扣费" :label-col="{ span: 12 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`waterAndElectricityFee`]"
@@ -102,8 +158,8 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item label="餐费扣费" :label-col="{ span: 6 }">
+            <a-col :span="6">
+              <a-form-item label="餐费扣费" :label-col="{ span: 12 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`foodFee`]"
@@ -111,21 +167,118 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item label="车补" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`carAllowanceFee`]"
-                  placeholder="请输入车补"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="厂牌及工衣扣费" :label-col="{ span: 6 }">
+            <a-col :span="6">
+              <a-form-item label="厂牌及工衣扣费" :label-col="{ span: 12 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`brandAndClothesFee`]"
                   placeholder="请输入厂牌及工衣扣费"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="个税" :label-col="{ span: 18 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`taxes`]"
+                  placeholder="请输入个税"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="保险" :label-col="{ span: 12 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`insurance`]"
+                  placeholder="请输入保险"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="借支" :label-col="{ span: 18 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`borrow`]"
+                  placeholder="请输入借支"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="代扣（工头借支）" :label-col="{ span: 12 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`bossBorrow`]"
+                  placeholder="请输入代扣（工头借支）"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="12">
+            <a-col :span="6">
+              <a-form-item label="实发工资" :label-col="{ span: 12 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`actualPay`, {
+                    rules: [{ required: true, message: '请输入实发工资!'}]
+                  }]"
+                  placeholder="请输入实发工资"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="12">
+            <a-col :span="6">
+              <a-form-item label="已发工资" :label-col="{ span: 12 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`hasPaid`]"
+                  placeholder="请输入已发工资"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="支付日期" :label-col="{ span: 12 }">
+                <a-date-picker
+                  :disabled="type === '0'"
+                  v-decorator="[`paidDate`, {
+                    rules: [{ required: true, message: '请选择支付日期!'}]
+                  }]"
+                  format="YYYY-MM-DD"
+                  style="width: 100%"
+                  placeholder="请选择支付日期"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="付款备注" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`paidRemark`]"
+                  placeholder="请输入付款备注"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="12">
+            <a-col :span="6">
+              <a-form-item label="补差价" :label-col="{ span: 12 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`repairPrice`]"
+                  placeholder="请输入补差价"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="补发日期" :label-col="{ span: 12 }">
+                <a-date-picker
+                  :disabled="type === '0'"
+                  v-decorator="[`repairDate`, {
+                    rules: [{ required: true, message: '请选择补发日期!'}]
+                  }]"
+                  format="YYYY-MM-DD"
+                  style="width: 100%"
+                  placeholder="请选择补发日期"
                 />
               </a-form-item>
             </a-col>
@@ -249,7 +402,7 @@ export default {
     },
     async queryDetail (id) {
       this.spinning = true
-      const res = await this.$http.get(`/data/monthAttence/get/${id}`)
+      const res = await this.$http.get(`/data/payRoll/get/${id}`)
       this.spinning = false
       if (res) {
         const {
@@ -302,9 +455,9 @@ export default {
           }
           this.spinning = true
           if (this.id) param.id = this.id
-          const res = await this.$http.post('/data/monthAttence/saveOrUpdate', param)
+          const res = await this.$http.post('/data/payRoll/saveOrUpdate', param)
           if (res) {
-            this.$message.success(`${this.id ? '员工档案信息修改成功！' : '新增员工档案成功！'}`)
+            this.$message.success(`${this.id ? '工资核算信息修改成功！' : '新增工资核算信息成功！'}`)
             if (submitType === 1) {
               this.$router.back()
             } else {
