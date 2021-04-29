@@ -2,8 +2,9 @@ import axios from 'axios'
 import Router from '../router/index.js'
 import { message } from 'ant-design-vue'
 
-axios.defaults.baseURL = 'http://hrsys.zero-yun.cn'
-// axios.defaults.baseURL = 'http://hrsys.zero-yun.cn:7001'
+const baseURL = 'http://hrsys.zero-yun.cn'
+
+axios.defaults.baseURL = baseURL
 
 // request拦截器
 axios.interceptors.request.use(
@@ -30,6 +31,7 @@ axios.interceptors.response.use(response => {
 })
 
 const http = {
+  baseURL,
   get: function (url, params) {
     return new Promise((resolve, reject) => {
       axios.get(url, {

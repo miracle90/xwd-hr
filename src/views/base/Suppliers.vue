@@ -126,10 +126,10 @@ export default {
     // this.findList()
   },
   methods: {
-    async findList () {
-      const res = await this.$http.get('/data/supplier/find')
-      console.log(res)
-    },
+    // async findList () {
+    //   const res = await this.$http.get('/data/supplier/find')
+    //   console.log(res)
+    // },
     deleteSuppliers () {
       this.$confirm({
         title: '删除提示',
@@ -213,6 +213,4 @@ export default {
 </script>
 
 <style lang="less">
-  .page-wrapper {
-  }
 </style>

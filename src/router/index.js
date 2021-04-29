@@ -116,8 +116,26 @@ const routes = [
         }
       },
       {
+        path: '/archivesedit',
+        component: () => import('../views/staff/ArchivesEdit.vue'),
+        meta: {
+          openKey: 'sub3',
+          selectKey: '/archives',
+          bread: ['员工管理', '员工档案-编辑']
+        }
+      },
+      {
         path: '/month',
         component: () => import('../views/staff/Month.vue'),
+        meta: {
+          openKey: 'sub3',
+          selectKey: '/month',
+          bread: ['员工管理', '月考勤数据']
+        }
+      },
+      {
+        path: '/monthedit',
+        component: () => import('../views/staff/MonthEdit.vue'),
         meta: {
           openKey: 'sub3',
           selectKey: '/month',

@@ -1,30 +1,68 @@
 <template>
   <a-spin class="page-wrapper" :spinning="spinning">
-    <a-row type="flex" style="margin-bottom: 20px;">
-      <a-col style="display: flex; align-items: center;">入职日期：</a-col>
-      <a-col><a-range-picker v-model="rangePicker" @change="onPickerChange" :locale="locale" /></a-col>
-    </a-row>
-    <a-row type="flex" style="margin-bottom: 20px;">
-      <a-col style="display: flex; align-items: center;">单据状态：</a-col>
-      <a-col style="margin-right: 200px;">
-        <a-radio-group v-model="status" button-style="solid">
-          <a-radio-button value="0">待提交</a-radio-button>
-          <a-radio-button value="1">待回复</a-radio-button>
-          <a-radio-button value="2">已回复</a-radio-button>
-          <a-radio-button value="3">已确认</a-radio-button>
-        </a-radio-group>
+    <a-form :form="form" @submit="() => {
+        page = 1;
+        handleSearch();
+      }" layout="horizontal">
+      <a-row :gutter="24">
+        <a-col :span="5">
+          <a-form-item label="入职日期">
+            <a-range-picker v-decorator="[`date`]" :locale="locale" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="5">
+          <a-form-item label="工号">
+            <a-input
+              v-decorator="[`queryEmployeeNumber`]"
+              placeholder="请输入工号"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="5">
+          <a-form-item label="姓名">
+            <a-input
+              v-decorator="[`queryEmployeeName`]"
+              placeholder="请输入姓名"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="5">
+          <a-form-item label="雇佣状态">
+            <a-select
+              v-decorator="['queryEmployState']"
+              placeholder="请选择雇佣状态"
+            >
+              <a-select-option value="1">在职</a-select-option>
+              <a-select-option value="2">离职</a-select-option>
+              <a-select-option value="3">自离</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="4" style="padding-top: 43px;">
+          <a-button type="primary" html-type="submit" style="margin-right: 5px;">查询</a-button>
+          <a-button @click="reset">重置</a-button>
+        </a-col>
+      </a-row>
+    </a-form>
+    <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+      <a-col>
+        <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button>
+        <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button>
+        <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
+        <a-upload
+          :action="`${$http.baseURL}/data/employee/import`"
+          :showUploadList="false"
+          name="file"
+          :before-upload="beforeUpload"
+        >
+          <a-button>导入</a-button>
+        </a-upload>
       </a-col>
       <a-col>
-        <a-button type="primary" @click="query" style="margin-right: 20px;">查询</a-button>
-        <a-button @click="reset">重置</a-button>
-      </a-col>
-    </a-row>
-    <a-row type="flex" style="margin-bottom: 20px;">
-      <a-col>
-        <a-button @click="add" type="primary" style="margin-right: 20px;">新增</a-button>
-        <a-button @click="submit" type="primary" style="margin-right: 20px;">提交</a-button>
-        <!-- <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-right: 20px;">修改</a-button> -->
-        <a-button @click="deletePlan" :disabled="!selectedIds.length" type="danger" style="margin-right: 20px;">批量删除</a-button>
+        <a-button @click="add">新增</a-button>
+        <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-left: 5px;">修改</a-button>
+        <a-button @click="dimission" :disabled="!selectedIds.length" style="margin-left: 5px;">离职</a-button>
+        <a-button @click="selfDimission" :disabled="!selectedIds.length" style="margin-left: 5px;">自离</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -40,19 +78,14 @@
           }"
           :rowKey="(record, index) => index"
         >
-          <span slot="action" slot-scope="record">
-            <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">查看</router-link>
-            <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">修改</router-link>
-            <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">审核</router-link>
-          </span>
-          <!-- <router-link
-            slot="supplierName"
+          <router-link
+            slot="employeeNumber"
             slot-scope="text, record"
             style="color: #1890ff"
-            :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}"
-          >{{ text }}</router-link> -->
+            :to="{ path: '/archivesedit', query: { id: record.id, type: 0 }}"
+          >{{ text }}</router-link>
+          <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span>
+          <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工'][text] }}</span>
         </a-table>
       </a-col>
     </a-row>
@@ -84,77 +117,99 @@ import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 
 const columns = [
   {
-    title: '需求编号',
-    dataIndex: 'demandCode',
-    key: 'demandCode'
+    title: '工号',
+    dataIndex: 'employeeNumber',
+    key: 'employeeNumber',
+    scopedSlots: { customRender: 'employeeNumber' }
   },
   {
-    title: '客户名称',
-    dataIndex: 'supplierCode',
-    key: 'supplierCode'
+    title: '姓名',
+    dataIndex: 'employeeName',
+    key: 'employeeName'
   },
   {
-    title: '需求事业部',
-    dataIndex: 'deptName',
-    key: 'deptName'
+    title: '入职日期',
+    dataIndex: 'onJobDate',
+    key: 'onJobDate'
   },
   {
-    title: '需求工种',
-    dataIndex: 'demandTrade',
-    key: 'demandTrade'
+    title: '离职日期',
+    dataIndex: 'downJobDate',
+    key: 'downJobDate'
   },
   {
-    title: '需求人数',
-    dataIndex: 'demandPersions',
-    key: 'demandPersions'
+    title: '雇佣状态',
+    dataIndex: 'employState',
+    key: 'employState'
   },
   {
-    title: '需求比例',
-    dataIndex: 'demandRatio',
-    key: 'demandRatio'
+    title: '工种',
+    dataIndex: 'jobType',
+    key: 'jobType',
+    scopedSlots: { customRender: 'jobType' }
   },
   {
-    title: '需求日期',
-    dataIndex: 'demandBeginDate',
-    key: 'demandBeginDate'
+    title: '区域',
+    dataIndex: 'area',
+    key: 'area'
   },
   {
-    title: '撤离日期',
-    dataIndex: 'demandEndDate',
-    key: 'demandEndDate'
+    title: '所属公司',
+    dataIndex: 'customerId',
+    key: 'customerId',
+    scopedSlots: { customRender: 'customerId' }
   },
   {
-    title: '截止回复日期',
-    dataIndex: 'replyEndDate',
-    key: 'replyEndDate'
+    title: '所在部门',
+    dataIndex: 'department',
+    key: 'department'
   },
   {
-    title: '可供应数量',
-    dataIndex: 'dispatchEndDate',
-    key: 'dispatchEndDate'
+    title: '本人电话',
+    dataIndex: 'employeePhone',
+    key: 'employeePhone'
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status'
+    title: '紧急联系人',
+    dataIndex: 'emergencyContactName',
+    key: 'emergencyContactName'
   },
   {
-    title: '操作',
-    key: 'action',
-    scopedSlots: { customRender: 'action' }
+    title: '紧急联系电话',
+    dataIndex: 'emergencyContactPhone',
+    key: 'emergencyContactPhone'
+  },
+  {
+    title: '员工工价',
+    dataIndex: 'employeePrice',
+    key: 'employeePrice'
+  },
+  {
+    title: '工资卡信息',
+    dataIndex: 'payrollCardInfo',
+    key: 'payrollCardInfo'
+  },
+  {
+    title: '招聘来源',
+    dataIndex: 'supplierName',
+    key: 'supplierName'
+  },
+  {
+    title: '性别',
+    dataIndex: 'sex',
+    key: 'sex'
   }
 ]
 
 export default {
   data () {
     return {
+      customerList: [],
+      supplierList: [],
       locale,
-      rangePicker: null,
-      demandBeginDate: '',
-      demandEndDate: '',
-      status: '',
+      queryOnJobDateStartTime: '',
+      queryOnJobDateEndTime: '',
       spinning: false,
-      delayTime: 500,
       selectedRowKeys: [],
       selectedRows: [],
       selectedIds: [],
@@ -163,17 +218,168 @@ export default {
       page: 1,
       limit: 10,
       data: [],
-      columns
+      columns,
+      form: this.$form.createForm(this, { name: 'advanced_search' })
     }
   },
   computed: {
     //
   },
   mounted () {
-    this.getList()
-    // this.findList()
+    this.findCustomerList()
+    this.findSuppliersList()
+    this.handleSearch()
   },
   methods: {
+    beforeUpload (file) {
+      console.log('file ', file)
+      return true
+    },
+    /**
+     * 导出
+     */
+    exportOpt () {
+      this.$confirm({
+        title: '导出',
+        content: '确定要进行数据导出吗？',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          this.form.validateFields(async (error, values) => {
+            if (!error) {
+              const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+              const param = {
+                queryEmployeeNumber,
+                queryEmployeeName,
+                queryEmployState,
+                queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
+                queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+              }
+              this.spinning = true
+              const res = await this.$http.get('/data/employee/export', param)
+              this.spinning = false
+              if (res) {
+                this.$message.success('数据导出成功!')
+              }
+            }
+          })
+        }
+      })
+    },
+    /**
+     * 离职
+     */
+    dimission () {
+      this.$confirm({
+        title: '离职提示',
+        content: '确定对员工进行离职操作吗？',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          this.spinning = true
+          if (this.selectedIds.length === 1) {
+            const id = this.selectedIds[0]
+            const res = await this.$http.post(`/data/employee/resign/${id}`)
+            this.spinning = false
+            if (res) {
+              this.selectedIds = []
+              this.selectedRowKeys = []
+              this.selectedRows = []
+              this.$message.success('离职操作成功!')
+              this.handleSearch()
+            }
+          } else {
+            const res = await this.$http.post('/data/employee/batchResign', {
+              idsArr: this.selectedIds
+            })
+            this.spinning = false
+            if (res) {
+              this.selectedIds = []
+              this.selectedRowKeys = []
+              this.selectedRows = []
+              this.$message.success('批量离职操作成功!')
+              this.handleSearch()
+            }
+          }
+        }
+      })
+    },
+    /**
+     * 自离
+     */
+    selfDimission () {
+      this.$confirm({
+        title: '自离提示',
+        content: '确定对员工进行自离操作吗？',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          this.spinning = true
+          if (this.selectedIds.length === 1) {
+            const id = this.selectedIds[0]
+            const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
+            this.spinning = false
+            if (res) {
+              this.selectedIds = []
+              this.selectedRowKeys = []
+              this.selectedRows = []
+              this.$message.success('自离操作成功!')
+              this.handleSearch()
+            }
+          } else {
+            const res = await this.$http.post('/data/employee/batchResignBySelf', {
+              idsArr: this.selectedIds
+            })
+            this.spinning = false
+            if (res) {
+              this.selectedIds = []
+              this.selectedRowKeys = []
+              this.selectedRows = []
+              this.$message.success('批量自离操作成功!')
+              this.handleSearch()
+            }
+          }
+        }
+      })
+    },
+    /**
+     * 数据推送
+     */
+    dataPush () {
+      this.$confirm({
+        title: '数据推送',
+        content: '确定要进行数据推送吗？',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          this.spinning = true
+          const res = await this.$http.post('/data/employee/dataPush')
+          this.spinning = false
+          if (res) {
+            this.$message.success('数据推送成功!')
+          }
+        }
+      })
+    },
+    /**
+     * 模板下载
+     */
+    downloadTemplet () {
+      this.$confirm({
+        title: '模板下载',
+        content: '确定要进行模板下载吗？',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          this.spinning = true
+          const res = await this.$http.get('/data/employee/downloadTemplet')
+          this.spinning = false
+          if (res) {
+            this.$message.success('模板下载成功!')
+          }
+        }
+      })
+    },
     onPickerChange (date, dateString) {
       console.log(date, dateString)
     },
@@ -181,97 +387,124 @@ export default {
       //
     },
     reset () {
-      //
+      this.form.resetFields()
     },
-    async findList () {
+    async findCustomerList () {
+      const res = await this.$http.get('/data/customer/find')
+      this.customerList = res.data
+    },
+    async findSuppliersList () {
       const res = await this.$http.get('/data/supplier/find')
-      console.log(res)
+      this.supplierList = res.data
     },
-    deletePlan () {
-      this.$confirm({
-        title: '删除提示',
-        content: '确定要删除所勾选的记录吗？',
-        okText: '确定',
-        okType: 'danger',
-        cancelText: '取消',
-        onOk: async () => {
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/supplier/delete/${id}`)
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('删除供应商成功!')
-              this.getList()
-            }
-          } else {
-            const res = await this.$http.post('/data/supplier/batchDel', {
-              idsArr: this.selectedIds
-            })
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('批量删除供应商成功!')
-              this.getList()
-            }
-          }
-        },
-        onCancel: () => {
-          console.log('Cancel')
-        }
-      })
-    },
+    // deletePlan () {
+    //   this.$confirm({
+    //     title: '删除提示',
+    //     content: '确定要删除所勾选的记录吗？',
+    //     okText: '确定',
+    //     okType: 'danger',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       if (this.selectedIds.length === 1) {
+    //         const id = this.selectedIds[0]
+    //         const res = await this.$http.post(`/data/supplier/delete/${id}`)
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('删除供应商成功!')
+    //           this.getList()
+    //         }
+    //       } else {
+    //         const res = await this.$http.post('/data/supplier/batchDel', {
+    //           idsArr: this.selectedIds
+    //         })
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('批量删除供应商成功!')
+    //           this.getList()
+    //         }
+    //       }
+    //     },
+    //     onCancel: () => {
+    //       console.log('Cancel')
+    //     }
+    //   })
+    // },
     modify () {
       const id = this.selectedIds[0]
       // 修改type为1，详情type为0
-      this.$router.push({ path: '/suppliersedit', query: { id, type: 1 } })
+      this.$router.push({ path: '/archivesedit', query: { id, type: 1 } })
     },
     onSelectChange (selectedRowKeys, selectedRows) {
-      console.log('onSelectChange')
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
       this.selectedIds = selectedRows.map(item => item.id)
     },
     add () {
-      this.$router.push('/planedit')
+      this.$router.push('/archivesedit')
     },
-    query () {
-      this.page = 1
-      this.getList()
-    },
+    // query () {
+    //   this.page = 1
+    //   this.getList()
+    // },
     onChange (page) {
       this.page = page
-      this.getList()
+      this.handleSearch()
     },
     onShowSizeChange (current, limit) {
       this.page = 1
       this.limit = limit
-      this.getList()
+      this.handleSearch()
     },
-    async getList () {
-      this.spinning = true
-      const { page, limit, demandBeginDate, demandEndDate, status } = this
-      const res = await this.$http.get('/data/demand/list', {
-        page,
-        limit,
-        demandBeginDate,
-        demandEndDate,
-        status
+    // async getList () {
+    //   this.spinning = true
+    //   const { page, limit, queryOnJobDateStartTime, queryOnJobDateEndTime, status } = this
+    //   const res = await this.$http.get('/data/employee/list', {
+    //     page,
+    //     limit,
+    //     queryOnJobDateStartTime,
+    //     queryOnJobDateEndTime,
+    //     status
+    //   })
+    //   this.spinning = false
+    //   if (res) {
+    //     const { count, data } = res
+    //     this.data = data
+    //     this.total = count
+    //   }
+    // },
+    handleSearch (e) {
+      if (e) e.preventDefault()
+      this.form.validateFields(async (error, values) => {
+        if (!error) {
+          const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+          const { page, limit } = this
+          const param = {
+            page,
+            limit,
+            queryEmployeeNumber,
+            queryEmployeeName,
+            queryEmployState,
+            queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
+            queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+          }
+          this.spinning = true
+          const res = await this.$http.get('/data/employee/list', param)
+          this.spinning = false
+          if (res) {
+            const { count, data } = res
+            this.data = data
+            this.total = count
+          }
+        }
       })
-      this.spinning = false
-      if (res) {
-        const { count, data } = res
-        this.data = data
-        this.total = count
-      }
     }
   }
 }
 </script>
 
 <style lang="less">
-  .page-wrapper {
-  }
 </style>
