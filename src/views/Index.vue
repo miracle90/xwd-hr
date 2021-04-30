@@ -37,18 +37,18 @@
         </a-sub-menu>
         <a-sub-menu key="sub4">
           <span slot="title"><a-icon type="mail" /><span>返费管理</span></span>
-          <a-menu-item key="41">返费设定</a-menu-item>
-          <a-menu-item key="42">返费计算</a-menu-item>
+          <a-menu-item key="/setting"><router-link to="/setting">返费设定</router-link></a-menu-item>
+          <a-menu-item key="/calculate"><router-link to="/calculate">返费计算</router-link></a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub5">
           <span slot="title"><a-icon type="mail" /><span>报表分析</span></span>
-          <a-menu-item key="51">员工花名册</a-menu-item>
+          <a-menu-item key="/employee"><router-link to="/employee">员工花名册</router-link></a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub6">
           <span slot="title"><a-icon type="mail" /><span>系统管理</span></span>
-          <a-menu-item key="61">租户管理</a-menu-item>
-          <a-menu-item key="62">用户管理</a-menu-item>
-          <a-menu-item key="63">角色管理</a-menu-item>
+          <a-menu-item key="/hirer"><router-link to="/hirer">租户管理</router-link></a-menu-item>
+          <a-menu-item key="/user"><router-link to="/user">用户管理</router-link></a-menu-item>
+          <a-menu-item key="/role"><router-link to="/role">角色管理</router-link></a-menu-item>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>

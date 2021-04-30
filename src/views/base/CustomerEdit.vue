@@ -194,8 +194,8 @@ export default {
           this.spinning = true
           if (this.id) param.id = this.id
           const res = await this.$http.post(`/data/customer/${this.id ? 'update' : 'add'}`, param)
+          this.spinning = false
           if (res) {
-            this.spinning = false
             this.$message.success(`${this.id ? '客户信息修改成功！' : '新增客户成功！'}`)
             this.$router.back()
           }

@@ -186,6 +186,78 @@ const routes = [
           selectKey: '/borrow',
           bread: ['员工管理', '借支管理-编辑']
         }
+      },
+      {
+        path: '/setting',
+        component: () => import('../views/reimbursement/Setting.vue'),
+        meta: {
+          openKey: 'sub4',
+          selectKey: '/setting',
+          bread: ['返费管理', '返费设定']
+        }
+      },
+      {
+        path: '/settingedit',
+        component: () => import('../views/reimbursement/SettingEdit.vue'),
+        meta: {
+          openKey: 'sub4',
+          selectKey: '/setting',
+          bread: ['返费管理', '返费设定-编辑']
+        }
+      },
+      {
+        path: '/calculate',
+        component: () => import('../views/reimbursement/Calculate.vue'),
+        meta: {
+          openKey: 'sub4',
+          selectKey: '/calculate',
+          bread: ['返费管理', '返费计算']
+        }
+      },
+      {
+        path: '/calculateedit',
+        component: () => import('../views/reimbursement/CalculateEdit.vue'),
+        meta: {
+          openKey: 'sub4',
+          selectKey: '/calculate',
+          bread: ['返费管理', '返费计算-编辑']
+        }
+      },
+      {
+        path: '/employee',
+        component: () => import('../views/report/Employee.vue'),
+        meta: {
+          openKey: 'sub5',
+          selectKey: '/employee',
+          bread: ['报表分析', '员工花名册']
+        }
+      },
+      {
+        path: '/hirer',
+        component: () => import('../views/system/Hirer.vue'),
+        meta: {
+          openKey: 'sub6',
+          selectKey: '/hirer',
+          bread: ['系统管理', '租户管理']
+        }
+      },
+      {
+        path: '/user',
+        component: () => import('../views/system/User.vue'),
+        meta: {
+          openKey: 'sub6',
+          selectKey: '/user',
+          bread: ['系统管理', '用户管理']
+        }
+      },
+      {
+        path: '/role',
+        component: () => import('../views/system/Role.vue'),
+        meta: {
+          openKey: 'sub6',
+          selectKey: '/role',
+          bread: ['系统管理', '角色管理']
+        }
       }
     ]
   }

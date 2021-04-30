@@ -43,6 +43,7 @@
           :showUploadList="false"
           name="file"
           :before-upload="beforeUpload"
+          @change="handleChange"
         >
           <a-button>导入</a-button>
         </a-upload>
@@ -219,9 +220,21 @@ export default {
     this.handleSearch()
   },
   methods: {
+    handleChange (info) {
+      if (info.file.status === 'done') {
+        this.$message.success('上传成功')
+      } else if (info.file.status === 'error') {
+        this.$message.error('上传失败')
+      }
+    },
     beforeUpload (file) {
-      console.log('file ', file)
-      return true
+      const { name } = file
+      const type = name.split('.').pop()
+      if (['xlsx', 'xls', 'xltx', 'xlt', 'xlsm', 'xlsm', 'xlsb', 'xltm', 'csv'].includes(type)) {
+        return true
+      }
+      this.$message.error('请上传正确格式的表格文件')
+      return false
     },
     /**
      * 导出

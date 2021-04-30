@@ -5,28 +5,7 @@
         handleSearch();
       }" layout="horizontal">
       <a-row :gutter="24">
-        <a-col :span="5">
-          <a-form-item label="入职日期">
-            <a-range-picker v-decorator="[`date`]" :locale="locale" />
-          </a-form-item>
-        </a-col>
-        <a-col :span="5">
-          <a-form-item label="工号">
-            <a-input
-              v-decorator="[`queryEmployeeNumber`]"
-              placeholder="请输入工号"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="5">
-          <a-form-item label="姓名">
-            <a-input
-              v-decorator="[`queryEmployeeName`]"
-              placeholder="请输入姓名"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="5">
+        <a-col :span="6">
           <a-form-item label="雇佣状态">
             <a-select
               v-decorator="['queryEmployState']"
@@ -38,13 +17,38 @@
             </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="4" style="padding-top: 43px;">
-          <a-button type="primary" html-type="submit" style="margin-right: 5px;">查询</a-button>
+        <a-col :span="6">
+          <a-form-item label="入职日期">
+            <a-range-picker v-decorator="[`date`]" :locale="locale" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="6">
+          <a-form-item label="供应商">
+            <a-select
+              v-decorator="['queryEmployState']"
+              placeholder="请选择供应商"
+            >
+              <a-select-option v-for="item in supplierList" :key="item.id" :value="item.id">
+                {{ item.supplierName }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="6">
+          <a-form-item label="部门">
+            <a-input
+              v-decorator="[`queryEmployeeNumber`]"
+              placeholder="请输入部门"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="6">
+          <a-button type="primary" html-type="submit" style="margin-right: 5px;">打印</a-button>
           <a-button @click="reset">重置</a-button>
         </a-col>
       </a-row>
     </a-form>
-    <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+    <!-- <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <a-col>
         <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button>
         <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button>
@@ -65,8 +69,8 @@
         <a-button @click="dimission" :disabled="!selectedIds.length" style="margin-left: 5px;">离职</a-button>
         <a-button @click="selfDimission" :disabled="!selectedIds.length" style="margin-left: 5px;">自离</a-button>
       </a-col>
-    </a-row>
-    <a-row style="margin-bottom: 20px;">
+    </a-row> -->
+    <!-- <a-row style="margin-bottom: 20px;">
       <a-col>
         <a-table
           :pagination="false"
@@ -89,8 +93,8 @@
           <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工'][text] }}</span>
         </a-table>
       </a-col>
-    </a-row>
-    <a-row style="margin-bottom: 20px;">
+    </a-row> -->
+    <!-- <a-row style="margin-bottom: 20px;">
       <a-col>
         <a-pagination
           v-model="page"
@@ -109,7 +113,7 @@
           </template>
         </a-pagination>
       </a-col>
-    </a-row>
+    </a-row> -->
   </a-spin>
 </template>
 
