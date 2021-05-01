@@ -162,8 +162,8 @@ const columns = [
   },
   {
     title: '所在部门',
-    dataIndex: 'department',
-    key: 'department'
+    dataIndex: 'deptName',
+    key: 'deptName'
   },
   {
     title: '本人电话',

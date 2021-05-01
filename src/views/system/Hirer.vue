@@ -399,7 +399,7 @@ export default {
       this.selectedIds = selectedRows.map(item => item.id)
     },
     add () {
-      this.$router.push('/archivesedit')
+      this.$router.push('/hireredit')
     },
     // query () {
     //   this.page = 1

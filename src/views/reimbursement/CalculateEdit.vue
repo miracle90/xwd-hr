@@ -1,233 +1,137 @@
 <template>
   <a-spin class="page-wrapper" :spinning="spinning">
-    <a-row>
+    <a-row style="border-bottom: 1px solid #000000;">
       <a-col>
-        <a-form class="ant-advanced-search-form" :form="form" @submit="handleSearch" layout="horizontal">
+        <a-form class="ant-advanced-search-form" layout="horizontal">
           <a-row style="margin-bottom: 20px;">
             <a-col :span="24">
-              <a-button v-if="type === '1'" type="primary" html-type="submit" style="margin-right: 20px;">提交</a-button>
-              <a-button v-if="type === '1'" :style="{ marginRight: '20px' }" @click="handleReset">重置</a-button>
-              <a-button @click="cancel">{{ type !== '1' ? '返回' : '取消' }}</a-button>
+              <a-button @click="cancel">返回</a-button>
             </a-col>
           </a-row>
           <a-row :gutter="12">
-            <a-col :span="6">
-              <a-form-item label="工号" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`employeeNumber`, {
-                    rules: [{ required: true, message: '请输入供应商编码!'}]
-                  }]"
-                  placeholder="请输入供应商编码"
-                />
+            <a-col :span="8">
+              <a-form-item label="核算月份" :label-col="{ span: 12 }">
+                {{ yearMonth }}
               </a-form-item>
             </a-col>
-            <a-col :span="6">
-              <a-form-item label="姓名" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`employeeName`, {
-                    rules: [{ required: true, message: '请输入姓名!'}]
-                  }]"
-                  placeholder="请输入姓名"
-                />
+            <a-col :span="8">
+              <a-form-item label="供应商编号" :label-col="{ span: 12 }">
+                {{ supplierCode }}
               </a-form-item>
             </a-col>
-            <a-col :span="6">
-              <a-form-item label="入职日期" :label-col="{ span: 6 }">
-                <a-date-picker
-                  :disabled="type === '0'"
-                  v-decorator="[`onJobDate`, {
-                    rules: [{ required: true, message: '请选择入职日期!'}]
-                  }]"
-                  format="YYYY-MM-DD"
-                  style="width: 100%"
-                  placeholder="请选择入职日期"
-                />
+            <a-col :span="8">
+              <a-form-item label="供应商名称" :label-col="{ span: 12 }">
+                {{ supplierName }}
               </a-form-item>
             </a-col>
-            <a-col :span="6">
-              <a-form-item label="雇佣状态" :label-col="{ span: 6 }">
-                <a-select
-                  :disabled="type === '0'"
-                  v-decorator="[`employState`, {
-                    rules: [{ required: true, message: '请选择雇佣状态!'}]
-                  }]"
-                  placeholder="请选择雇佣状态"
-                >
-                  <a-select-option value="在职">在职</a-select-option>
-                  <a-select-option value="离职">离职</a-select-option>
-                  <a-select-option value="自离">自离</a-select-option>
-                </a-select>
+            <a-col :span="8">
+              <a-form-item label="人数" :label-col="{ span: 12 }">
+                {{ persionTotal }}
               </a-form-item>
             </a-col>
-            <a-col :span="6">
-              <a-form-item label="性别" :label-col="{ span: 6 }">
-                <a-select
-                  :disabled="type === '0'"
-                  v-decorator="[`sex`, {
-                    rules: [{ required: true, message: '请选择性别!'}]
-                  }]"
-                  placeholder="请选择性别"
-                >
-                  <a-select-option value="男">男</a-select-option>
-                  <a-select-option value="女">女</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="民族" :label-col="{ span: 6 }">
-                <a-select
-                  :disabled="type === '0'"
-                  v-decorator="[`ethnic`, {
-                    rules: [{ required: true, message: '请选择民族!'}]
-                  }]"
-                  placeholder="请选择民族"
-                >
-                  <a-select-option value="汉族">汉族</a-select-option>
-                  <a-select-option value="回族">回族</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="本人电话" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`employeePhone`, {
-                    rules: [{ required: true, message: '请输入本人电话!'}]
-                  }]"
-                  placeholder="请输入本人电话"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="身份证号码" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`idCard`, {
-                    rules: [{ required: true, message: '请输入身份证号码!'}]
-                  }]"
-                  placeholder="请输入身份证号码"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="紧急联系人" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`emergencyContactName`]"
-                  placeholder="请输入紧急联系人"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="紧急联系电话" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`emergencyContactPhone`]"
-                  placeholder="请输入紧急联系电话"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="户籍地址" :label-col="{ span: 3 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`originAddress`, {
-                    rules: [{ required: true, message: '请输入户籍地址!'}]
-                  }]"
-                  placeholder="请输入户籍地址"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="工种" :label-col="{ span: 6 }">
-                <a-select
-                  :disabled="type === '0'"
-                  v-decorator="[`jobType`, {
-                    rules: [{ required: true, message: '请选择工种!'}]
-                  }]"
-                  placeholder="请选择工种"
-                >
-                  <a-select-option :value="1">学生工</a-select-option>
-                  <a-select-option :value="2">农民工</a-select-option>
-                  <a-select-option :value="3">社会工</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="区域" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`area`]"
-                  placeholder="请输入区域"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="所属公司" :label-col="{ span: 6 }">
-                <a-select
-                  :disabled="type === '0'"
-                  v-decorator="[`customerId`, {
-                    rules: [{ required: true, message: '请选择所属公司!'}]
-                  }]"
-                  placeholder="请选择所属公司"
-                >
-                  <a-select-option v-for="item in customerList" :value="item.id" :key="item.id">{{ item.customerName }}</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="所在部门" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`department`]"
-                  placeholder="请输入所在部门"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="招聘来源" :label-col="{ span: 6 }">
-                <a-select
-                  :disabled="type === '0'"
-                  v-decorator="[`supplierId`, {
-                    rules: [{ required: true, message: '请选择招聘来源!'}]
-                  }]"
-                  placeholder="请选择招聘来源"
-                >
-                  <a-select-option v-for="item in supplierList" :value="item.id" :key="item.id">{{ item.supplierName }}</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="工价" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`employeePrice`, {
-                    rules: [{ required: true, message: '请输入工价!'}]
-                  }]"
-                  placeholder="请输入工价"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="工资卡" :label-col="{ span: 3 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`payrollCardInfo`]"
-                  placeholder="请输入工资卡"
-                />
+            <a-col :span="8">
+              <a-form-item label="返费合计" :label-col="{ span: 12 }">
+                {{ rebateTotal }}
               </a-form-item>
             </a-col>
           </a-row>
         </a-form>
       </a-col>
     </a-row>
+    <a-row type="flex" style="display: flex; justify-content: space-between; margin: 10px 0;">
+      <a-col>
+        <a-button @click="exportOpt">导出</a-button>
+      </a-col>
+      <a-col style="display: flex;">
+        <a-input v-model="employeeName" placeholder="请输入员工姓名" />
+        <a-button type="primary" @click="() => {
+          page = 1;
+          handleSearch();
+        }" style="margin-left: 5px;">查询</a-button>
+      </a-col>
+    </a-row>
+    <a-row style="margin-bottom: 20px;">
+      <a-col>
+        <a-table
+          :pagination="false"
+          :columns="columns"
+          :data-source="data"
+          :rowKey="(record, index) => index"
+        ></a-table>
+      </a-col>
+    </a-row>
+    <a-row style="margin-bottom: 20px;">
+      <a-col>
+        <a-pagination
+          v-model="page"
+          :page-size-options="pageSizeOptions"
+          :total="total"
+          show-size-changer
+          show-quick-jumper
+          :page-size="limit"
+          :show-total="total => `共${total}条记录`"
+          @showSizeChange="onShowSizeChange"
+          @change="onChange"
+        >
+          <template slot="buildOptionText" slot-scope="props">
+            <span v-if="props.value !== '50'">{{ props.value }}条/页</span>
+            <span v-if="props.value === '50'">全部</span>
+          </template>
+        </a-pagination>
+      </a-col>
+    </a-row>
   </a-spin>
 </template>
 
 <script>
-import Moment from 'moment'
+const columns = [
+  {
+    title: '工号',
+    dataIndex: 'employeeNumber',
+    key: 'employeeNumber'
+  },
+  {
+    title: '姓名',
+    dataIndex: 'employeeName',
+    key: 'employeeName'
+  },
+  {
+    title: '公司',
+    dataIndex: 'customerName',
+    key: 'customerName'
+  },
+  {
+    title: '部门',
+    dataIndex: 'deptName',
+    key: 'deptName'
+  },
+  {
+    title: '工时（小时）',
+    dataIndex: 'totalHours',
+    key: 'totalHours'
+  },
+  {
+    title: '代扣费',
+    dataIndex: 'withholdFee',
+    key: 'withholdFee'
+  },
+  {
+    title: '返费标准（元/工时）',
+    dataIndex: 'rebateStandard',
+    key: 'rebateStandard'
+  },
+  {
+    title: '返费合计（元）',
+    dataIndex: 'rebateTotal',
+    key: 'rebateTotal'
+  },
+  {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark'
+  }
+]
+// import Moment from 'moment'
 
 // function getBase64 (file) {
 //   return new Promise((resolve, reject) => {
@@ -241,13 +145,28 @@ import Moment from 'moment'
 export default {
   data () {
     return {
+      data: [],
+      columns,
+      selectedRowKeys: [],
+      selectedRows: [],
+      selectedIds: [],
+      total: 0,
+      pageSizeOptions: ['10', '20', '30', '40', '50'],
+      page: 1,
+      limit: 10,
+      employeeName: '',
+      yearMonth: '',
+      supplierCode: '',
+      supplierId: '',
+      supplierName: '',
+      persionTotal: '',
+      rebateTotal: '',
       customerList: [],
       supplierList: [],
       previewVisible: false,
       previewImage: '',
       fileList: [],
       spinning: false,
-      type: '1', // 新增、修改type为1，查看详情type为0
       id: '',
       form: this.$form.createForm(this, { name: 'advanced_search' })
     }
@@ -256,17 +175,50 @@ export default {
     //
   },
   mounted () {
-    this.findCustomerList()
-    this.findSuppliersList()
-    const { id, type } = this.$route.query
+    // this.findCustomerList()
+    // this.findSuppliersList()
+    const { id, supplierId, yearMonth } = this.$route.query
     if (id) {
       this.id = id
-      this.type = type
+      this.supplierId = supplierId
+      this.yearMonth = yearMonth
       this.queryDetail(id)
+      this.handleSearch()
       // this.queryAttachment(id)
     }
   },
   methods: {
+    onChange (page) {
+      this.page = page
+      this.handleSearch()
+    },
+    onShowSizeChange (current, limit) {
+      this.page = 1
+      this.limit = limit
+      this.handleSearch()
+    },
+    /**
+     * 导出
+     */
+    exportOpt () {
+      this.$confirm({
+        title: '导出',
+        content: '确定要进行数据导出吗？',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          const { employeeName, supplierId, yearMonth } = this
+          this.spinning = true
+          const res = await this.$http.get('/data/employeeRebate/export', {
+            employeeName, supplierId, yearMonth
+          })
+          this.spinning = false
+          if (res) {
+            this.$message.success('数据导出成功!')
+          }
+        }
+      })
+    },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')
       if (res) {
@@ -343,66 +295,53 @@ export default {
       this.spinning = false
       if (res) {
         const {
-          onJobDate,
-          employeeNumber,
-          employeeName,
-          employState,
-          sex,
-          ethnic,
-          employeePhone,
-          idCard,
-          emergencyContactName,
-          emergencyContactPhone,
-          originAddress,
-          jobType,
-          area,
-          customerId,
-          department,
-          supplierId,
-          employeePrice,
-          payrollCardInfo
+          yearMonth,
+          supplierCode,
+          supplierName,
+          persionTotal,
+          rebateTotal
         } = res.data
-        this.form.setFieldsValue({
-          onJobDate: onJobDate ? Moment(onJobDate) : null,
-          employeeNumber,
-          employeeName,
-          employState,
-          sex,
-          ethnic,
-          employeePhone,
-          idCard,
-          emergencyContactName,
-          emergencyContactPhone,
-          originAddress,
-          jobType,
-          area,
-          customerId,
-          department,
-          supplierId,
-          employeePrice,
-          payrollCardInfo
-        })
+        this.yearMonth = yearMonth
+        this.supplierCode = supplierCode
+        this.supplierName = supplierName
+        this.persionTotal = persionTotal
+        this.rebateTotal = rebateTotal
+
+        // this.form.setFieldsValue({
+        //   onJobDate: onJobDate ? Moment(onJobDate) : null,
+        //   employeeNumber,
+        //   employeeName,
+        //   employState,
+        //   sex,
+        //   ethnic,
+        //   employeePhone,
+        //   idCard,
+        //   emergencyContactName,
+        //   emergencyContactPhone,
+        //   originAddress,
+        //   jobType,
+        //   area,
+        //   customerId,
+        //   deptName,
+        //   supplierId,
+        //   employeePrice,
+        //   payrollCardInfo
+        // })
       }
     },
-    handleSearch (e) {
-      e.preventDefault()
-      this.form.validateFields(async (error, values) => {
-        if (!error) {
-          console.log(values)
-          const { onJobDate } = values
-          const param = {
-            ...values,
-            onJobDate: onJobDate ? (typeof onJobDate === 'string' ? onJobDate : onJobDate.format('YYYY-MM-DD')) : null
-          }
-          this.spinning = true
-          if (this.id) param.id = this.id
-          const res = await this.$http.post(`/data/employee/${this.id ? 'update' : 'add'}`, param)
-          if (res) {
-            this.$message.success(`${this.id ? '员工档案信息修改成功！' : '新增员工档案成功！'}`)
-            this.$router.back()
-          }
-        }
-      })
+    async handleSearch () {
+      const { employeeName, supplierId, yearMonth, page, limit } = this
+      const param = {
+        employeeName, supplierId, yearMonth, page, limit
+      }
+      this.spinning = true
+      const res = await this.$http.get('/data/employeeRebate/list', param)
+      this.spinning = false
+      if (res) {
+        this.data = res.data
+        // this.$message.success(`${this.id ? '员工档案信息修改成功！' : '新增员工档案成功！'}`)
+        // this.$router.back()
+      }
     },
     /**
      * 上传附件
@@ -435,6 +374,9 @@ export default {
 </script>
 
 <style lang="less">
+  .ant-form-item-children {
+    color: #1890ff;
+  }
   .ant-advanced-search-form .ant-form-item {
     display: flex;
   }

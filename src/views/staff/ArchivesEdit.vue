@@ -181,7 +181,7 @@
               <a-form-item label="所在部门" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`department`]"
+                  v-decorator="[`deptName`]"
                   placeholder="请输入所在部门"
                 />
               </a-form-item>
@@ -357,7 +357,7 @@ export default {
           jobType,
           area,
           customerId,
-          department,
+          deptName,
           supplierId,
           employeePrice,
           payrollCardInfo
@@ -377,7 +377,7 @@ export default {
           jobType,
           area,
           customerId,
-          department,
+          deptName,
           supplierId,
           employeePrice,
           payrollCardInfo

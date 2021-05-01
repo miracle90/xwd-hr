@@ -113,8 +113,8 @@ const columns = [
   },
   {
     title: '部门',
-    dataIndex: 'department',
-    key: 'department'
+    dataIndex: 'deptName',
+    key: 'deptName'
   },
   {
     title: '工号',

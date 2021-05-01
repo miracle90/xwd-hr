@@ -242,6 +242,15 @@ const routes = [
         }
       },
       {
+        path: '/hireredit',
+        component: () => import('../views/system/HirerEdit.vue'),
+        meta: {
+          openKey: 'sub6',
+          selectKey: '/hireredit',
+          bread: ['系统管理', '租户管理']
+        }
+      },
+      {
         path: '/user',
         component: () => import('../views/system/User.vue'),
         meta: {

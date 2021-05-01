@@ -5,7 +5,7 @@
         handleSearch();
       }" layout="horizontal">
       <a-row :gutter="24">
-        <a-col :span="5">
+        <a-col :span="6">
           <a-form-item label="供应商名称">
             <a-input
               v-decorator="[`supplierName`]"
@@ -13,7 +13,7 @@
             />
           </a-form-item>
         </a-col>
-        <a-col :span="4" style="padding-top: 43px;">
+        <a-col :span="6" style="padding-top: 43px;">
           <a-button type="primary" html-type="submit" style="margin-right: 5px;">查询</a-button>
           <a-button @click="reset">重置</a-button>
         </a-col>

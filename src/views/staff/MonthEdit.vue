@@ -50,7 +50,7 @@
               <a-form-item label="部门" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="true"
-                  v-decorator="[`department`]"
+                  v-decorator="[`deptName`]"
                   placeholder="输入工号进行查询"
                 />
               </a-form-item>
@@ -267,7 +267,7 @@ export default {
           jobType,
           area,
           customerId,
-          department,
+          deptName,
           supplierId,
           employeePrice,
           payrollCardInfo
@@ -287,7 +287,7 @@ export default {
           jobType,
           area,
           customerId,
-          department,
+          deptName,
           supplierId,
           employeePrice,
           payrollCardInfo

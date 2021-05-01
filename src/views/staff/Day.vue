@@ -97,8 +97,8 @@ const columns = [
   },
   {
     title: '所属部门',
-    dataIndex: 'department',
-    key: 'department'
+    dataIndex: 'deptName',
+    key: 'deptName'
   },
   {
     title: '工号',

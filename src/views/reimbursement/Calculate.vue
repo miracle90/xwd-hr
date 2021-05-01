@@ -42,9 +42,12 @@
             {{ supplierList.find(item => item.id === record.supplierId) ? supplierList.find(item => item.id === record.supplierId).supplierName : '' }}
           </span>
           <span slot="action" slot-scope="record">
-            <router-link style="color: #1890ff" :to="{ path: '/calculateedit', query: { id: record.id, type: 0 }}">查看</router-link>
-            <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/calculateedit', query: { id: record.id, type: 1 }}">修改</router-link>
+            <router-link style="color: #1890ff" :to="{
+              path: '/calculateedit',
+              query: { id: record.id, supplierId: record.supplierId, yearMonth: record.yearMonth }}"
+            >查看</router-link>
+            <!-- <a-divider type="vertical" /> -->
+            <!-- <router-link style="color: #1890ff" :to="{ path: '/calculateedit', query: { id: record.id, type: 1 }}">修改</router-link> -->
             <a-divider type="vertical" />
             <a  @click="deleteData(1, record.id)" style="color: red">删除</a>
           </span>
@@ -328,23 +331,23 @@ export default {
         onOk: async () => {
           this.spinning = true
           if (type === 1) {
-            const res = await this.$http.post(`/data/rebate/delete/${id}`)
+            const res = await this.$http.post(`/data/supplierRebate/delete/${id}`)
             if (res) {
               this.selectedIds = []
               this.selectedRowKeys = []
               this.selectedRows = []
-              this.$message.success('删除返费设定信息成功!')
+              this.$message.success('删除返费计算定信息成功!')
               this.handleSearch()
             }
           } else {
-            const res = await this.$http.post('/data/rebate/batchDel', {
+            const res = await this.$http.post('/data/supplierRebate/batchDel', {
               idsArr: this.selectedIds
             })
             if (res) {
               this.selectedIds = []
               this.selectedRowKeys = []
               this.selectedRows = []
-              this.$message.success('批量删除供应商成功!')
+              this.$message.success('批量删除返费计算信息成功!')
               this.handleSearch()
             }
           }
