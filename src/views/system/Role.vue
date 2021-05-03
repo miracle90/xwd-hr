@@ -5,40 +5,15 @@
         handleSearch();
       }" layout="horizontal">
       <a-row :gutter="24">
-        <a-col :span="5">
-          <a-form-item label="入职日期">
-            <a-range-picker v-decorator="[`date`]" :locale="locale" />
-          </a-form-item>
-        </a-col>
-        <a-col :span="5">
-          <a-form-item label="工号">
+        <a-col :span="6">
+          <a-form-item label="编号搜索">
             <a-input
-              v-decorator="[`queryEmployeeNumber`]"
-              placeholder="请输入工号"
+              v-decorator="[`keyword`]"
+              placeholder="请输入编号/代码搜索"
             />
           </a-form-item>
         </a-col>
-        <a-col :span="5">
-          <a-form-item label="姓名">
-            <a-input
-              v-decorator="[`queryEmployeeName`]"
-              placeholder="请输入姓名"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="5">
-          <a-form-item label="雇佣状态">
-            <a-select
-              v-decorator="['queryEmployState']"
-              placeholder="请选择雇佣状态"
-            >
-              <a-select-option value="1">在职</a-select-option>
-              <a-select-option value="2">离职</a-select-option>
-              <a-select-option value="3">自离</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4" style="padding-top: 43px;">
+        <a-col :span="6" style="padding-top: 43px;">
           <a-button type="primary" html-type="submit" style="margin-right: 5px;">查询</a-button>
           <a-button @click="reset">重置</a-button>
         </a-col>
@@ -46,8 +21,10 @@
     </a-form>
     <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <a-col>
-        <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button>
-        <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button>
+        <a-button @click="add" style="margin-right: 5px;">新建角色</a-button>
+        <!-- <a-button @click="deletePlan" :disabled="!selectedIds.length" type="danger" style="margin-right: 5px;">删除</a-button> -->
+        <!-- <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button>
+        <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button> -->
         <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
         <a-upload
           :action="`${$http.baseURL}/data/employee/import`"
@@ -58,12 +35,6 @@
         >
           <a-button>导入</a-button>
         </a-upload>
-      </a-col>
-      <a-col>
-        <a-button @click="add">新增</a-button>
-        <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-left: 5px;">修改</a-button>
-        <a-button @click="dimission" :disabled="!selectedIds.length" style="margin-left: 5px;">离职</a-button>
-        <a-button @click="selfDimission" :disabled="!selectedIds.length" style="margin-left: 5px;">自离</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -79,14 +50,23 @@
           }"
           :rowKey="(record, index) => index"
         >
-          <router-link
+          <span slot="action" slot-scope="record">
+            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 0 }}">查看</router-link>
+            <a-divider type="vertical" />
+            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 1 }}">修改</router-link>
+            <a-divider type="vertical" />
+            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 1 }}">启用</router-link>
+            <!-- <a-divider type="vertical" /> -->
+            <!-- <a  @click="deleteData(1, record.id)" style="color: red">删除</a> -->
+          </span>
+          <!-- <router-link
             slot="employeeNumber"
             slot-scope="text, record"
             style="color: #1890ff"
             :to="{ path: '/archivesedit', query: { id: record.id, type: 0 }}"
           >{{ text }}</router-link>
           <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span>
-          <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工'][text] }}</span>
+          <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工'][text] }}</span> -->
         </a-table>
       </a-col>
     </a-row>
@@ -118,87 +98,44 @@ import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 
 const columns = [
   {
-    title: '工号',
-    dataIndex: 'employeeNumber',
-    key: 'employeeNumber',
-    scopedSlots: { customRender: 'employeeNumber' }
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id'
   },
   {
-    title: '姓名',
-    dataIndex: 'employeeName',
-    key: 'employeeName'
+    title: '角色名称',
+    dataIndex: 'roleName',
+    key: 'roleName'
   },
   {
-    title: '入职日期',
-    dataIndex: 'onJobDate',
-    key: 'onJobDate'
+    title: '描述',
+    dataIndex: 'remark',
+    key: 'remark'
   },
   {
-    title: '离职日期',
-    dataIndex: 'downJobDate',
-    key: 'downJobDate'
+    title: '租户代码',
+    dataIndex: 'agentId',
+    key: 'agentId'
   },
   {
-    title: '雇佣状态',
-    dataIndex: 'employState',
-    key: 'employState'
+    title: '更新人',
+    dataIndex: 'updateUser',
+    key: 'updateUser'
   },
   {
-    title: '工种',
-    dataIndex: 'jobType',
-    key: 'jobType',
-    scopedSlots: { customRender: 'jobType' }
+    title: '更新时间',
+    dataIndex: 'updateTime',
+    key: 'updateTime'
   },
   {
-    title: '区域',
-    dataIndex: 'area',
-    key: 'area'
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status'
   },
   {
-    title: '所属公司',
-    dataIndex: 'customerId',
-    key: 'customerId',
-    scopedSlots: { customRender: 'customerId' }
-  },
-  {
-    title: '所在部门',
-    dataIndex: 'deptName',
-    key: 'deptName'
-  },
-  {
-    title: '本人电话',
-    dataIndex: 'employeePhone',
-    key: 'employeePhone'
-  },
-  {
-    title: '紧急联系人',
-    dataIndex: 'emergencyContactName',
-    key: 'emergencyContactName'
-  },
-  {
-    title: '紧急联系电话',
-    dataIndex: 'emergencyContactPhone',
-    key: 'emergencyContactPhone'
-  },
-  {
-    title: '员工工价',
-    dataIndex: 'employeePrice',
-    key: 'employeePrice'
-  },
-  {
-    title: '工资卡信息',
-    dataIndex: 'payrollCardInfo',
-    key: 'payrollCardInfo'
-  },
-  {
-    title: '招聘来源',
-    dataIndex: 'supplierName',
-    key: 'supplierName'
-  },
-  {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex'
+    title: '操作',
+    key: 'action',
+    scopedSlots: { customRender: 'action' }
   }
 ]
 
@@ -410,42 +347,42 @@ export default {
       const res = await this.$http.get('/data/supplier/find')
       this.supplierList = res.data
     },
-    // deletePlan () {
-    //   this.$confirm({
-    //     title: '删除提示',
-    //     content: '确定要删除所勾选的记录吗？',
-    //     okText: '确定',
-    //     okType: 'danger',
-    //     cancelText: '取消',
-    //     onOk: async () => {
-    //       if (this.selectedIds.length === 1) {
-    //         const id = this.selectedIds[0]
-    //         const res = await this.$http.post(`/data/supplier/delete/${id}`)
-    //         if (res) {
-    //           this.selectedIds = []
-    //           this.selectedRowKeys = []
-    //           this.selectedRows = []
-    //           this.$message.success('删除供应商成功!')
-    //           this.getList()
-    //         }
-    //       } else {
-    //         const res = await this.$http.post('/data/supplier/batchDel', {
-    //           idsArr: this.selectedIds
-    //         })
-    //         if (res) {
-    //           this.selectedIds = []
-    //           this.selectedRowKeys = []
-    //           this.selectedRows = []
-    //           this.$message.success('批量删除供应商成功!')
-    //           this.getList()
-    //         }
-    //       }
-    //     },
-    //     onCancel: () => {
-    //       console.log('Cancel')
-    //     }
-    //   })
-    // },
+    deletePlan () {
+      this.$confirm({
+        title: '删除提示',
+        content: '确定要删除所勾选的记录吗？',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk: async () => {
+          if (this.selectedIds.length === 1) {
+            const id = this.selectedIds[0]
+            const res = await this.$http.post(`/data/supplier/delete/${id}`)
+            if (res) {
+              this.selectedIds = []
+              this.selectedRowKeys = []
+              this.selectedRows = []
+              this.$message.success('删除供应商成功!')
+              this.getList()
+            }
+          } else {
+            const res = await this.$http.post('/data/supplier/batchDel', {
+              idsArr: this.selectedIds
+            })
+            if (res) {
+              this.selectedIds = []
+              this.selectedRowKeys = []
+              this.selectedRows = []
+              this.$message.success('批量删除供应商成功!')
+              this.getList()
+            }
+          }
+        },
+        onCancel: () => {
+          console.log('Cancel')
+        }
+      })
+    },
     modify () {
       const id = this.selectedIds[0]
       // 修改type为1，详情type为0
@@ -457,7 +394,7 @@ export default {
       this.selectedIds = selectedRows.map(item => item.id)
     },
     add () {
-      this.$router.push('/archivesedit')
+      this.$router.push('/roleedit')
     },
     // query () {
     //   this.page = 1
@@ -493,19 +430,15 @@ export default {
       if (e) e.preventDefault()
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+          const { keyword } = values
           const { page, limit } = this
           const param = {
+            keyword,
             page,
-            limit,
-            queryEmployeeNumber,
-            queryEmployeeName,
-            queryEmployState,
-            queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-            queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+            limit
           }
           this.spinning = true
-          const res = await this.$http.get('/data/employee/list', param)
+          const res = await this.$http.get('/data/role/list', param)
           this.spinning = false
           if (res) {
             const { count, data } = res

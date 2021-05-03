@@ -12,13 +12,13 @@
           </a-row>
           <a-row :gutter="12">
             <a-col :span="12">
-              <a-form-item label="租户ID" :label-col="{ span: 6 }">
+              <a-form-item label="用户ID" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`agentNum`, {
-                    rules: [{ required: true, message: '请输入租户ID!'}]
+                    rules: [{ required: true, message: '请输入用户ID!'}]
                   }]"
-                  placeholder="请输入租户ID"
+                  placeholder="请输入用户ID"
                 />
               </a-form-item>
             </a-col>
@@ -34,22 +34,93 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="租户名称" :label-col="{ span: 6 }">
+              <a-form-item label="用户名" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`agentName`, {
-                    rules: [{ required: true, message: '请输入租户名称!'}]
+                  v-decorator="[`loginName`, {
+                    rules: [{ required: true, message: '请输入用户名!'}]
                   }]"
-                  placeholder="请输入租户名称"
+                  placeholder="请输入用户名"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="描述" :label-col="{ span: 6 }">
+              <a-form-item label="真实姓名" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`remark`]"
-                  placeholder="请输入描述"
+                  v-decorator="[`name`, {
+                    rules: [{ required: true, message: '请输入真实姓名!'}]
+                  }]"
+                  placeholder="请输入真实姓名"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="用户类型" :label-col="{ span: 6 }">
+                <a-select
+                  :disabled="type === '0'"
+                  v-decorator="['userType']"
+                  placeholder="请选择用户类型"
+                >
+                  <a-select-option value="SUPERADMIN">超级管理员</a-select-option>
+                  <a-select-option value="ADMIN">管理员</a-select-option>
+                  <a-select-option value="AGENT">租户</a-select-option>
+                  <a-select-option value="COMMON">普通用户</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="工号" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`employNo`]"
+                  placeholder="请输入工号"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="电话号码" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`phone`]"
+                  placeholder="请输入电话号码"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="邮箱" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`email`]"
+                  placeholder="请输入邮箱"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="用户描述" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`remarks`]"
+                  placeholder="请输入用户描述"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="性别" :label-col="{ span: 6 }">
+                <a-radio-group
+                  :disabled="type === '0'"
+                  v-decorator="['sex']">
+                  <a-radio value="男">男</a-radio>
+                  <a-radio value="女">女</a-radio>
+                </a-radio-group>
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="头像" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`headImg`]"
+                  placeholder="头像存储地址链接"
                 />
               </a-form-item>
             </a-col>
@@ -58,17 +129,17 @@
                 <a-radio-group
                   :disabled="type === '0'"
                   v-decorator="['status', {
-                    rules: [{ required: true, message: '请选择租户状态!' }]
+                    rules: [{ required: true, message: '请选择用户状态!' }]
                   }]">
-                  <a-radio :value="1">启用</a-radio>
-                  <a-radio :value="0">停用</a-radio>
+                  <a-radio :value="1">开启</a-radio>
+                  <a-radio :value="0">锁定</a-radio>
                 </a-radio-group>
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item label="分配角色" :label-col="{ span: 3 }">
                 <a-checkbox-group
-                  v-decorator="['roleRights', {
+                  v-decorator="['idsArr', {
                     rules: [{ required: true, message: '请分配租户角色!' }]
                   }]"
                   style="width: 100%;"
@@ -89,7 +160,7 @@
 </template>
 
 <script>
-// import Moment from 'moment'
+import Moment from 'moment'
 
 // function getBase64 (file) {
 //   return new Promise((resolve, reject) => {
@@ -125,7 +196,6 @@ export default {
       this.id = id
       this.type = type
       this.queryDetail(id)
-      this.findDispaterUsers(id)
       // this.queryAttachment(id)
     }
   },
@@ -201,46 +271,50 @@ export default {
     //     }
     //   }
     // },
-    async findDispaterUsers (id) {
-      this.spinning = true
-      const res = await this.$http.get(`/data/role/findDispaterUsers/${id}`)
-      this.spinning = false
-      if (res) {
-        // const {
-        //   agentCode,
-        //   agentName,
-        //   agentNum,
-        //   remark,
-        //   status
-        // } = res.data
-        // this.form.setFieldsValue({
-        //   agentCode,
-        //   agentName,
-        //   agentNum,
-        //   remark,
-        //   status
-        // })
-      }
-    },
     async queryDetail (id) {
       this.spinning = true
       const res = await this.$http.get(`/data/agent/get/${id}`)
-      console.log('~~~~~~~~~', res)
       this.spinning = false
       if (res) {
         const {
-          agentCode,
-          agentName,
-          agentNum,
-          remark,
-          status
+          onJobDate,
+          employeeNumber,
+          employeeName,
+          employState,
+          sex,
+          ethnic,
+          employeePhone,
+          idCard,
+          emergencyContactName,
+          emergencyContactPhone,
+          originAddress,
+          jobType,
+          area,
+          customerId,
+          deptName,
+          supplierId,
+          employeePrice,
+          payrollCardInfo
         } = res.data
         this.form.setFieldsValue({
-          agentCode,
-          agentName,
-          agentNum,
-          remark,
-          status
+          onJobDate: onJobDate ? Moment(onJobDate) : null,
+          employeeNumber,
+          employeeName,
+          employState,
+          sex,
+          ethnic,
+          employeePhone,
+          idCard,
+          emergencyContactName,
+          emergencyContactPhone,
+          originAddress,
+          jobType,
+          area,
+          customerId,
+          deptName,
+          supplierId,
+          employeePrice,
+          payrollCardInfo
         })
       }
     },

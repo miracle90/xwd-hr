@@ -8,7 +8,7 @@
         <a-col :span="6">
           <a-form-item label="编号搜索">
             <a-input
-              v-decorator="[`queryEmployeeNumber`]"
+              v-decorator="[`keyword`]"
               placeholder="请输入编号/代码搜索"
             />
           </a-form-item>
@@ -22,12 +22,12 @@
     <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <a-col>
         <a-button @click="add" style="margin-right: 5px;">新建租户</a-button>
-        <a-button @click="deletePlan" :disabled="!selectedIds.length" type="danger" style="margin-right: 5px;">删除</a-button>
+        <a-button @click="deleteData(2)" :disabled="!selectedIds.length" type="danger" style="margin-right: 5px;">删除</a-button>
         <!-- <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button>
         <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button> -->
         <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
         <a-upload
-          :action="`${$http.baseURL}/data/employee/import`"
+          :action="`${$http.baseURL}/data/agent/import`"
           :showUploadList="false"
           name="file"
           :before-upload="beforeUpload"
@@ -50,12 +50,15 @@
           }"
           :rowKey="(record, index) => index"
         >
+          <span slot="status" slot-scope="record">{{ ['停用', '启用'][record.status] }}</span>
           <span slot="action" slot-scope="record">
-            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 0 }}">查看</router-link>
+            <router-link style="color: #1890ff" :to="{ path: '/hireredit', query: { id: record.id, type: 0 }}">查看</router-link>
             <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 1 }}">修改</router-link>
+            <router-link style="color: #1890ff" :to="{ path: '/hireredit', query: { id: record.id, type: 1 }}">修改</router-link>
             <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 1 }}">启用</router-link>
+            <!-- <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 1 }}">启用</router-link> -->
+            <a v-if="record.status === 0"  @click="use(1, record.id)">启用</a>
+            <a v-else  @click="use(2, record.id)">停用</a>
             <a-divider type="vertical" />
             <a  @click="deleteData(1, record.id)" style="color: red">删除</a>
           </span>
@@ -99,43 +102,43 @@ import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 const columns = [
   {
     title: 'ID',
-    dataIndex: 'employeeNumber',
-    key: 'employeeNumber'
+    dataIndex: 'agentNum',
+    key: 'agentNum'
   },
   {
     title: '租户代码',
-    dataIndex: 'employeeName',
-    key: 'employeeName'
+    dataIndex: 'agentCode',
+    key: 'agentCode'
   },
   {
     title: '租户名称',
-    dataIndex: 'onJobDate',
-    key: 'onJobDate'
+    dataIndex: 'agentName',
+    key: 'agentName'
   },
   {
     title: '创建人',
-    dataIndex: 'downJobDate',
-    key: 'downJobDate'
+    dataIndex: 'createUser',
+    key: 'createUser'
   },
   {
     title: '创建日期',
-    dataIndex: 'employState',
-    key: 'employState'
+    dataIndex: 'createTime',
+    key: 'createTime'
   },
   {
     title: '更新人',
-    dataIndex: 'jobType',
-    key: 'jobType'
+    dataIndex: 'updateUser',
+    key: 'updateUser'
   },
   {
     title: '更新时间',
-    dataIndex: 'area',
-    key: 'area'
+    dataIndex: 'updateTime',
+    key: 'updateTime'
   },
   {
     title: '状态',
-    dataIndex: 'customerId',
-    key: 'customerId'
+    key: 'status',
+    scopedSlots: { customRender: 'status' }
   },
   {
     title: '操作',
@@ -202,16 +205,12 @@ export default {
         onOk: async () => {
           this.form.validateFields(async (error, values) => {
             if (!error) {
-              const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+              const { keyword } = values
               const param = {
-                queryEmployeeNumber,
-                queryEmployeeName,
-                queryEmployState,
-                queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-                queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+                keyword
               }
               this.spinning = true
-              const res = await this.$http.get('/data/employee/export', param)
+              const res = await this.$http.get('/data/export/export', param)
               this.spinning = false
               if (res) {
                 this.$message.success('数据导出成功!')
@@ -352,7 +351,7 @@ export default {
       const res = await this.$http.get('/data/supplier/find')
       this.supplierList = res.data
     },
-    deletePlan () {
+    deleteData (type, id) {
       this.$confirm({
         title: '删除提示',
         content: '确定要删除所勾选的记录吗？',
@@ -360,31 +359,29 @@ export default {
         okType: 'danger',
         cancelText: '取消',
         onOk: async () => {
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/supplier/delete/${id}`)
+          this.spinning = true
+          if (type === 1) {
+            const res = await this.$http.post(`/data/agent/delete/${id}`)
             if (res) {
               this.selectedIds = []
               this.selectedRowKeys = []
               this.selectedRows = []
-              this.$message.success('删除供应商成功!')
-              this.getList()
+              this.$message.success('删除租户信息成功!')
+              this.handleSearch()
             }
           } else {
-            const res = await this.$http.post('/data/supplier/batchDel', {
+            const res = await this.$http.post('/data/agent/batchDel', {
               idsArr: this.selectedIds
             })
             if (res) {
               this.selectedIds = []
               this.selectedRowKeys = []
               this.selectedRows = []
-              this.$message.success('批量删除供应商成功!')
-              this.getList()
+              this.$message.success('批量删除租户信息成功!')
+              this.handleSearch()
             }
           }
-        },
-        onCancel: () => {
-          console.log('Cancel')
+          this.spinning = false
         }
       })
     },
@@ -435,19 +432,15 @@ export default {
       if (e) e.preventDefault()
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+          const { keyword } = values
           const { page, limit } = this
           const param = {
+            keyword,
             page,
-            limit,
-            queryEmployeeNumber,
-            queryEmployeeName,
-            queryEmployState,
-            queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-            queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+            limit
           }
           this.spinning = true
-          const res = await this.$http.get('/data/employee/list', param)
+          const res = await this.$http.get('/data/agent/list', param)
           this.spinning = false
           if (res) {
             const { count, data } = res

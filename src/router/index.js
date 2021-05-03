@@ -28,7 +28,7 @@ const routes = [
         meta: {
           openKey: 'sub1',
           selectKey: '/suppliers',
-          bread: ['基础数据', '供应商管理-编辑']
+          bread: ['基础数据', '供应商管理-详情']
         }
       },
       {
@@ -47,7 +47,7 @@ const routes = [
         meta: {
           openKey: 'sub1',
           selectKey: '/customer',
-          bread: ['基础数据', '客户管理-编辑']
+          bread: ['基础数据', '客户管理-详情']
         }
       },
       {
@@ -66,7 +66,7 @@ const routes = [
         meta: {
           openKey: 'sub2',
           selectKey: '/plan',
-          bread: ['供需协同', '需求计划-编辑']
+          bread: ['供需协同', '需求计划-详情']
         }
       },
       {
@@ -121,7 +121,7 @@ const routes = [
         meta: {
           openKey: 'sub3',
           selectKey: '/archives',
-          bread: ['员工管理', '员工档案-编辑']
+          bread: ['员工管理', '员工档案-详情']
         }
       },
       {
@@ -139,7 +139,7 @@ const routes = [
         meta: {
           openKey: 'sub3',
           selectKey: '/month',
-          bread: ['员工管理', '月考勤数据-编辑']
+          bread: ['员工管理', '月考勤数据-详情']
         }
       },
       {
@@ -166,7 +166,7 @@ const routes = [
         meta: {
           openKey: 'sub3',
           selectKey: '/salary',
-          bread: ['员工管理', '工资核算-编辑']
+          bread: ['员工管理', '工资核算-详情']
         }
       },
       {
@@ -184,7 +184,7 @@ const routes = [
         meta: {
           openKey: 'sub3',
           selectKey: '/borrow',
-          bread: ['员工管理', '借支管理-编辑']
+          bread: ['员工管理', '借支管理-详情']
         }
       },
       {
@@ -202,7 +202,7 @@ const routes = [
         meta: {
           openKey: 'sub4',
           selectKey: '/setting',
-          bread: ['返费管理', '返费设定-编辑']
+          bread: ['返费管理', '返费设定-详情']
         }
       },
       {
@@ -220,7 +220,7 @@ const routes = [
         meta: {
           openKey: 'sub4',
           selectKey: '/calculate',
-          bread: ['返费管理', '返费计算-编辑']
+          bread: ['返费管理', '返费计算-详情']
         }
       },
       {
@@ -246,8 +246,8 @@ const routes = [
         component: () => import('../views/system/HirerEdit.vue'),
         meta: {
           openKey: 'sub6',
-          selectKey: '/hireredit',
-          bread: ['系统管理', '租户管理']
+          selectKey: '/hirer',
+          bread: ['系统管理', '租户管理-详情']
         }
       },
       {
@@ -260,12 +260,30 @@ const routes = [
         }
       },
       {
+        path: '/useredit',
+        component: () => import('../views/system/UserEdit.vue'),
+        meta: {
+          openKey: 'sub6',
+          selectKey: '/user',
+          bread: ['系统管理', '用户管理-详情']
+        }
+      },
+      {
         path: '/role',
         component: () => import('../views/system/Role.vue'),
         meta: {
           openKey: 'sub6',
           selectKey: '/role',
           bread: ['系统管理', '角色管理']
+        }
+      },
+      {
+        path: '/roleedit',
+        component: () => import('../views/system/RoleEdit.vue'),
+        meta: {
+          openKey: 'sub6',
+          selectKey: '/role',
+          bread: ['系统管理', '角色管理-详情']
         }
       }
     ]

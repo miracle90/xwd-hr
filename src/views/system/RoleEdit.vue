@@ -68,7 +68,7 @@
             <a-col :span="24">
               <a-form-item label="分配角色" :label-col="{ span: 3 }">
                 <a-checkbox-group
-                  v-decorator="['roleRights', {
+                  v-decorator="['idsArr', {
                     rules: [{ required: true, message: '请分配租户角色!' }]
                   }]"
                   style="width: 100%;"
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-// import Moment from 'moment'
+import Moment from 'moment'
 
 // function getBase64 (file) {
 //   return new Promise((resolve, reject) => {
@@ -125,7 +125,6 @@ export default {
       this.id = id
       this.type = type
       this.queryDetail(id)
-      this.findDispaterUsers(id)
       // this.queryAttachment(id)
     }
   },
@@ -201,46 +200,50 @@ export default {
     //     }
     //   }
     // },
-    async findDispaterUsers (id) {
-      this.spinning = true
-      const res = await this.$http.get(`/data/role/findDispaterUsers/${id}`)
-      this.spinning = false
-      if (res) {
-        // const {
-        //   agentCode,
-        //   agentName,
-        //   agentNum,
-        //   remark,
-        //   status
-        // } = res.data
-        // this.form.setFieldsValue({
-        //   agentCode,
-        //   agentName,
-        //   agentNum,
-        //   remark,
-        //   status
-        // })
-      }
-    },
     async queryDetail (id) {
       this.spinning = true
       const res = await this.$http.get(`/data/agent/get/${id}`)
-      console.log('~~~~~~~~~', res)
       this.spinning = false
       if (res) {
         const {
-          agentCode,
-          agentName,
-          agentNum,
-          remark,
-          status
+          onJobDate,
+          employeeNumber,
+          employeeName,
+          employState,
+          sex,
+          ethnic,
+          employeePhone,
+          idCard,
+          emergencyContactName,
+          emergencyContactPhone,
+          originAddress,
+          jobType,
+          area,
+          customerId,
+          deptName,
+          supplierId,
+          employeePrice,
+          payrollCardInfo
         } = res.data
         this.form.setFieldsValue({
-          agentCode,
-          agentName,
-          agentNum,
-          remark,
-          status
+          onJobDate: onJobDate ? Moment(onJobDate) : null,
+          employeeNumber,
+          employeeName,
+          employState,
+          sex,
+          ethnic,
+          employeePhone,
+          idCard,
+          emergencyContactName,
+          emergencyContactPhone,
+          originAddress,
+          jobType,
+          area,
+          customerId,
+          deptName,
+          supplierId,
+          employeePrice,
+          payrollCardInfo
         })
       }
     },
