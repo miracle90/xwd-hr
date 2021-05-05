@@ -359,11 +359,15 @@ export default {
     },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')
-      this.customerList = res.data
+      if (res) {
+        this.customerList = res.data
+      }
     },
     async findSuppliersList () {
       const res = await this.$http.get('/data/supplier/find')
-      this.supplierList = res.data
+      if (res) {
+        this.supplierList = res.data
+      }
     },
     deleteBorrow () {
       this.$confirm({
