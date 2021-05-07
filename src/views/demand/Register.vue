@@ -11,8 +11,8 @@
             </a-col>
           </a-row>
           <a-row :gutter="24">
-             <a-col :span="12">
-              <a-form-item label="公司名称" :label-col="{ span: 5 }">
+            <a-col :span="12">
+              <a-form-item label="公司名称" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
                   @change="customerIdChange"
@@ -28,7 +28,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求事业部" :label-col="{ span: 5 }">
+              <a-form-item label="需求事业部" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="true"
                   v-decorator="[`deptName`]"
@@ -37,7 +37,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系人" :label-col="{ span: 5 }">
+              <a-form-item label="联系人" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`contactName`, {
@@ -48,7 +48,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系电话" :label-col="{ span: 5 }">
+              <a-form-item label="联系电话" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`contactPhone`, {
@@ -59,7 +59,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求人数" :label-col="{ span: 5 }">
+              <a-form-item label="需求人数" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandPersions`, {
@@ -70,7 +70,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求工种" :label-col="{ span: 5 }">
+              <a-form-item label="需求工种" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandTrade`, {
@@ -81,7 +81,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求日期" :label-col="{ span: 5 }">
+              <a-form-item label="需求日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
                   v-decorator="[`demandBeginDate`, {
@@ -94,7 +94,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="撤离日期" :label-col="{ span: 5 }">
+              <a-form-item label="撤离日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
                   v-decorator="[`demandEndDate`]"
@@ -105,7 +105,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求比例" :label-col="{ span: 5 }">
+              <a-form-item label="需求比例" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandRatio`]"
@@ -114,7 +114,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求年龄" :label-col="{ span: 5 }">
+              <a-form-item label="需求年龄" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandAge`]"
@@ -123,7 +123,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="截止回复日期" :label-col="{ span: 5 }">
+              <a-form-item label="截止回复日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
                   v-decorator="[`replyEndDate`]"
@@ -136,7 +136,24 @@
           </a-row>
           <a-row :gutter="24" style="margin-top: 30px;">
             <a-col :span="12">
-              <a-form-item label="回复人数" :label-col="{ span: 5 }">
+              <a-form-item label="供应商名称" :label-col="{ span: 6 }">
+                <a-select
+                  :disabled="type === '0'"
+                  v-decorator="['supplierId', {
+                    rules: [{ required: true, message: '请选择供应商名称!' }]
+                  }]"
+                  placeholder="请选择供应商名称"
+                >
+                  <a-select-option v-for="(item, index) in supplierList" :key="index" :value="item.id">
+                    {{ item.supplierName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item label="回复人数" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`replyPersions`, {
@@ -147,7 +164,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="收费标准(元/工时)" :label-col="{ span: 5 }">
+              <a-form-item label="收费标准(元/工时)" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`chargeStandard`, {
@@ -158,7 +175,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="回复年龄" :label-col="{ span: 5 }">
+              <a-form-item label="回复年龄" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`replyAge`]"
@@ -167,7 +184,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="回复比例" :label-col="{ span: 5 }">
+              <a-form-item label="回复比例" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`replyRatio`]"
@@ -176,7 +193,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="资源来源地" :label-col="{ span: 5 }">
+              <a-form-item label="资源来源地" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`resourceOrigin`]"
@@ -185,7 +202,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="民族" :label-col="{ span: 5 }">
+              <a-form-item label="民族" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`nation`]"
@@ -194,7 +211,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="回复备注" :label-col="{ span: 5 }">
+              <a-form-item label="回复备注" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`replyRemark`]"
@@ -250,7 +267,7 @@ export default {
   mounted () {
     const { id, type } = this.$route.query
     this.findCustomerList()
-    // this.findSuppliersList()
+    this.findSuppliersList()
     if (id) {
       this.id = id
       this.type = type
@@ -293,9 +310,9 @@ export default {
       const res = await this.$http.get('/data/supplier/find')
       if (res) {
         this.supplierList = res.data
-        if (this.id) {
-          this.findSupplier(this.id)
-        }
+        // if (this.id) {
+        //   this.findSupplier(this.id)
+        // }
       }
     },
     onSelectChange (selectedRowKeys, selectedRows) {

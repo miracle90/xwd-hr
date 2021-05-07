@@ -8,8 +8,9 @@
         <a-col :span="6">
           <a-form-item label="雇佣状态">
             <a-select
-              v-decorator="['queryEmployState']"
+              v-decorator="['employStateArr']"
               placeholder="请选择雇佣状态"
+              mode="multiple"
             >
               <a-select-option value="1">在职</a-select-option>
               <a-select-option value="2">离职</a-select-option>
@@ -25,7 +26,7 @@
         <a-col :span="6">
           <a-form-item label="供应商">
             <a-select
-              v-decorator="['queryEmployState']"
+              v-decorator="['supplierId']"
               placeholder="请选择供应商"
             >
               <a-select-option v-for="item in supplierList" :key="item.id" :value="item.id">
@@ -37,13 +38,13 @@
         <a-col :span="6">
           <a-form-item label="部门">
             <a-input
-              v-decorator="[`queryEmployeeNumber`]"
+              v-decorator="[`deptName`]"
               placeholder="请输入部门"
             />
           </a-form-item>
         </a-col>
         <a-col :span="6">
-          <a-button type="primary" html-type="submit" style="margin-right: 5px;">打印</a-button>
+          <a-button type="primary" html-type="submit" style="margin-right: 5px;">导出</a-button>
           <a-button @click="reset">重置</a-button>
         </a-col>
       </a-row>
@@ -233,7 +234,7 @@ export default {
   mounted () {
     this.findCustomerList()
     this.findSuppliersList()
-    this.handleSearch()
+    // this.handleSearch()
   },
   methods: {
     handleChange (info) {
@@ -276,7 +277,9 @@ export default {
               const res = await this.$http.get('/data/employee/export', param)
               this.spinning = false
               if (res) {
-                this.$message.success('数据导出成功!')
+                const { data } = res
+                window.open(data)
+                this.$message.success('导出成功')
               }
             }
           })
@@ -501,24 +504,28 @@ export default {
       if (e) e.preventDefault()
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
-          const { page, limit } = this
+          const { date, employStateArr, supplierId, deptName } = values
+          // const { page, limit } = this
           const param = {
-            page,
-            limit,
-            queryEmployeeNumber,
-            queryEmployeeName,
-            queryEmployState,
-            queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-            queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+            // page,
+            // limit,
+            // queryEmployeeNumber,
+            // queryEmployeeName,
+            employStateArr,
+            supplierId,
+            deptName,
+            onJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
+            onJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
           }
           this.spinning = true
-          const res = await this.$http.get('/data/employee/list', param)
+          const res = await this.$http.get('/data/employee/export', param)
           this.spinning = false
           if (res) {
-            const { count, data } = res
-            this.data = data
-            this.total = count
+            const { data } = res
+            window.open(data)
+            this.$message.success('导出成功')
+            // this.data = data
+            // this.total = count
           }
         }
       })

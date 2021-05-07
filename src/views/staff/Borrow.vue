@@ -227,7 +227,9 @@ export default {
               const res = await this.$http.get('/data/employee/export', param)
               this.spinning = false
               if (res) {
-                this.$message.success('数据导出成功!')
+                const { data } = res
+                window.open(data)
+                this.$message.success('导出成功')
               }
             }
           })
