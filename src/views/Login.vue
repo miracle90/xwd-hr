@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <transition name="form-fade" mode="in-out">
-      <section class="form-contianer" v-show="showLogin">
+      <a-spin class="form-contianer" v-show="showLogin" :spinning="spinning">
         <h1 class="manage-tip">人力资源供应系统</h1>
         <a-form :layout="formLayout" :form="form" @submit="handleSubmit">
           <a-form-item
@@ -29,7 +29,7 @@
             <a-button type="primary" html-type="submit" class="submit-btn">登录</a-button>
           </a-form-item>
         </a-form>
-      </section>
+      </a-spin>
     </transition>
   </div>
 </template>
@@ -40,6 +40,7 @@
 export default {
   data () {
     return {
+      spinning: false,
       formLayout: 'vertical',
       form: this.$form.createForm(this, { name: 'coordinated' }),
       showLogin: false
@@ -60,7 +61,9 @@ export default {
       this.form.validateFields(async (err, values) => {
         if (!err) {
           // 校验通过，调用接口
+          this.spinning = true
           const res = await this.$http.post('/data/user/login', values)
+          this.spinning = false
           if (res) {
             const { token } = res.data
             window.localStorage.setItem('token', token)

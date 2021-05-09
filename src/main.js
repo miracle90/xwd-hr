@@ -26,6 +26,7 @@ import {
   Radio,
   Checkbox,
   Modal,
+  Result,
   message
 } from 'ant-design-vue'
 
@@ -48,6 +49,7 @@ Vue.use(DatePicker)
 Vue.use(Radio)
 Vue.use(Checkbox)
 Vue.use(Modal)
+Vue.use(Result)
 
 Vue.prototype.$message = message
 Vue.prototype.$confirm = Modal.confirm
