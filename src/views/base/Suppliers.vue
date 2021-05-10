@@ -92,8 +92,9 @@ const columns = [
 	},
 	{
 		title: '供应商地址',
-		dataIndex: 'supplierAddr',
-		key: 'supplierAddr',
+		dataIndex: 'registerAddress',
+		key: 'registerAddress',
+		ellipsis: true
 	},
 	{
 		title: '供应商名称',
@@ -127,13 +128,13 @@ const columns = [
 	},
 	{
 		title: '累计输送人数',
-		dataIndex: 'totalPerson',
-		key: 'totalPerson',
+		dataIndex: 'totalTrasportPersions',
+		key: 'totalTrasportPersions',
 	},
 	{
 		title: '资源强项',
-		dataIndex: 'sourcePower',
-		key: 'sourcePower',
+		dataIndex: 'resourceAdvantage',
+		key: 'resourceAdvantage',
 	},
 ]
 
@@ -172,26 +173,18 @@ export default {
 				okText: '确定',
 				cancelText: '取消',
 				onOk: async () => {
-					this.form.validateFields(async (error, values) => {
-						if (!error) {
-							const { yearMonth } = values
-							const param = {
-								yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null,
-							}
-							this.spinning = true
-							const res = await this.$http.get(
-								'/data/supplierRebate/export',
-								param
-							)
-							this.spinning = false
-							if (res) {
-								const { data } = res
-								window.open(data)
-								this.$message.success('导出成功')
-							}
-						}
+					const { keyword } = this
+					this.spinning = true
+					const res = await this.$http.get('/data/supplier/export', {
+						keyword
 					})
-				},
+					this.spinning = false
+					if (res) {
+						const { data } = res
+						window.open(data)
+						this.$message.success('导出成功')
+					}
+				}
 			})
 		},
 		// async findList () {

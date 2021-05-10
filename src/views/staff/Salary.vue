@@ -162,8 +162,8 @@ const columns = [
   },
   {
     title: '发薪主体',
-    dataIndex: 'actualPay',
-    key: 'actualPay'
+    dataIndex: 'payeeMain',
+    key: 'payeeMain'
   },
   {
     title: '供应商',

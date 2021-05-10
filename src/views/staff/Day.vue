@@ -51,7 +51,7 @@
           :rowKey="(record, index) => index"
         >
           <!-- <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span> -->
-          <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工'][text] }}</span>
+          <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工', '正式工'][text] }}</span>
           <span slot="action" slot-scope="record">
             <router-link style="color: #1890ff" :to="{ path: '/monthedit', query: { id: record.id, type: 1 }}">修改</router-link>
           </span>

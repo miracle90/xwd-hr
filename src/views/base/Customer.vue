@@ -73,8 +73,9 @@ const columns = [
   },
   {
     title: '注册地址',
-    key: 'supplierName',
-    scopedSlots: { customRender: 'supplierName' }
+    dataIndex: 'registerAddress',
+    key: 'registerAddress',
+    ellipsis: true
   },
   {
     title: '客户名称',
@@ -83,8 +84,8 @@ const columns = [
   },
   {
     title: '事业部',
-    dataIndex: 'bussinessUnit',
-    key: 'bussinessUnit'
+    dataIndex: 'deptName',
+    key: 'deptName'
   },
   {
     title: '联系人',
@@ -95,6 +96,11 @@ const columns = [
     title: '联系方式',
     dataIndex: 'contactPhone',
     key: 'contactPhone'
+  },
+  {
+    title: '邮箱',
+    dataIndex: 'contactEmail',
+    key: 'contactEmail'
   }
 ]
 

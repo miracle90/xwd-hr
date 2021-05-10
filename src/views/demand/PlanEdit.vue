@@ -29,12 +29,25 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求事业部" :label-col="{ span: 6 }">
+              <!-- <a-form-item label="需求事业部" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="true"
                   v-decorator="[`deptName`]"
                   placeholder="关联所选公司名称"
                 />
+              </a-form-item> -->
+              <a-form-item label="需求事业部" :label-col="{ span: 6 }">
+                <a-select
+                  :disabled="type === '0'"
+                  v-decorator="['deptId', {
+                    rules: [{ required: true, message: '请选择需求事业部!' }]
+                  }]"
+                  placeholder="请选择需求事业部"
+                >
+                  <a-select-option v-for="(item, index) in deptList" :key="index" :value="item.id">
+                    {{ item.deptName }}
+                  </a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -197,6 +210,7 @@ const columns = [
 export default {
   data () {
     return {
+      deptList: [],
       customerList: [],
       selectedRowKeys: [],
       selectedRows: [],
@@ -229,8 +243,6 @@ export default {
         const selectedRowKeys = []
         const selectedRows = []
         const list = res.data.map(item => item.supplierId)
-        console.log(list)
-        console.log(this.supplierList)
         this.supplierList.forEach((item, index) => {
           if (list.includes(item.id)) {
             selectedRowKeys.push(index)
@@ -241,11 +253,15 @@ export default {
         this.selectedRows = selectedRows
       }
     },
-    customerIdChange (id) {
-      const deptName = id ? this.customerList.find(item => item.id === id).bussinessUnit : ''
-      this.form.setFieldsValue({
-        deptName
-      })
+    async customerIdChange (customerId) {
+      if (customerId || customerId === 0) {
+        const res = await this.$http.get('/data/dept/findByCustomerId', {
+          customerId
+        })
+        if (res) {
+          this.deptList = res.data
+        }
+      }
     },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')
@@ -276,7 +292,7 @@ export default {
       if (res) {
         const {
           customerId,
-          deptName,
+          deptId,
           contactName,
           contactPhone,
           demandPersions,
@@ -288,9 +304,10 @@ export default {
           demandAge,
           remark
         } = res.data
+        this.customerIdChange(customerId)
         this.form.setFieldsValue({
           customerId,
-          deptName,
+          deptId,
           contactName,
           contactPhone,
           demandPersions,

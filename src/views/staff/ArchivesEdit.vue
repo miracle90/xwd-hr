@@ -11,7 +11,7 @@
             </a-col>
           </a-row>
           <a-row :gutter="12">
-            <a-col :span="6">
+            <a-col :span="12">
               <a-form-item label="工号" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
@@ -22,7 +22,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
               <a-form-item label="姓名" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
@@ -33,7 +33,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
               <a-form-item label="入职日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
@@ -46,7 +46,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
               <a-form-item label="雇佣状态" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
@@ -61,7 +61,7 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
               <a-form-item label="性别" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
@@ -75,7 +75,18 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
+              <a-form-item label="民族" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`ethnic`, {
+                    rules: [{ required: true, message: '请输入民族!'}]
+                  }]"
+                  placeholder="请输入民族"
+                />
+              </a-form-item>
+            </a-col>
+            <!-- <a-col :span="12">
               <a-form-item label="民族" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
@@ -88,8 +99,8 @@
                   <a-select-option value="回族">回族</a-select-option>
                 </a-select>
               </a-form-item>
-            </a-col>
-            <a-col :span="6">
+            </a-col> -->
+            <a-col :span="12">
               <a-form-item label="本人电话" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
@@ -100,7 +111,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
               <a-form-item label="身份证号码" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
@@ -111,26 +122,33 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="6">
-              <a-form-item label="紧急联系人" :label-col="{ span: 6 }">
+            <a-col :span="12">
+              <a-form-item label="年龄" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`emergencyContactName`]"
-                  placeholder="请输入紧急联系人"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="紧急联系电话" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`emergencyContactPhone`]"
-                  placeholder="请输入紧急联系电话"
+                  v-decorator="[`age`]"
+                  placeholder="请输入年龄"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="户籍地址" :label-col="{ span: 3 }">
+              <a-form-item label="工种" :label-col="{ span: 6 }">
+                <a-select
+                  :disabled="type === '0'"
+                  v-decorator="[`jobType`, {
+                    rules: [{ required: true, message: '请选择工种!'}]
+                  }]"
+                  placeholder="请选择工种"
+                >
+                  <a-select-option :value="1">学生工</a-select-option>
+                  <a-select-option :value="2">农民工</a-select-option>
+                  <a-select-option :value="3">社会工</a-select-option>
+                  <a-select-option :value="4">正式工</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="户籍地址" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`originAddress`, {
@@ -140,32 +158,25 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="6">
-              <a-form-item label="工种" :label-col="{ span: 6 }">
-                <a-select
-                  :disabled="type === '0'"
-                  v-decorator="[`jobType`, {
-                    rules: [{ required: true, message: '请选择工种!'}]
-                  }]"
-                  placeholder="请选择工种"
-                >
-                  <a-select-option :value="0">正式工</a-select-option>
-                  <a-select-option :value="1">学生工</a-select-option>
-                  <a-select-option :value="2">农民工</a-select-option>
-                  <a-select-option :value="3">社会工</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="区域" :label-col="{ span: 6 }">
+            <a-col :span="12">
+              <a-form-item label="紧急联系人" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`area`]"
-                  placeholder="请输入区域"
+                  v-decorator="[`emergencyContactName`]"
+                  placeholder="请输入紧急联系人"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
+              <a-form-item label="紧急联系电话" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`emergencyContactPhone`]"
+                  placeholder="请输入紧急联系电话"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
               <a-form-item label="所属公司" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
@@ -178,7 +189,7 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
               <a-form-item label="所在部门" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
@@ -187,7 +198,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+             <a-col :span="12">
               <a-form-item label="招聘来源" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
@@ -200,7 +211,7 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
               <a-form-item label="工价" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
@@ -212,11 +223,20 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="工资卡" :label-col="{ span: 3 }">
+              <a-form-item label="工资卡" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`payrollCardInfo`]"
                   placeholder="请输入工资卡"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="区域" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`area`]"
+                  placeholder="请输入区域"
                 />
               </a-form-item>
             </a-col>
@@ -398,6 +418,7 @@ export default {
           this.spinning = true
           if (this.id) param.id = this.id
           const res = await this.$http.post(`/data/employee/${this.id ? 'update' : 'add'}`, param)
+          this.spinning = false
           if (res) {
             this.$message.success(`${this.id ? '员工档案信息修改成功！' : '新增员工档案成功！'}`)
             this.$router.back()

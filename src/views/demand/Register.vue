@@ -301,11 +301,17 @@ export default {
         this.selectedRows = selectedRows
       }
     },
-    customerIdChange (id) {
-      const deptName = id ? this.customerList.find(item => item.id === id).bussinessUnit : ''
-      this.form.setFieldsValue({
-        deptName
-      })
+    async customerIdChange (customerId) {
+      if (customerId || customerId === 0) {
+        const res = await this.$http.get('/data/dept/findByCustomerId', {
+          customerId
+        })
+        console.log(res)
+      }
+      // const deptName = id ? this.customerList.find(item => item.id === id).bussinessUnit : ''
+      // this.form.setFieldsValue({
+      //   deptName
+      // })
     },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')

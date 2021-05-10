@@ -34,12 +34,18 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求事业部" :label-col="{ span: 5 }">
-                <a-input
-                  :disabled="true"
-                  v-decorator="[`deptName`]"
-                  placeholder="关联所选公司名称"
-                />
+              <a-form-item label="需求事业部" :label-col="{ span: 6 }">
+                <a-select
+                  :disabled="type === '0'"
+                  v-decorator="['deptId', {
+                    rules: [{ required: true, message: '请选择需求事业部!' }]
+                  }]"
+                  placeholder="请选择需求事业部"
+                >
+                  <a-select-option v-for="(item, index) in deptList" :key="index" :value="item.id">
+                    {{ item.deptName }}
+                  </a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -236,10 +242,11 @@ const columns = [
 export default {
   data () {
     return {
+      deptList: [],
       demandCode: '',
       customerList: [],
       supplierList: [],
-      findSupplierList: [],
+      selectSuppliersList: [],
       columns,
       spinning: false,
       type: '1', // 新增、修改type为1，查看详情type为0
@@ -249,8 +256,8 @@ export default {
   },
   computed: {
     distributeSupplierList () {
-      if (this.findSuppliersList.length && this.supplierList.length) {
-        return this.supplierList.filter(item => this.findSuppliersList.includes(item.id))
+      if (this.selectSuppliersList.length && this.supplierList.length) {
+        return this.supplierList.filter(item => this.selectSuppliersList.includes(item.id))
       }
       return []
     }
@@ -271,14 +278,18 @@ export default {
       if (res) {
         const list = res.data && res.data.length ? res.data.map(item => item.supplierId) : []
         console.log(list)
-        this.findSuppliersList = list
+        this.selectSuppliersList = list
       }
     },
-    customerIdChange (id) {
-      const deptName = id ? this.customerList.find(item => item.id === id).bussinessUnit : ''
-      this.form.setFieldsValue({
-        deptName
-      })
+    async customerIdChange (customerId) {
+      if (customerId || customerId === 0) {
+        const res = await this.$http.get('/data/dept/findByCustomerId', {
+          customerId
+        })
+        if (res) {
+          this.deptList = res.data
+        }
+      }
     },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')
@@ -310,7 +321,7 @@ export default {
         const {
           demandCode,
           customerId,
-          deptName,
+          deptId,
           contactName,
           contactPhone,
           demandPersions,
@@ -323,9 +334,10 @@ export default {
           remark
         } = res.data
         this.demandCode = demandCode
+        this.customerIdChange(customerId)
         this.form.setFieldsValue({
           customerId,
-          deptName,
+          deptId,
           contactName,
           contactPhone,
           demandPersions,

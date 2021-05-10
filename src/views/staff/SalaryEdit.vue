@@ -37,7 +37,7 @@
             </a-col>
             <a-col :span="4">
               <a-form-item label="" :label-col="{ span: 6 }">
-                <a-button type="primary" @click="cancel">查询</a-button>
+                <a-button type="primary" @click="getByEmployeeNumber">查询</a-button>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -286,7 +286,7 @@
               <a-form-item label="发薪主体" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`paidRemark`]"
+                  v-decorator="[`payeeMain`]"
                   placeholder="请输入发薪主体"
                 />
               </a-form-item>
@@ -300,6 +300,7 @@
 
 <script>
 import Moment from 'moment'
+import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 
 // function getBase64 (file) {
 //   return new Promise((resolve, reject) => {
@@ -313,6 +314,7 @@ import Moment from 'moment'
 export default {
   data () {
     return {
+      locale,
       customerList: [],
       supplierList: [],
       previewVisible: false,
@@ -339,6 +341,37 @@ export default {
     }
   },
   methods: {
+    async getByEmployeeNumber() {
+      const employeeNumber = this.form.getFieldValue('employeeNumber')
+      if (!employeeNumber) {
+        return this.$message.error('工号不得为空！')
+      }
+      this.spinning = true
+      const res = await this.$http.get('/data/employee/getByEmployeeNumber', {
+        employeeNumber
+      })
+      this.spinning = false
+      if (res) {
+        const {
+          employeeName,
+          age,
+          ethnic,
+          customerName,
+          deptName,
+          onJobDate,
+          downJobDate
+        } = res.data
+        this.form.setFieldsValue({
+          employeeName,
+          age,
+          ethnic,
+          customerName,
+          deptName,
+          onJobDate,
+          downJobDate
+        })
+      }
+    },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')
       if (res) {

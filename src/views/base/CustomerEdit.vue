@@ -37,7 +37,7 @@
               <a-form-item label="事业部" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`bussinessUnit`]"
+                  v-decorator="[`deptName`]"
                   placeholder="请输入事业部"
                 />
               </a-form-item>
@@ -95,7 +95,7 @@
               <a-form-item label="邮箱" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`contactEmail`]"
                   placeholder="请输入邮箱"
                 />
               </a-form-item>
@@ -167,6 +167,8 @@ export default {
       this.spinning = false
       if (res) {
         const {
+          deptName,
+          contactEmail,
           customerCode,
           customerName,
           contactName,
@@ -179,6 +181,8 @@ export default {
           invoiceCompanyName
         } = res.data
         this.form.setFieldsValue({
+          deptName,
+          contactEmail,
           customerCode,
           customerName,
           contactName,

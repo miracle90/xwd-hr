@@ -57,7 +57,7 @@
               <a-form-item label="联系人职务" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`contactPersionPost`]"
                   placeholder="请输入联系人职务"
                 />
               </a-form-item>
@@ -95,7 +95,7 @@
               <a-form-item label="邮箱" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`contactPhone`]"
+                  v-decorator="[`email`]"
                   placeholder="请输入邮箱"
                 />
               </a-form-item>
@@ -124,7 +124,7 @@
               <a-form-item label="供应商级别" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`supplierLevel`]"
                   placeholder="请输入供应商级别"
                 />
               </a-form-item>
@@ -144,7 +144,7 @@
               <a-form-item label="累计输送人数" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`totalTrasportPersions`]"
                   placeholder="请输入累计输送人数"
                 />
               </a-form-item>
@@ -153,7 +153,7 @@
               <a-form-item label="引荐人" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`recommendPersion`]"
                   placeholder="请输入引荐人"
                 />
               </a-form-item>
@@ -162,7 +162,7 @@
               <a-form-item label="资源强项" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`resourceAdvantage`]"
                   placeholder="请输入资源强项"
                 />
               </a-form-item>
@@ -171,7 +171,7 @@
               <a-form-item label="合作开始日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`cooperateBeginDate`]"
                   format="YYYY-MM-DD"
                   style="width: 100%"
                   placeholder="请选择合作开始日期"
@@ -182,7 +182,7 @@
               <a-form-item label="合作次数" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`cooperateTimes`]"
                   placeholder="请输入合作次数"
                 />
               </a-form-item>
@@ -191,7 +191,7 @@
               <a-form-item label="关键事项" :label-col="{ span: 3 }">
                 <a-textarea
                   :disabled="type === '0'"
-                  v-decorator="[``]"
+                  v-decorator="[`focusEvent`]"
                   placeholder="请输入关键事项"
                   :auto-size="{ minRows: 3 }"
                 />
@@ -391,6 +391,14 @@ export default {
       this.spinning = false
       if (res) {
         const {
+          focusEvent,
+          email,
+          supplierLevel,
+          totalTrasportPersions,
+          contactPersionPost,
+          cooperateTimes,
+          recommendPersion,
+          resourceAdvantage,
           supplierCode,
           supplierName,
           contactName,
@@ -399,6 +407,7 @@ export default {
           legalRepresentative,
           dispatchBeginDate,
           dispatchEndDate,
+          cooperateBeginDate,
           registeredCapital,
           registerAddress,
           dutyParagraph,
@@ -409,6 +418,14 @@ export default {
           accountOfBankName
         } = res.data
         this.form.setFieldsValue({
+          focusEvent,
+          email,
+          supplierLevel,
+          totalTrasportPersions,
+          contactPersionPost,
+          cooperateTimes,
+          recommendPersion,
+          resourceAdvantage,
           supplierCode,
           supplierName,
           contactName,
@@ -417,6 +434,7 @@ export default {
           legalRepresentative,
           dispatchBeginDate: dispatchBeginDate ? Moment(dispatchBeginDate) : null,
           dispatchEndDate: dispatchEndDate ? Moment(dispatchEndDate) : null,
+          cooperateBeginDate: cooperateBeginDate ? Moment(cooperateBeginDate) : null,
           registeredCapital,
           registerAddress,
           dutyParagraph,
@@ -433,11 +451,12 @@ export default {
       this.form.validateFields(async (error, values) => {
         if (!error) {
           console.log(values)
-          const { dispatchBeginDate, dispatchEndDate } = values
+          const { dispatchBeginDate, dispatchEndDate, cooperateBeginDate } = values
           const param = {
             ...values,
             dispatchBeginDate: dispatchBeginDate ? (typeof dispatchBeginDate === 'string' ? dispatchBeginDate : dispatchBeginDate.format('YYYY-MM-DD')) : null,
-            dispatchEndDate: dispatchEndDate ? (typeof dispatchEndDate === 'string' ? dispatchEndDate : dispatchEndDate.format('YYYY-MM-DD')) : null
+            dispatchEndDate: dispatchEndDate ? (typeof dispatchEndDate === 'string' ? dispatchEndDate : dispatchEndDate.format('YYYY-MM-DD')) : null,
+            cooperateBeginDate: cooperateBeginDate ? (typeof cooperateBeginDate === 'string' ? cooperateBeginDate : cooperateBeginDate.format('YYYY-MM-DD')) : null
           }
           this.spinning = true
           if (this.id) param.id = this.id

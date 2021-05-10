@@ -5,9 +5,9 @@
         <a-form class="ant-advanced-search-form" :form="form" layout="horizontal">
           <a-row style="margin-bottom: 20px;">
             <a-col :span="24">
-              <a-button v-if="type === '1'" type="primary" @click="handleSearch(1)" style="margin-right: 20px;">提交</a-button>
-              <a-button v-if="type === '1'" type="primary" @click="handleSearch(2)" style="margin-right: 20px;">提交后新增</a-button>
-              <a-button v-if="type === '1'" :style="{ marginRight: '20px' }" @click="handleReset">重置</a-button>
+              <a-button v-if="type === '1'" type="primary" @click="handleSearch(1)" style="margin-right: 5px;">提交</a-button>
+              <a-button v-if="type === '1'" type="primary" @click="handleSearch(2)" style="margin-right: 5px;">提交后新增</a-button>
+              <a-button v-if="type === '1'" style="margin-right: 5px;" @click="handleReset">重置</a-button>
               <a-button @click="cancel">{{ type !== '1' ? '返回' : '取消' }}</a-button>
             </a-col>
           </a-row>
@@ -25,7 +25,7 @@
             </a-col>
             <a-col :span="4">
               <a-form-item label="" :label-col="{ span: 6 }">
-                <a-button type="primary" @click="cancel">查询</a-button>
+                <a-button type="primary" @click="getByEmployeeNumber">查询</a-button>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -50,7 +50,7 @@
               <a-form-item label="民族" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="true"
-                  v-decorator="[`nation`]"
+                  v-decorator="[`ethnic`]"
                   placeholder="输入工号进行查询"
                 />
               </a-form-item>
@@ -88,6 +88,19 @@
                   :disabled="true"
                   v-decorator="[`downJobDate`]"
                   placeholder="输入工号进行查询"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="月份" :label-col="{ span: 6 }">
+                <a-month-picker
+                  :disabled="type === '0'"
+                  v-decorator="[`yearMonth`, {
+                    rules: [{ required: true, message: '请选择出勤月份!'}]
+                  }]"
+                  placeholder="请选择出勤月份"
+                  :locale="locale"
+                  style="width: 100%;"
                 />
               </a-form-item>
             </a-col>
@@ -156,6 +169,7 @@
 
 <script>
 import Moment from 'moment'
+import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 
 // function getBase64 (file) {
 //   return new Promise((resolve, reject) => {
@@ -169,6 +183,7 @@ import Moment from 'moment'
 export default {
   data () {
     return {
+      locale,
       customerList: [],
       supplierList: [],
       previewVisible: false,
@@ -195,6 +210,37 @@ export default {
     }
   },
   methods: {
+    async getByEmployeeNumber() {
+      const employeeNumber = this.form.getFieldValue('employeeNumber')
+      if (!employeeNumber) {
+        return this.$message.error('工号不得为空！')
+      }
+      this.spinning = true
+      const res = await this.$http.get('/data/employee/getByEmployeeNumber', {
+        employeeNumber
+      })
+      this.spinning = false
+      if (res) {
+        const {
+          employeeName,
+          age,
+          ethnic,
+          customerName,
+          deptName,
+          onJobDate,
+          downJobDate
+        } = res.data
+        this.form.setFieldsValue({
+          employeeName,
+          age,
+          ethnic,
+          customerName,
+          deptName,
+          onJobDate,
+          downJobDate
+        })
+      }
+    },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')
       if (res) {
@@ -271,58 +317,55 @@ export default {
       this.spinning = false
       if (res) {
         const {
-          onJobDate,
           employeeNumber,
           employeeName,
-          employState,
-          sex,
+          age,
           ethnic,
-          employeePhone,
-          idCard,
-          emergencyContactName,
-          emergencyContactPhone,
-          originAddress,
-          jobType,
-          area,
-          customerId,
+          customerName,
           deptName,
-          supplierId,
-          employeePrice,
-          payrollCardInfo
+          onJobDate,
+          downJobDate,
+          yearMonth,
+          workAbnormalHours,
+          settlementHours,
+          waterAndElectricityFee,
+          foodFee,
+          carAllowanceFee,
+          brandAndClothesFee
         } = res.data
         this.form.setFieldsValue({
-          onJobDate: onJobDate ? Moment(onJobDate) : null,
           employeeNumber,
           employeeName,
-          employState,
-          sex,
+          age,
           ethnic,
-          employeePhone,
-          idCard,
-          emergencyContactName,
-          emergencyContactPhone,
-          originAddress,
-          jobType,
-          area,
-          customerId,
+          customerName,
           deptName,
-          supplierId,
-          employeePrice,
-          payrollCardInfo
+          onJobDate,
+          downJobDate,
+          yearMonth: yearMonth ? Moment(yearMonth) : null,
+          workAbnormalHours,
+          settlementHours,
+          waterAndElectricityFee,
+          foodFee,
+          carAllowanceFee,
+          brandAndClothesFee
         })
       }
     },
     handleSearch (submitType) {
       this.form.validateFields(async (error, values) => {
         if (!error) {
+          const { yearMonth } = values
           const param = {
-            ...values
+            ...values,
+             yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null
           }
           this.spinning = true
           if (this.id) param.id = this.id
           const res = await this.$http.post('/data/monthAttence/saveOrUpdate', param)
+          this.spinning = false
           if (res) {
-            this.$message.success(`${this.id ? '员工档案信息修改成功！' : '新增员工档案成功！'}`)
+            this.$message.success(`${this.id ? '员工月考勤数据修改成功！' : '新增员工月考勤数据成功！'}`)
             if (submitType === 1) {
               this.$router.back()
             } else {

@@ -15,16 +15,16 @@
         </a-radio-group>
       </a-col>
       <a-col>
-        <a-button type="primary" @click="query" style="margin-right: 20px;">查询</a-button>
+        <a-button type="primary" @click="query" style="margin-right: 5px;">查询</a-button>
         <a-button @click="reset">重置</a-button>
       </a-col>
     </a-row>
     <a-row type="flex" style="margin-bottom: 20px;">
       <a-col>
-        <a-button @click="add" type="primary" style="margin-right: 20px;">新增</a-button>
+        <a-button @click="add" type="primary" style="margin-right: 5px;">新增</a-button>
         <!-- <a-button @click="submit" type="primary" style="margin-right: 20px;">提交</a-button> -->
         <!-- <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-right: 20px;">修改</a-button> -->
-        <a-button @click="deletePlan" :disabled="!selectedIds.length" type="danger" style="margin-right: 20px;">删除</a-button>
+        <a-button @click="deletePlan" :disabled="!selectedIds.length" type="danger" style="margin-right: 5px;">删除</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -152,13 +152,13 @@ const columns = [
   },
   {
     title: '更新人',
-    dataIndex: 'replyPersionTotal',
-    key: 'replyPersionTotal'
+    dataIndex: 'updateUser',
+    key: 'updateUser'
   },
   {
     title: '更新时间',
-    dataIndex: 'replyPersionTotal',
-    key: 'replyPersionTotal'
+    dataIndex: 'updateTime',
+    key: 'updateTime'
   },
   {
     title: '操作',
