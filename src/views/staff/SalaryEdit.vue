@@ -282,6 +282,15 @@
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="12">
+              <a-form-item label="发薪主体" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`paidRemark`]"
+                  placeholder="请输入发薪主体"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </a-form>
       </a-col>

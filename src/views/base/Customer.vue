@@ -34,10 +34,10 @@
         >
           <router-link
             slot="customerName"
-            slot-scope="text, record"
+            slot-scope="record"
             style="color: #1890ff"
             :to="{ path: '/customeredit', query: { id: record.id, type: 0 }}"
-          >{{ text }}</router-link>
+          >{{ record.customerName }}</router-link>
         </a-table>
       </a-col>
     </a-row>
@@ -72,8 +72,12 @@ const columns = [
     key: 'customerCode'
   },
   {
+    title: '注册地址',
+    key: 'supplierName',
+    scopedSlots: { customRender: 'supplierName' }
+  },
+  {
     title: '客户名称',
-    dataIndex: 'customerName',
     key: 'customerName',
     scopedSlots: { customRender: 'customerName' }
   },

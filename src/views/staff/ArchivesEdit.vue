@@ -149,6 +149,7 @@
                   }]"
                   placeholder="请选择工种"
                 >
+                  <a-select-option :value="0">正式工</a-select-option>
                   <a-select-option :value="1">学生工</a-select-option>
                   <a-select-option :value="2">农民工</a-select-option>
                   <a-select-option :value="3">社会工</a-select-option>

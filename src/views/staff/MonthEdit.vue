@@ -38,6 +38,24 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
+              <a-form-item label="年龄" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="true"
+                  v-decorator="[`age`]"
+                  placeholder="输入工号进行查询"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="民族" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="true"
+                  v-decorator="[`nation`]"
+                  placeholder="输入工号进行查询"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
               <a-form-item label="所属公司" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="true"

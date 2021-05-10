@@ -15,9 +15,9 @@
     </a-row>
     <a-row type="flex" style="margin-bottom: 20px;">
       <a-col>
-        <a-button type="primary" @click="query" style="margin-right: 20px;">查询</a-button>
-        <a-button @click="reset" style="margin-right: 20px;">重置</a-button>
-        <a-button @click="add" style="margin-right: 20px;">需求登记</a-button>
+        <a-button type="primary" @click="query" style="margin-right: 5px;">查询</a-button>
+        <a-button @click="reset" style="margin-right: 5px;">重置</a-button>
+        <a-button @click="add" style="margin-right: 5px;">需求登记</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -148,7 +148,7 @@ const columns = [
     key: 'demandEndDate'
   },
   {
-    title: '需求比例',
+    title: '男女比例',
     dataIndex: 'demandRatio',
     key: 'demandRatio'
   },

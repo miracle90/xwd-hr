@@ -27,7 +27,7 @@
         <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button> -->
         <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
         <a-upload
-          :action="`${$http.baseURL}/data/employee/import`"
+          :action="`${$http.baseURL}/data/role/import`"
           :showUploadList="false"
           name="file"
           :before-upload="beforeUpload"
@@ -50,12 +50,14 @@
           }"
           :rowKey="(record, index) => index"
         >
+          <span slot="status" slot-scope="record">{{ ['停用', '启用'][record.status] }}</span>
           <span slot="action" slot-scope="record">
-            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 0 }}">查看</router-link>
+            <router-link style="color: #1890ff" :to="{ path: '/roleedit', query: { id: record.id, type: 0 }}">查看</router-link>
             <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 1 }}">修改</router-link>
+            <router-link style="color: #1890ff" :to="{ path: '/roleedit', query: { id: record.id, type: 1 }}">修改</router-link>
             <a-divider type="vertical" />
-            <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 1 }}">启用</router-link>
+            <a v-if="record.status === 0"  @click="use(1, record.id)">启用</a>
+            <a v-else  @click="use(2, record.id)">停用</a>
             <!-- <a-divider type="vertical" /> -->
             <!-- <a  @click="deleteData(1, record.id)" style="color: red">删除</a> -->
           </span>
@@ -169,6 +171,30 @@ export default {
     this.handleSearch()
   },
   methods: {
+    use(status, id) {
+      this.$confirm({
+        title: '切换状态',
+        content: `确定要切换角色状态为${status === 1 ? '开启' : '停用'}吗？`,
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          this.form.validateFields(async (error, values) => {
+            if (!error) {
+              this.spinning = true
+              const res = await this.$http.post('/data/user/changeStatus', {
+                id,
+                status
+              })
+              this.spinning = false
+              if (res) {
+                this.$message.success('状态切换成功！')
+                this.handleSearch()
+              }
+            }
+          })
+        }
+      })
+    },
     handleChange (info) {
       if (info.file.status === 'done') {
         this.$message.success('上传成功')
@@ -197,16 +223,12 @@ export default {
         onOk: async () => {
           this.form.validateFields(async (error, values) => {
             if (!error) {
-              const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+              const { keyword } = values
               const param = {
-                queryEmployeeNumber,
-                queryEmployeeName,
-                queryEmployState,
-                queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-                queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+                keyword
               }
               this.spinning = true
-              const res = await this.$http.get('/data/employee/export', param)
+              const res = await this.$http.get('/data/role/export', param)
               this.spinning = false
               if (res) {
                 const { data } = res

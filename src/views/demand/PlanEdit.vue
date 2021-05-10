@@ -13,7 +13,7 @@
           </a-row>
           <a-row :gutter="24">
              <a-col :span="12">
-              <a-form-item label="公司名称" :label-col="{ span: 5 }">
+              <a-form-item label="公司名称" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
                   @change="customerIdChange"
@@ -29,7 +29,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求事业部" :label-col="{ span: 5 }">
+              <a-form-item label="需求事业部" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="true"
                   v-decorator="[`deptName`]"
@@ -38,7 +38,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系人" :label-col="{ span: 5 }">
+              <a-form-item label="联系人" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`contactName`, {
@@ -49,7 +49,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系电话" :label-col="{ span: 5 }">
+              <a-form-item label="联系电话" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`contactPhone`, {
@@ -60,7 +60,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求人数" :label-col="{ span: 5 }">
+              <a-form-item label="需求人数" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandPersions`, {
@@ -71,7 +71,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求工种" :label-col="{ span: 5 }">
+              <a-form-item label="需求工种" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandTrade`, {
@@ -82,7 +82,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求日期" :label-col="{ span: 5 }">
+              <a-form-item label="需求日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
                   v-decorator="[`demandBeginDate`, {
@@ -95,7 +95,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="撤离日期" :label-col="{ span: 5 }">
+              <a-form-item label="撤离日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
                   v-decorator="[`demandEndDate`]"
@@ -106,16 +106,16 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求比例" :label-col="{ span: 5 }">
+              <a-form-item label="男女比例" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandRatio`]"
-                  placeholder="请输入需求比例"
+                  placeholder="请输入男女比例"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求年龄" :label-col="{ span: 5 }">
+              <a-form-item label="需求年龄" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandAge`]"
@@ -124,7 +124,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="截止回复日期" :label-col="{ span: 5 }">
+              <a-form-item label="截止回复日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
                   v-decorator="[`replyEndDate`]"
@@ -135,7 +135,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="备注" :label-col="{ span: 5 }">
+              <a-form-item label="备注" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`remark`]"
@@ -144,7 +144,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="24">
-              <a-form-item label="发送" :label-col="{ span: 2 }">
+              <a-form-item label="发送" :label-col="{ span: 3 }">
                 <a-table
                   :pagination="false"
                   :columns="columns"

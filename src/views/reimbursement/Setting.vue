@@ -96,7 +96,7 @@ const columns = [
     key: 'supplierName'
   },
   {
-    title: '返费标准(元/工时',
+    title: '返费标准(元/工时）',
     dataIndex: 'rebateStandard',
     key: 'rebateStandard'
   },

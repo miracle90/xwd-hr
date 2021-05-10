@@ -137,6 +137,11 @@ const columns = [
     key: 'downJobDate'
   },
   {
+    title: '年龄',
+    dataIndex: 'age',
+    key: 'age'
+  },
+  {
     title: '民族',
     dataIndex: 'nation',
     key: 'nation'

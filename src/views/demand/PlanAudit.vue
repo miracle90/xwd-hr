@@ -111,11 +111,11 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求比例" :label-col="{ span: 5 }">
+              <a-form-item label="男女比例" :label-col="{ span: 5 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandRatio`]"
-                  placeholder="请输入需求比例"
+                  placeholder="请输入男女比例"
                 />
               </a-form-item>
             </a-col>

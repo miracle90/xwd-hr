@@ -111,9 +111,19 @@ const columns = [
     key: 'demandPersions'
   },
   {
-    title: '需求比例',
+    title: '男女比例',
     dataIndex: 'demandRatio',
     key: 'demandRatio'
+  },
+  {
+    title: '需求年龄',
+    dataIndex: 'demandAge',
+    key: 'demandAge'
+  },
+  {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark'
   },
   {
     title: '需求日期',
@@ -139,6 +149,16 @@ const columns = [
     title: '状态',
     key: 'status',
     scopedSlots: { customRender: 'status' }
+  },
+  {
+    title: '更新人',
+    dataIndex: 'replyPersionTotal',
+    key: 'replyPersionTotal'
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'replyPersionTotal',
+    key: 'replyPersionTotal'
   },
   {
     title: '操作',

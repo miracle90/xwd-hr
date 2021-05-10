@@ -12,7 +12,7 @@
           </a-row>
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-item label="供应商编码" :label-col="{ span: 5 }">
+              <a-form-item label="供应商编码" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`supplierCode`, {
@@ -23,7 +23,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="供应商名称" :label-col="{ span: 5 }">
+              <a-form-item label="供应商名称" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`supplierName`, {
@@ -34,7 +34,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系人" :label-col="{ span: 5 }">
+              <a-form-item label="联系人" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`contactName`, {
@@ -45,7 +45,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="统一社会信用代码" :label-col="{ span: 5 }">
+              <a-form-item label="统一社会信用代码" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`businessLicense`]"
@@ -54,7 +54,25 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系方式" :label-col="{ span: 5 }">
+              <a-form-item label="联系人职务" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  placeholder="请输入联系人职务"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="法定代表人" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`legalRepresentative`]"
+                  placeholder="请输入法定代表人"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="联系方式" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`contactPhone`, {
@@ -65,27 +83,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="法定代表人" :label-col="{ span: 5 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`legalRepresentative`]"
-                  placeholder="请输入法定代表人"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="派遣证有效期起" :label-col="{ span: 5 }">
-                <a-date-picker
-                  :disabled="type === '0'"
-                  v-decorator="[`dispatchBeginDate`]"
-                  format="YYYY-MM-DD"
-                  style="width: 100%"
-                  placeholder="请输入派遣证有效期起"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="注册资金" :label-col="{ span: 5 }">
+              <a-form-item label="注册资金" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`registeredCapital`]"
@@ -94,18 +92,16 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="派遣证有效期止" :label-col="{ span: 5 }">
-                <a-date-picker
+              <a-form-item label="邮箱" :label-col="{ span: 6 }">
+                <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`dispatchEndDate`]"
-                  format="YYYY-MM-DD"
-                  style="width: 100%"
-                  placeholder="请输入派遣证有效期止"
+                  v-decorator="[`contactPhone`]"
+                  placeholder="请输入邮箱"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="注册地址" :label-col="{ span: 5 }">
+              <a-form-item label="注册地址" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`registerAddress`]"
@@ -113,8 +109,96 @@
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="12">
+              <a-form-item label="派遣证有效期起" :label-col="{ span: 6 }">
+                <a-date-picker
+                  :disabled="type === '0'"
+                  v-decorator="[`dispatchBeginDate`]"
+                  format="YYYY-MM-DD"
+                  style="width: 100%"
+                  placeholder="请选择派遣证有效期起"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="供应商级别" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  placeholder="请输入供应商级别"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="派遣证有效期止" :label-col="{ span: 6 }">
+                <a-date-picker
+                  :disabled="type === '0'"
+                  v-decorator="[`dispatchEndDate`]"
+                  format="YYYY-MM-DD"
+                  style="width: 100%"
+                  placeholder="请选择派遣证有效期止"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="累计输送人数" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  placeholder="请输入累计输送人数"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="引荐人" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  placeholder="请输入引荐人"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="资源强项" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  placeholder="请输入资源强项"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="合作开始日期" :label-col="{ span: 6 }">
+                <a-date-picker
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  format="YYYY-MM-DD"
+                  style="width: 100%"
+                  placeholder="请选择合作开始日期"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="合作次数" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  placeholder="请输入合作次数"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
-              <a-form-item label="附件" :label-col="{ span: 2 }">
+              <a-form-item label="关键事项" :label-col="{ span: 3 }">
+                <a-textarea
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  placeholder="请输入关键事项"
+                  :auto-size="{ minRows: 3 }"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item label="附件" :label-col="{ span: 3 }">
                 <a-upload
                   :disabled="type === '0'"
                   list-type="picture-card"
@@ -141,7 +225,7 @@
           </a-row>
           <a-row :gutter="24" style="margin-bottom: 20px;">
             <a-col :span="12">
-              <a-form-item label="税号" :label-col="{ span: 5 }">
+              <a-form-item label="税号" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`dutyParagraph`]"
@@ -150,7 +234,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="开票公司名称" :label-col="{ span: 5 }">
+              <a-form-item label="开票公司名称" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`invoiceCompanyName`]"
@@ -164,7 +248,7 @@
           </a-row>
           <a-row :gutter="24" style="margin-bottom: 20px;">
             <a-col :span="12">
-              <a-form-item label="银行账号" :label-col="{ span: 5 }">
+              <a-form-item label="银行账号" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`bankAccount`]"
@@ -173,7 +257,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="银行名称" :label-col="{ span: 5 }">
+              <a-form-item label="银行名称" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`bankName`]"
@@ -182,7 +266,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="账户名称" :label-col="{ span: 5 }">
+              <a-form-item label="账户名称" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`accountName`]"
@@ -191,7 +275,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="开户行名称" :label-col="{ span: 5 }">
+              <a-form-item label="开户行名称" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`accountOfBankName`]"

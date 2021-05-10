@@ -13,7 +13,7 @@
           </a-row>
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-item label="回复人数" :label-col="{ span: 5 }">
+              <a-form-item label="回复人数" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`replyPersions`, {
@@ -24,7 +24,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="收费标准（元/工时）" :label-col="{ span: 5 }">
+              <a-form-item label="收费标准（元/工时）" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`chargeStandard`, {
@@ -35,7 +35,16 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="回复年龄" :label-col="{ span: 5 }">
+              <a-form-item label="车补" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`carAllowanceFee`]"
+                  placeholder="请输入车补"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="回复年龄" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`replyAge`]"
@@ -44,7 +53,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="回复比例" :label-col="{ span: 5 }">
+              <a-form-item label="回复比例" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`replyRatio`]"
@@ -53,7 +62,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="资源来源地" :label-col="{ span: 5 }">
+              <a-form-item label="资源来源地" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`resourceOrigin`]"
@@ -62,7 +71,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="民族" :label-col="{ span: 5 }">
+              <a-form-item label="民族" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`nation`]"
@@ -71,7 +80,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="回复备注" :label-col="{ span: 5 }">
+              <a-form-item label="回复备注" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`replyRemark`]"

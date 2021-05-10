@@ -12,7 +12,7 @@
           </a-row>
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-item label="客户编码" :label-col="{ span: 5 }">
+              <a-form-item label="客户编码" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`customerCode`, {
@@ -23,7 +23,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="客户名称" :label-col="{ span: 5 }">
+              <a-form-item label="客户名称" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`customerName`, {
@@ -34,7 +34,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="事业部" :label-col="{ span: 5 }">
+              <a-form-item label="事业部" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`bussinessUnit`]"
@@ -43,7 +43,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="统一社会信用代码" :label-col="{ span: 5 }">
+              <a-form-item label="统一社会信用代码" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`businessLicense`]"
@@ -52,7 +52,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系人" :label-col="{ span: 5 }">
+              <a-form-item label="联系人" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`contactName`, {
@@ -63,7 +63,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="法定代表人" :label-col="{ span: 5 }">
+              <a-form-item label="法定代表人" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`legalRepresentative`]"
@@ -72,7 +72,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系方式" :label-col="{ span: 5 }">
+              <a-form-item label="联系方式" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`contactPhone`, {
@@ -83,7 +83,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="注册资金" :label-col="{ span: 5 }">
+              <a-form-item label="注册资金" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`registeredCapital`]"
@@ -92,7 +92,16 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="注册地址" :label-col="{ span: 5 }">
+              <a-form-item label="邮箱" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[``]"
+                  placeholder="请输入邮箱"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="注册地址" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`registerAddress`]"
@@ -106,7 +115,7 @@
           </a-row>
           <a-row :gutter="24" style="margin-bottom: 20px;">
             <a-col :span="12">
-              <a-form-item label="税号" :label-col="{ span: 5 }">
+              <a-form-item label="税号" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`dutyParagraph`]"
@@ -115,7 +124,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="开票公司名称" :label-col="{ span: 5 }">
+              <a-form-item label="开票公司名称" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`invoiceCompanyName`]"

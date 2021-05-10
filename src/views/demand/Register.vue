@@ -105,11 +105,11 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求比例" :label-col="{ span: 6 }">
+              <a-form-item label="男女比例" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`demandRatio`]"
-                  placeholder="请输入需求比例"
+                  placeholder="请输入男女比例"
                 />
               </a-form-item>
             </a-col>
@@ -150,8 +150,6 @@
                 </a-select>
               </a-form-item>
             </a-col>
-          </a-row>
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item label="回复人数" :label-col="{ span: 6 }">
                 <a-input
@@ -171,6 +169,15 @@
                     rules: [{ required: true, message: '请输入收费标准(元/工时)!'}]
                   }]"
                   placeholder="请输入收费标准(元/工时)"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="车补" :label-col="{ span: 6 }">
+                <a-input
+                  :disabled="type === '0'"
+                  v-decorator="[`carAllowanceFee`]"
+                  placeholder="请输入车补"
                 />
               </a-form-item>
             </a-col>

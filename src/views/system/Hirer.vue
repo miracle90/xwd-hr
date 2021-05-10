@@ -56,7 +56,6 @@
             <a-divider type="vertical" />
             <router-link style="color: #1890ff" :to="{ path: '/hireredit', query: { id: record.id, type: 1 }}">修改</router-link>
             <a-divider type="vertical" />
-            <!-- <router-link style="color: #1890ff" :to="{ path: '/settingedit', query: { id: record.id, type: 1 }}">启用</router-link> -->
             <a v-if="record.status === 0"  @click="use(1, record.id)">启用</a>
             <a v-else  @click="use(2, record.id)">停用</a>
             <a-divider type="vertical" />

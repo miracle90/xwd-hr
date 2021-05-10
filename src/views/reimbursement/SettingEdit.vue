@@ -11,7 +11,7 @@
             </a-col>
           </a-row>
           <a-row :gutter="12">
-            <a-col :span="12">
+            <a-col :span="16">
               <a-form-item label="供应商" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
@@ -26,7 +26,7 @@
             </a-col>
           </a-row>
           <a-row :gutter="12">
-            <a-col :span="12">
+            <a-col :span="16">
               <a-form-item label="返费标准(元/工时)" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
@@ -39,7 +39,7 @@
             </a-col>
           </a-row>
           <a-row :gutter="12">
-            <a-col :span="12">
+            <a-col :span="16">
               <a-form-item label="入职日期起" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
@@ -54,7 +54,7 @@
             </a-col>
           </a-row>
           <a-row :gutter="12">
-            <a-col :span="12">
+            <a-col :span="16">
               <a-form-item label="入职日期止" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
@@ -69,14 +69,19 @@
             </a-col>
           </a-row>
           <a-row :gutter="12">
-            <a-col :span="12">
+            <a-col :span="16">
               <a-form-item label="代发工资" :label-col="{ span: 6 }">
-                <a-checkbox v-decorator="[`isProxyPay`, { valuePropName: 'checked' }]"></a-checkbox>
+                <a-radio-group
+                  :disabled="type === '0'"
+                  v-decorator="['isProxyPay']">
+                  <a-radio value="是">是</a-radio>
+                  <a-radio value="否">否</a-radio>
+                </a-radio-group>
               </a-form-item>
             </a-col>
           </a-row>
           <a-row :gutter="12">
-            <a-col :span="12">
+            <a-col :span="16">
               <a-form-item label="备注" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
@@ -238,9 +243,10 @@ export default {
             onJobDate: onJobDate ? (typeof onJobDate === 'string' ? onJobDate : onJobDate.format('YYYY-MM-DD')) : null,
             downJobDate: downJobDate ? (typeof downJobDate === 'string' ? downJobDate : downJobDate.format('YYYY-MM-DD')) : null
           }
-          this.spinning = true
           if (this.id) param.id = this.id
+          this.spinning = true
           const res = await this.$http.post(`/data/rebate/${this.id ? 'update' : 'add'}`, param)
+          this.spinning = false
           if (res) {
             this.$message.success(`${this.id ? '返费设定信息修改成功！' : '新增返费设定信息成功！'}`)
             this.$router.back()
