@@ -86,7 +86,7 @@
             :to="{ path: '/archivesedit', query: { id: record.id, type: 0 }}"
           >{{ text }}</router-link>
           <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span>
-          <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工'][text] }}</span>
+          <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工', '正式工'][text] }}</span>
         </a-table>
       </a-col>
     </a-row>
