@@ -39,8 +39,21 @@
           </span>
           <span slot="action" slot-scope="record">
             <router-link
+              v-if="record.demandType === '需求登记'"
               style="color: #1890ff"
-              :to="{ path: '/register', query: { id: record.id, type: 0 }}"
+              :to="{ path: '/register', query: { id: record.demandId, type: 0 }}"
+            >查看</router-link>
+            <!-- 客户需求 + 还未审核，跳转需求计划详情页面 -->
+            <router-link
+              v-if="record.demandType === '客户需求' && record.status !== 3"
+              style="color: #1890ff"
+              :to="{ path: '/planedit', query: { id: record.demandId, type: 0 }}"
+            >查看</router-link>
+            <!-- 客户需求 + 已审核，跳转审核页面查看详情 -->
+            <router-link
+              v-if="record.demandType === '客户需求' && record.status === 3"
+              style="color: #1890ff"
+              :to="{ path: '/planaudit', query: { id: record.demandId, type: 0 }}"
             >查看</router-link>
             <a-divider v-if="record.status === 1" type="vertical" />
             <router-link
@@ -104,8 +117,8 @@ const columns = [
   },
   {
     title: '客户',
-    key: 'customerId',
-    scopedSlots: { customRender: 'customerId' }
+    dataIndex: 'customerName',
+    key: 'customerName'
   },
   {
     title: '事业部',

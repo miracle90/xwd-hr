@@ -209,7 +209,7 @@ export default {
       const {
         id,
         customerId,
-        deptName,
+        deptId,
         contactName,
         contactPhone,
         demandPersions,
@@ -228,7 +228,7 @@ export default {
         const param = {
           id,
           customerId,
-          deptName,
+          deptId,
           contactName,
           contactPhone,
           demandPersions,

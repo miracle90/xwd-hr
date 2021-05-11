@@ -5,9 +5,9 @@
         <a-form class="ant-advanced-search-form" :form="form" layout="horizontal">
           <a-row style="margin-bottom: 20px;">
             <a-col :span="24">
-              <a-button type="primary" @click="handleSearch" style="margin-right: 20px;">审核</a-button>
+              <a-button v-if="type === '1'" type="primary" @click="handleSearch" style="margin-right: 20px;">审核</a-button>
               <!-- <a-button v-if="type === '1'" @click="handleSearch(2)" style="margin-right: 20px;">保存</a-button> -->
-              <!-- <a-button v-if="type === '1'" @click="handleReset" style="margin-right: 20px;">重置</a-button> -->
+              <a-button v-if="type === '1'" @click="handleReset" style="margin-right: 20px;">重置</a-button>
               <a-button @click="cancel">取消</a-button>
             </a-col>
           </a-row>
@@ -163,13 +163,13 @@
                 :data-source="distributeSupplierList"
                 :rowKey="(record, index) => index"
               >
-                <!-- <span slot="action" slot-scope="record">
-                  <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">查看</router-link>
-                  <a-divider type="vertical" />
-                  <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">修改</router-link>
-                  <a-divider type="vertical" />
-                  <router-link style="color: #1890ff" :to="{ path: '/suppliersedit', query: { id: record.id, type: 0 }}">审核</router-link>
-                </span> -->
+                <span slot="dispatchPersions" slot-scope="record" v-if="type !== '0'">
+                  <a-input
+                    @change="check"
+                    v-model="personObj[`${record.key}`]"
+                    style="width: 80px;"
+                  />
+                </span>
               </a-table>
             </a-col>
           </a-row>
@@ -232,22 +232,29 @@ const columns = [
     title: '回复备注',
     dataIndex: 'replyRemark',
     key: 'replyRemark'
-  },
-  {
-    title: '分配人数',
-    key: 'dispatchPersions'
   }
+  // {
+  //   title: '分配人数',
+  //   key: 'dispatchPersions',
+  //   scopedSlots: { customRender: 'dispatchPersions' }
+  // }
+  // {
+  //   title: '分配人数',
+  //   key: 'dispatchPersions',
+  //   dataIndex: 'dispatchPersions'
+  // }
 ]
 
 export default {
   data () {
     return {
+      personObj: {},
       deptList: [],
       demandCode: '',
       customerList: [],
       supplierList: [],
       selectSuppliersList: [],
-      columns,
+      columns: [],
       spinning: false,
       type: '1', // 新增、修改type为1，查看详情type为0
       id: '',
@@ -257,13 +264,70 @@ export default {
   computed: {
     distributeSupplierList () {
       if (this.selectSuppliersList.length && this.supplierList.length) {
-        return this.supplierList.filter(item => this.selectSuppliersList.includes(item.id))
+        // const list = this.supplierList.map(item => item.id)
+        return this.selectSuppliersList.map((selectItem, selectKey) => {
+          const supplierId = selectItem.supplierId
+          const id = selectItem.id
+          const baseInfo = this.supplierList.filter(item => item.id === supplierId)[0]
+          const {
+            supplierName,
+            contactName,
+            contactPhone
+          } = baseInfo
+          const {
+            demandId,
+            dispatchPersions,
+            replyPersions,
+            chargeStandard,
+            replyRatio,
+            replyAge,
+            resourceOrigin,
+            nation,
+            replyRemark
+          } = selectItem
+          console.log()
+          return {
+            key: selectKey,
+            id,
+            supplierName,
+            contactName,
+            contactPhone,
+            demandId,
+            dispatchPersions,
+            replyPersions,
+            chargeStandard,
+            replyRatio,
+            replyAge,
+            resourceOrigin,
+            nation,
+            replyRemark
+          }
+        })
       }
       return []
     }
   },
   mounted () {
     const { id, type } = this.$route.query
+    if (type === '0') {
+      this.columns = [
+        ...columns,
+        {
+          title: '分配人数',
+          dataIndex: 'dispatchPersions',
+          key: 'dispatchPersions'
+        }
+      ]
+    } else {
+      this.columns = [
+        ...columns,
+        {
+          title: '分配人数',
+          scopedSlots: { customRender: 'dispatchPersions' },
+          key: 'dispatchPersions'
+        }
+      ]
+    }
     this.findCustomerList()
     this.findSuppliersList()
     if (id) {
@@ -273,12 +337,20 @@ export default {
     }
   },
   methods: {
+    check () {
+      let count = 0
+      Object.keys(this.personObj).forEach(item => {
+        count += +this.personObj[item]
+      })
+      const demandPersions = this.form.getFieldValue('demandPersions')
+      if (count > demandPersions) {
+        this.$message.error('累计分配人数不得大于需求人数')
+      }
+    },
     async findSupplier (id) {
       const res = await this.$http.get(`/data/demand/findSupplier/${id}`)
       if (res) {
-        const list = res.data && res.data.length ? res.data.map(item => item.supplierId) : []
-        console.log(list)
-        this.selectSuppliersList = list
+        this.selectSuppliersList = res.data && res.data.length ? res.data : []
       }
     },
     async customerIdChange (customerId) {
@@ -351,29 +423,32 @@ export default {
         })
       }
     },
-    handleSearch () {
-      // 1 提交，/data/demand/submit
-      // 2 保存，/data/demand/saveOrUpdate
-      this.form.validateFields(async (error, values) => {
-        if (!error) {
-          const { demandBeginDate, demandEndDate, replyEndDate } = values
-          const param = {
-            ...values,
-            supplierIdsArr: this.selectedRows.map(item => item.id),
-            demandBeginDate: demandBeginDate ? (typeof demandBeginDate === 'string' ? demandBeginDate : demandBeginDate.format('YYYY-MM-DD')) : null,
-            demandEndDate: demandEndDate ? (typeof demandEndDate === 'string' ? demandEndDate : demandEndDate.format('YYYY-MM-DD')) : null,
-            replyEndDate: replyEndDate ? (typeof replyEndDate === 'string' ? replyEndDate : replyEndDate.format('YYYY-MM-DD')) : null
-          }
-          if (this.id) param.id = this.id
-          this.spinning = true
-          const res = await this.$http.post('/data/demand/auditor', param)
-          this.spinning = false
-          if (res) {
-            this.$message.success('需求审核成功')
-            this.$router.back()
-          }
-        }
+    async handleSearch () {
+      let count = 0
+      let demandId
+      const demandReplyList = []
+      this.distributeSupplierList.forEach((item, index) => {
+        demandId = item.demandId
+        count += +this.personObj[index] || 0
+        demandReplyList.push({
+          id: item.id,
+          dispatchPersions: +this.personObj[index] || 0
+        })
       })
+      const demandPersions = this.form.getFieldValue('demandPersions')
+      if (count > demandPersions) {
+        return this.$message.error('累计分配人数不得大于需求人数')
+      }
+      this.spinning = true
+      const res = await this.$http.post('/data/demand/auditor', {
+        demandId,
+        demandReplyList
+      })
+      this.spinning = false
+      if (res) {
+        this.$message.success('需求审核成功')
+        this.$router.back()
+      }
     },
     handleReset () {
       this.form.resetFields()
