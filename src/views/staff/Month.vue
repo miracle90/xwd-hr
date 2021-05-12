@@ -168,8 +168,8 @@ const columns = [
   },
   {
     title: '车补',
-    dataIndex: 'carAllowanceFee',
-    key: 'carAllowanceFee'
+    dataIndex: 'carAllowanceFeeFee',
+    key: 'carAllowanceFeeFee'
   },
   {
     title: '厂牌及工衣扣费',

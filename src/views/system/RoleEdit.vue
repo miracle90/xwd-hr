@@ -93,9 +93,19 @@
 								/>
 							</a-form-item>
 						</a-col>
-						<a-col :span="24" style="margin-top: 30px;">
-							<a-form-item label="角色授权" :label-col="{ span: 3 }">
-								<a-checkbox-group
+						<a-col :span="12" style="margin-top: 30px;">
+							<a-form-item label="角色授权" :label-col="{ span: 6 }">
+								<a-tree
+									v-decorator="['idsArr']"
+									checkable
+									:expanded-keys="expandedKeys"
+									:auto-expand-parent="autoExpandParent"
+									:selected-keys="selectedKeys"
+									:tree-data="treeData"
+									@expand="onExpand"
+									@select="onSelect"
+								/>
+								<!-- <a-checkbox-group
 									v-decorator="['idsArr']"
 									style="width: 100%"
 								>
@@ -104,17 +114,17 @@
 											<a-checkbox :value="item.id">{{ item.name }}</a-checkbox>
 										</a-col>
 									</a-row>
-								</a-checkbox-group>
+								</a-checkbox-group> -->
 							</a-form-item>
 						</a-col>
-						<a-col :span="24" style="margin-top: 30px;">
-							<a-form-item label="分配用户" :label-col="{ span: 3 }">
+						<a-col :span="12" style="margin-top: 30px;">
+							<a-form-item label="分配用户" :label-col="{ span: 6 }">
 								<a-checkbox-group
 									v-decorator="['idsArr']"
 									style="width: 100%"
 								>
 									<a-row>
-										<a-col :span="4" v-for="item in userList" :key="item.id">
+										<a-col :span="8" v-for="item in userList" :key="item.id">
 											<a-checkbox :value="item.id">{{ item.name }}</a-checkbox>
 										</a-col>
 									</a-row>
@@ -131,9 +141,59 @@
 <script>
 import Moment from 'moment'
 
+const treeData = [
+  {
+    title: '0-0',
+    key: '0-0',
+    children: [
+      {
+        title: '0-0-0',
+        key: '0-0-0',
+        children: [
+          { title: '0-0-0-0', key: '0-0-0-0' },
+          { title: '0-0-0-1', key: '0-0-0-1' },
+          { title: '0-0-0-2', key: '0-0-0-2' },
+        ],
+      },
+      {
+        title: '0-0-1',
+        key: '0-0-1',
+        children: [
+          { title: '0-0-1-0', key: '0-0-1-0' },
+          { title: '0-0-1-1', key: '0-0-1-1' },
+          { title: '0-0-1-2', key: '0-0-1-2' },
+        ],
+      },
+      {
+        title: '0-0-2',
+        key: '0-0-2',
+      },
+    ],
+  },
+  {
+    title: '0-1',
+    key: '0-1',
+    children: [
+      { title: '0-1-0-0', key: '0-1-0-0' },
+      { title: '0-1-0-1', key: '0-1-0-1' },
+      { title: '0-1-0-2', key: '0-1-0-2' },
+    ],
+  },
+  {
+    title: '0-2',
+    key: '0-2',
+  },
+]
+
 export default {
 	data() {
 		return {
+			expandedKeys: ['0-0-0', '0-0-1'],
+      autoExpandParent: true,
+      checkedKeys: ['0-0-0'],
+      selectedKeys: [],
+      treeData,
+			ruleList: [],
 			userList: [],
 			spinning: false,
 			type: '1', // 新增、修改type为1，查看详情type为0
@@ -146,6 +206,7 @@ export default {
 	},
 	mounted() {
 		this.getUserList()
+		this.getRuleList()
 		const { id, type } = this.$route.query
 		if (id) {
 			this.id = id
@@ -155,13 +216,34 @@ export default {
 		}
 	},
 	methods: {
+		onExpand(expandedKeys) {
+      console.log('onExpand', expandedKeys)
+      // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+      // or, you can remove all expanded children keys.
+      this.expandedKeys = expandedKeys
+      this.autoExpandParent = false
+    },
+    onCheck(checkedKeys) {
+      console.log('onCheck', checkedKeys)
+      this.checkedKeys = checkedKeys
+    },
+    onSelect(selectedKeys, info) {
+      console.log('onSelect', info)
+      this.selectedKeys = selectedKeys
+    },
 		async getUserList() {
 			const res = await this.$http.get('/data/user/list')
 			if (res) {
 				this.userList = res.data
 			}
 		},
-		// async findSuppliersList () {
+		async getRuleList() {
+			const res = await this.$http.get('/data/role/getRightsTree/0')
+			if (res) {
+				this.ruleList = res.data
+			}
+		},
+		// async findSuppliersList () {q
 		//   const res = await this.$http.get('/data/supplier/find')
 		//   if (res) {
 		//     this.supplierList = res.data

@@ -29,11 +29,17 @@
             </a-col>
             <a-col :span="12">
               <a-form-item label="需求事业部" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="true"
-                  v-decorator="[`deptName`]"
-                  placeholder="关联所选公司名称"
-                />
+                <a-select
+                  :disabled="type === '0'"
+                  v-decorator="['deptId', {
+                    rules: [{ required: true, message: '请选择需求事业部!' }]
+                  }]"
+                  placeholder="请选择需求事业部"
+                >
+                  <a-select-option v-for="(item, index) in deptList" :key="index" :value="item.id">
+                    {{ item.deptName }}
+                  </a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -257,6 +263,7 @@ const columns = [
 export default {
   data () {
     return {
+      deptList: [],
       customerList: [],
       selectedRowKeys: [],
       selectedRows: [],
@@ -272,46 +279,45 @@ export default {
     //
   },
   mounted () {
-    const { id, type } = this.$route.query
+    const { id, demandId, type } = this.$route.query
     this.findCustomerList()
     this.findSuppliersList()
     if (id) {
       this.id = id
       this.type = type
+      this.demandId = demandId
       this.queryDetail(id)
       // this.findSupplier(id)
     }
   },
   methods: {
-    async findSupplier (id) {
-      const res = await this.$http.get(`/data/demand/findSupplier/${id}`)
-      if (res) {
-        const selectedRowKeys = []
-        const selectedRows = []
-        const list = res.data.map(item => item.supplierId)
-        console.log(list)
-        console.log(this.supplierList)
-        this.supplierList.forEach((item, index) => {
-          if (list.includes(item.id)) {
-            selectedRowKeys.push(index)
-            selectedRows.push(item)
-          }
-        })
-        this.selectedRowKeys = selectedRowKeys
-        this.selectedRows = selectedRows
-      }
-    },
+    // async findSupplier (id) {
+    //   const res = await this.$http.get(`/data/demand/findSupplier/${id}`)
+    //   if (res) {
+    //     const selectedRowKeys = []
+    //     const selectedRows = []
+    //     const list = res.data.map(item => item.supplierId)
+    //     console.log(list)
+    //     console.log(this.supplierList)
+    //     this.supplierList.forEach((item, index) => {
+    //       if (list.includes(item.id)) {
+    //         selectedRowKeys.push(index)
+    //         selectedRows.push(item)
+    //       }
+    //     })
+    //     this.selectedRowKeys = selectedRowKeys
+    //     this.selectedRows = selectedRows
+    //   }
+    // },
     async customerIdChange (customerId) {
       if (customerId || customerId === 0) {
         const res = await this.$http.get('/data/dept/findByCustomerId', {
           customerId
         })
-        console.log(res)
+        if (res) {
+          this.deptList = res.data
+        }
       }
-      // const deptName = id ? this.customerList.find(item => item.id === id).bussinessUnit : ''
-      // this.form.setFieldsValue({
-      //   deptName
-      // })
     },
     async findCustomerList () {
       const res = await this.$http.get('/data/customer/find')
@@ -337,36 +343,57 @@ export default {
     },
     async queryDetail (id) {
       this.spinning = true
-      const res = await this.$http.get(`/data/demand/getRecordSelfInfo/${id}`)
+      const res = await this.$http.get(`/data/demand/getDemandReplyInfo/${id}`)
       this.spinning = false
       if (res) {
         const {
-          customerId,
-          deptName,
-          contactName,
-          contactPhone,
-          demandPersions,
-          demandTrade,
-          demandBeginDate,
-          demandEndDate,
-          replyEndDate,
-          demandRatio,
-          demandAge,
-          remark
+          demand: {
+            customerId,
+            deptId,
+            contactName,
+            contactPhone,
+            demandPersions,
+            demandTrade,
+            demandBeginDate,
+            demandEndDate,
+            demandRatio,
+            demandAge,
+            replyEndDate
+          },
+          demandReply: {
+            supplierId,
+            replyPersions,
+            chargeStandard,
+            carAllowanceFee,
+            replyAge,
+            replyRatio,
+            resourceOrigin,
+            nation,
+            replyRemark
+          }
         } = res.data
+        this.customerIdChange(customerId)
         this.form.setFieldsValue({
           customerId,
-          deptName,
+          deptId,
           contactName,
           contactPhone,
           demandPersions,
           demandTrade,
           demandBeginDate: demandBeginDate ? Moment(demandBeginDate) : null,
           demandEndDate: demandEndDate ? Moment(demandEndDate) : null,
-          replyEndDate: replyEndDate ? Moment(replyEndDate) : null,
           demandRatio,
           demandAge,
-          remark
+          replyEndDate: replyEndDate ? Moment(replyEndDate) : null,
+          supplierId,
+          replyPersions,
+          chargeStandard,
+          carAllowanceFee,
+          replyAge,
+          replyRatio,
+          resourceOrigin,
+          nation,
+          replyRemark
         })
       }
     },
@@ -374,8 +401,9 @@ export default {
       this.form.validateFields(async (error, values) => {
         if (!error) {
           const {
+            supplierId,
             customerId,
-            deptName,
+            deptId,
             contactName,
             contactPhone,
             demandPersions,
@@ -387,6 +415,7 @@ export default {
             replyEndDate,
             replyPersions,
             chargeStandard,
+            carAllowanceFee,
             replyAge,
             replyRatio,
             resourceOrigin,
@@ -396,7 +425,7 @@ export default {
           const param = {
             demandParam: {
               customerId,
-              deptName,
+              deptId,
               contactName,
               contactPhone,
               demandPersions,
@@ -408,8 +437,10 @@ export default {
               replyEndDate: replyEndDate ? (typeof replyEndDate === 'string' ? replyEndDate : replyEndDate.format('YYYY-MM-DD')) : null
             },
             demandReply: {
+              supplierId,
               replyPersions,
               chargeStandard,
+              carAllowanceFee,
               replyAge,
               replyRatio,
               resourceOrigin,
@@ -417,12 +448,15 @@ export default {
               replyRemark
             }
           }
-          if (this.id) param.demandParam.id = this.id
+          if (this.id) {
+            param.demandParam.id = this.demandId
+            param.demandReply.id = this.id
+          }
           this.spinning = true
           const res = await this.$http.post('/data/demand/recordSelf', param)
           this.spinning = false
           if (res) {
-            this.$message.success('需求登记成功！')
+            this.$message.success(`${!this.id ? '需求登记成功！' : '需求登记修改成功！'}`)
             this.$router.back()
           }
         }

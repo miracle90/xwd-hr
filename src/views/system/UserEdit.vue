@@ -89,9 +89,7 @@
 									v-decorator="['userType']"
 									placeholder="请选择用户类型"
 								>
-									<a-select-option value="SUPERADMIN"
-										>超级管理员</a-select-option
-									>
+									<a-select-option value="SUPERADMIN">超级管理员</a-select-option>
 									<a-select-option value="ADMIN">管理员</a-select-option>
 									<a-select-option value="AGENT">租户</a-select-option>
 									<a-select-option value="COMMON">普通用户</a-select-option>
@@ -323,16 +321,13 @@ export default {
 			e.preventDefault()
 			this.form.validateFields(async (error, values) => {
 				if (!error) {
-					console.log(values)
+					const { roleIdArr, ...obj } = values
 					const param = {
-						...values,
+						...obj
 					}
 					this.spinning = true
 					if (this.id) param.id = this.id
-					const res = await this.$http.post(
-						`/data/user/${this.id ? 'update' : 'add'}`,
-						param
-					)
+					const res = await this.$http.post(`/data/user/${this.id ? 'update' : 'add'}`, param)
 					this.spinning = false
 					if (res) {
 						this.$message.success(

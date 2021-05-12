@@ -13,14 +13,14 @@
           </a-row>
           <a-row :gutter="24">
             <a-col :span="12" style="font-weight: bold;">
-              <a-form-item label="需求编号" :label-col="{ span: 5 }">{{ demandCode }}</a-form-item>
+              <a-form-item label="需求编号" :label-col="{ span: 6 }">{{ demandCode }}</a-form-item>
             </a-col>
           </a-row>
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-item label="公司名称" :label-col="{ span: 5 }">
+              <a-form-item label="公司名称" :label-col="{ span: 6 }">
                 <a-select
-                  :disabled="type === '0'"
+                  :disabled="true"
                   @change="customerIdChange"
                   v-decorator="['customerId', {
                     rules: [{ required: true, message: '请选择公司名称!' }]
@@ -36,7 +36,7 @@
             <a-col :span="12">
               <a-form-item label="需求事业部" :label-col="{ span: 6 }">
                 <a-select
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="['deptId', {
                     rules: [{ required: true, message: '请选择需求事业部!' }]
                   }]"
@@ -49,9 +49,9 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系人" :label-col="{ span: 5 }">
+              <a-form-item label="联系人" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`contactName`, {
                     rules: [{ required: true, message: '请输入联系人!'}]
                   }]"
@@ -60,9 +60,9 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="联系电话" :label-col="{ span: 5 }">
+              <a-form-item label="联系电话" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`contactPhone`, {
                     rules: [{ required: true, message: '请输入联系电话!'}]
                   }]"
@@ -71,9 +71,9 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求人数" :label-col="{ span: 5 }">
+              <a-form-item label="需求人数" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`demandPersions`, {
                     rules: [{ required: true, message: '请输入需求人数!'}]
                   }]"
@@ -82,9 +82,9 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求工种" :label-col="{ span: 5 }">
+              <a-form-item label="需求工种" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`demandTrade`, {
                     rules: [{ required: true, message: '请输入需求工种!'}]
                   }]"
@@ -93,9 +93,9 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求日期" :label-col="{ span: 5 }">
+              <a-form-item label="需求日期" :label-col="{ span: 6 }">
                 <a-date-picker
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`demandBeginDate`, {
                     rules: [{ required: true, message: '请选择需求日期!'}]
                   }]"
@@ -106,9 +106,9 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="撤离日期" :label-col="{ span: 5 }">
+              <a-form-item label="撤离日期" :label-col="{ span: 6 }">
                 <a-date-picker
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`demandEndDate`]"
                   format="YYYY-MM-DD"
                   style="width: 100%"
@@ -117,27 +117,27 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="男女比例" :label-col="{ span: 5 }">
+              <a-form-item label="男女比例" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`demandRatio`]"
                   placeholder="请输入男女比例"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="需求年龄" :label-col="{ span: 5 }">
+              <a-form-item label="需求年龄" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`demandAge`]"
                   placeholder="请输入需求年龄"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="截止回复日期" :label-col="{ span: 5 }">
+              <a-form-item label="截止回复日期" :label-col="{ span: 6 }">
                 <a-date-picker
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`replyEndDate`]"
                   format="YYYY-MM-DD"
                   style="width: 100%"
@@ -146,9 +146,9 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="备注" :label-col="{ span: 5 }">
+              <a-form-item label="备注" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`remark`]"
                   placeholder="请输入备注"
                 />
@@ -451,9 +451,10 @@ export default {
       }
     },
     handleReset () {
-      this.form.resetFields()
-      this.selectedRowKeys = []
-      this.selectedRows = []
+      this.personObj = {}
+      // this.form.resetFields()
+      // this.selectedRowKeys = []
+      // this.selectedRows = []
     },
     cancel () {
       this.$router.back()

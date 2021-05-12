@@ -29,13 +29,6 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <!-- <a-form-item label="需求事业部" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="true"
-                  v-decorator="[`deptName`]"
-                  placeholder="关联所选公司名称"
-                />
-              </a-form-item> -->
               <a-form-item label="需求事业部" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"

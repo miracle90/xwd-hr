@@ -30,6 +30,7 @@ import {
   Checkbox,
   Modal,
   Result,
+  Tree,
   message
 } from 'ant-design-vue'
 
@@ -53,6 +54,7 @@ Vue.use(Radio)
 Vue.use(Checkbox)
 Vue.use(Modal)
 Vue.use(Result)
+Vue.use(Tree)
 
 // 引入拖拽组件
 Vue.component('vue-draggable-resizable', VueDraggableResizable)

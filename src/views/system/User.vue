@@ -140,11 +140,11 @@ const columns = [
 		dataIndex: 'name',
 		key: 'name',
 	},
-	{
-		title: '租户代码',
-		dataIndex: 'agentCode',
-		key: 'agentCode',
-	},
+	// {
+	// 	title: '租户代码',
+	// 	dataIndex: 'agentCode',
+	// 	key: 'agentCode',
+	// },
 	{
 		title: '工号',
 		dataIndex: 'employNo',

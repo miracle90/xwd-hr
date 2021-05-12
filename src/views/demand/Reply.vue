@@ -38,7 +38,7 @@
               <a-form-item label="车补" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`carAllowanceFee`]"
+                  v-decorator="[`carAllowanceFeeFee`]"
                   placeholder="请输入车补"
                 />
               </a-form-item>

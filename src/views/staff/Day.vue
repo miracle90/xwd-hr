@@ -117,8 +117,8 @@ const columns = [
   },
   {
     title: '加班',
-    dataIndex: 'carAllowanceFee',
-    key: 'carAllowanceFee'
+    dataIndex: 'carAllowanceFeeFee',
+    key: 'carAllowanceFeeFee'
   },
   {
     title: '迟到',

@@ -114,11 +114,11 @@ const columns = [
     dataIndex: 'remark',
     key: 'remark'
   },
-  {
-    title: '租户代码',
-    dataIndex: 'agentId',
-    key: 'agentId'
-  },
+  // {
+  //   title: '租户代码',
+  //   dataIndex: 'agentId',
+  //   key: 'agentId'
+  // },
   {
     title: '更新人',
     dataIndex: 'updateUser',
