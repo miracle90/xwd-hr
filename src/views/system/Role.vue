@@ -56,8 +56,8 @@
             <a-divider type="vertical" />
             <router-link style="color: #1890ff" :to="{ path: '/roleedit', query: { id: record.id, type: 1 }}">修改</router-link>
             <a-divider type="vertical" />
-            <a v-if="record.status === 0"  @click="use(1, record.id)">启用</a>
-            <a v-else  @click="use(2, record.id)">停用</a>
+            <a v-if="record.status === 1" @click="use(0, record.id)">停用</a>
+            <a v-else @click="use(1, record.id)">启用</a>
             <!-- <a-divider type="vertical" /> -->
             <!-- <a  @click="deleteData(1, record.id)" style="color: red">删除</a> -->
           </span>
@@ -131,8 +131,8 @@ const columns = [
   },
   {
     title: '状态',
-    dataIndex: 'status',
-    key: 'status'
+    key: 'status',
+    scopedSlots: { customRender: 'status' }
   },
   {
     title: '操作',
@@ -181,7 +181,7 @@ export default {
           this.form.validateFields(async (error, values) => {
             if (!error) {
               this.spinning = true
-              const res = await this.$http.post('/data/user/changeStatus', {
+              const res = await this.$http.post('/data/role/setStatus', {
                 id,
                 status
               })

@@ -207,8 +207,8 @@ export default {
 		//
 	},
 	mounted() {
-		this.findCustomerList()
-		this.findSuppliersList()
+		// this.findCustomerList()
+		// this.findSuppliersList()
 		this.handleSearch()
 	},
 	methods: {

@@ -328,13 +328,18 @@ export default {
 					this.spinning = true
 					if (this.id) param.id = this.id
 					const res = await this.$http.post(`/data/user/${this.id ? 'update' : 'add'}`, param)
-					this.spinning = false
 					if (res) {
-						this.$message.success(
-							`${this.id ? '用户信息修改成功！' : '新增用户成功！'}`
-						)
-						this.$router.back()
+						const { id } = res.data
+						const response = await this.$http.post('/data/user/saveRoles/', {
+							id,
+							roleIdArr
+						})
+						if (response) {
+							this.$message.success(`${this.id ? '用户信息修改成功！' : '新增用户成功！'}`)
+							this.$router.back()
+						}
 					}
+					this.spinning = false
 				}
 			})
 		},

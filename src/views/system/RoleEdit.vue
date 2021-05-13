@@ -34,7 +34,7 @@
 								<a-input
 									:disabled="type === '0'"
 									v-decorator="[
-										`agentNum`,
+										`roleNum`,
 										{
 											rules: [{ required: true, message: '请输入角色ID!' }],
 										},
@@ -96,14 +96,16 @@
 						<a-col :span="12" style="margin-top: 30px;">
 							<a-form-item label="角色授权" :label-col="{ span: 6 }">
 								<a-tree
-									v-decorator="['idsArr']"
+									v-decorator="['roleRights']"
+									:defaultExpandAll="true"
 									checkable
 									:expanded-keys="expandedKeys"
-									:auto-expand-parent="autoExpandParent"
+									:auto-expand-parent="true"
 									:selected-keys="selectedKeys"
-									:tree-data="treeData"
+									:tree-data="ruleList"
 									@expand="onExpand"
 									@select="onSelect"
+									@check="onCheck"
 								/>
 								<!-- <a-checkbox-group
 									v-decorator="['idsArr']"
@@ -120,7 +122,7 @@
 						<a-col :span="12" style="margin-top: 30px;">
 							<a-form-item label="分配用户" :label-col="{ span: 6 }">
 								<a-checkbox-group
-									v-decorator="['idsArr']"
+									v-decorator="['userIdArr']"
 									style="width: 100%"
 								>
 									<a-row>
@@ -141,58 +143,13 @@
 <script>
 import Moment from 'moment'
 
-const treeData = [
-  {
-    title: '0-0',
-    key: '0-0',
-    children: [
-      {
-        title: '0-0-0',
-        key: '0-0-0',
-        children: [
-          { title: '0-0-0-0', key: '0-0-0-0' },
-          { title: '0-0-0-1', key: '0-0-0-1' },
-          { title: '0-0-0-2', key: '0-0-0-2' },
-        ],
-      },
-      {
-        title: '0-0-1',
-        key: '0-0-1',
-        children: [
-          { title: '0-0-1-0', key: '0-0-1-0' },
-          { title: '0-0-1-1', key: '0-0-1-1' },
-          { title: '0-0-1-2', key: '0-0-1-2' },
-        ],
-      },
-      {
-        title: '0-0-2',
-        key: '0-0-2',
-      },
-    ],
-  },
-  {
-    title: '0-1',
-    key: '0-1',
-    children: [
-      { title: '0-1-0-0', key: '0-1-0-0' },
-      { title: '0-1-0-1', key: '0-1-0-1' },
-      { title: '0-1-0-2', key: '0-1-0-2' },
-    ],
-  },
-  {
-    title: '0-2',
-    key: '0-2',
-  },
-]
-
 export default {
 	data() {
 		return {
-			expandedKeys: ['0-0-0', '0-0-1'],
+			expandedKeys: [],
       autoExpandParent: true,
-      checkedKeys: ['0-0-0'],
+      checkedKeys: [],
       selectedKeys: [],
-      treeData,
 			ruleList: [],
 			userList: [],
 			spinning: false,
@@ -221,7 +178,7 @@ export default {
       // if not set autoExpandParent to false, if children expanded, parent can not collapse.
       // or, you can remove all expanded children keys.
       this.expandedKeys = expandedKeys
-      this.autoExpandParent = false
+      // this.autoExpandParent = false
     },
     onCheck(checkedKeys) {
       console.log('onCheck', checkedKeys)
@@ -358,23 +315,44 @@ export default {
 			e.preventDefault()
 			this.form.validateFields(async (error, values) => {
 				if (!error) {
-					console.log(values)
+					const { userIdArr, roleRights, ...obj } = values
+					const resultList = []
 					const param = {
-						...values,
+						...obj
+					}
+					for (let i = 0; i < this.checkedKeys.length; i++) {
+						const item = this.checkedKeys[i]
+						const index = item.split('-')
+						index.shift()
+						let result = JSON.parse(JSON.stringify(this.ruleList))
+						while (index.length) {
+							const m = index.shift()
+							// 如果result是数组，取索引，否则取children的索引
+							result = Array.isArray(result) ? result[m] : result.children[m]
+						}
+						resultList.push(result.id)
 					}
 					this.spinning = true
 					if (this.id) param.id = this.id
-					const res = await this.$http.post(
-						`/data/role/${this.id ? 'update' : 'add'}`,
-						param
-					)
-					this.spinning = false
-					if (res) {
-						this.$message.success(
-							`${this.id ? '角色信息修改成功！' : '新增角色成功！'}`
-						)
-						this.$router.back()
+					const res1 = await this.$http.post(`/data/role/${this.id ? 'update' : 'add'}`, param)
+					if (res1) {
+						const { id } = res1.data
+						const res2 = await this.$http.post('/data/role/setRights', {
+							id,
+							roleRights: resultList
+						})
+						if (res2) {
+							const res3 = await this.$http.post('/data/role/saveUsers', {
+								id,
+								userIdArr
+							})
+							if (res3) {
+								this.$message.success(`${this.id ? '角色信息修改成功！' : '新增角色成功！'}`)
+								this.$router.back()
+							}
+						}
 					}
+					this.spinning = false
 				}
 			})
 		},
