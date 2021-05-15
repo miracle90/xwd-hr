@@ -82,7 +82,7 @@
 								/>
 							</a-form-item>
 						</a-col>
-						<a-col :span="12">
+						<!-- <a-col :span="12">
 							<a-form-item label="用户类型" :label-col="{ span: 6 }">
 								<a-select
 									:disabled="type === '0'"
@@ -95,7 +95,7 @@
 									<a-select-option value="COMMON">普通用户</a-select-option>
 								</a-select>
 							</a-form-item>
-						</a-col>
+						</a-col> -->
 						<a-col :span="12">
 							<a-form-item label="工号" :label-col="{ span: 6 }">
 								<a-input
@@ -293,7 +293,7 @@ export default {
 					userNum,
 					loginName,
 					name,
-					userType,
+					// userType,
 					employNo,
 					phone,
 					email,
@@ -306,7 +306,7 @@ export default {
 					userNum,
 					loginName,
 					name,
-					userType,
+					// userType,
 					employNo,
 					phone,
 					email,
