@@ -168,6 +168,7 @@
 						<a-col :span="24">
 							<a-form-item label="分配角色" :label-col="{ span: 3 }">
 								<a-checkbox-group
+									:disabled="type === '0'"
 									v-decorator="[
 										'roleIdArr',
 										{
@@ -239,6 +240,10 @@ export default {
 		async findDispaterRoles(id) {
 			const res = await this.$http.get(`/data/user/findDispaterRoles/${id}`)
 			if (res) {
+				const roleIdArr = res.data.map(item => item.id)
+				this.form.setFieldsValue({
+					roleIdArr
+				})
 			}
 		},
 		// handleCancel () {

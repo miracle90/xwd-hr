@@ -43,17 +43,6 @@
 								/>
 							</a-form-item>
 						</a-col>
-						<!-- <a-col :span="12">
-              <a-form-item label="租户代码" :label-col="{ span: 6 }">
-                <a-input
-                  :disabled="type === '0'"
-                  v-decorator="[`agentCode`, {
-                    rules: [{ required: true, message: '请输入租户代码!'}]
-                  }]"
-                  placeholder="请输入租户代码"
-                />
-              </a-form-item>
-            </a-col> -->
 						<a-col :span="12">
 							<a-form-item label="角色名称" :label-col="{ span: 6 }">
 								<a-input
@@ -96,6 +85,7 @@
 						<a-col :span="12" style="margin-top: 30px;">
 							<a-form-item label="角色授权" :label-col="{ span: 6 }">
 								<a-tree
+									:disabled="type === '0'"
 									v-decorator="['roleRights']"
 									:defaultExpandAll="true"
 									checkable
@@ -107,21 +97,12 @@
 									@select="onSelect"
 									@check="onCheck"
 								/>
-								<!-- <a-checkbox-group
-									v-decorator="['idsArr']"
-									style="width: 100%"
-								>
-									<a-row>
-										<a-col :span="4" v-for="item in userList" :key="item.id">
-											<a-checkbox :value="item.id">{{ item.name }}</a-checkbox>
-										</a-col>
-									</a-row>
-								</a-checkbox-group> -->
 							</a-form-item>
 						</a-col>
 						<a-col :span="12" style="margin-top: 30px;">
 							<a-form-item label="分配用户" :label-col="{ span: 6 }">
 								<a-checkbox-group
+									:disabled="type === '0'"
 									v-decorator="['userIdArr']"
 									style="width: 100%"
 								>
@@ -141,8 +122,6 @@
 </template>
 
 <script>
-import Moment from 'moment'
-
 export default {
 	data() {
 		return {
@@ -169,6 +148,8 @@ export default {
 			this.id = id
 			this.type = type
 			this.queryDetail(id)
+			this.findDispaterUsers(id)
+			this.getRightsTree(id)
 			// this.queryAttachment(id)
 		}
 	},
@@ -200,114 +181,49 @@ export default {
 				this.ruleList = res.data
 			}
 		},
-		// async findSuppliersList () {q
-		//   const res = await this.$http.get('/data/supplier/find')
-		//   if (res) {
-		//     this.supplierList = res.data
-		//   }
-		// },
-		// async queryAttachment (id) {
-		//   const res = await this.$http.get(`/data/supplier/findFile/${id}`)
-		//   if (res) {
-		//     const fileList = res.data.map(file => {
-		//       return {
-		//         uid: file.id,
-		//         name: file.fileName,
-		//         status: 'done',
-		//         url: file.fileUrl,
-		//         thumbUrl: file.fileUrl
-		//       }
-		//     })
-		//     this.fileList = fileList
-		//   }
-		// },
-		// handleCancel () {
-		//   this.previewVisible = false
-		// },
-		// async handlePreview (file) {
-		//   if (!file.url && !file.preview) {
-		//     file.preview = await getBase64(file.originFileObj)
-		//   }
-		//   this.previewImage = file.url || file.preview
-		//   this.previewVisible = true
-		// },
-		// handleChange ({ fileList }) {
-		//   fileList = fileList.filter(file => {
-		//     const { size } = file
-		//     if (size > 5 * 1024 * 1024) {
-		//       this.$message.error('单个文件小于5M!')
-		//       return false
-		//     }
-		//     return true
-		//   })
-		//   this.fileList = fileList
-		// },
-		// beforeUpload (file) {
-		//   return false
-		// },
-		/**
-		 * 删除
-		 * 1、如果是已经上传的附件，调用删除接口
-		 * 2、如果是还未上传的附件，直接从数组中去掉
-		 */
-		// async handleRemove (file) {
-		//   const index = this.fileList.indexOf(file)
-		//   const newFileList = this.fileList.slice()
-		//   newFileList.splice(index, 1)
-		//   this.fileList = newFileList
-		//   // 如果是已经上传的附件
-		//   if (!file.originFileObj) {
-		//     const { uid } = file
-		//     const res = await this.$http.get(`/data/supplier/deleteFile/${uid}`)
-		//     if (res) {
-		//       this.$message.success('删除远程附件成功')
-		//     }
-		//   }
-		// },
+		async findDispaterUsers(id) {
+			const res = await this.$http.get(`/data/role/findDispaterUsers/${id}`)
+			if (res) {
+				const userIdArr = res.data.map(item => item.id)
+				this.form.setFieldsValue({
+					userIdArr
+				})
+			}
+			console.log(res)
+		},
+		async getRightsTree(id) {
+			const list = []
+			const res = await this.$http.get(`/data/role/getRightsTree/${id}`)
+			if (res) {
+				const { data } = res
+				data.forEach((l1, i1) => {
+					const { checked: checked1, id: id1 } = l1
+					if (checked1) {
+						list.push(`0-${id1 - 1}`)
+					} else {
+						//
+					}
+				})
+				console.log(list)
+				this.checkedKeys = list
+			}
+		},
 		async queryDetail(id) {
 			this.spinning = true
 			const res = await this.$http.get(`/data/role/get/${id}`)
 			this.spinning = false
 			if (res) {
 				const {
-					onJobDate,
-					employeeNumber,
-					employeeName,
-					employState,
-					sex,
-					ethnic,
-					employeePhone,
-					idCard,
-					emergencyContactName,
-					emergencyContactPhone,
-					originAddress,
-					jobType,
-					area,
-					customerId,
-					deptName,
-					supplierId,
-					employeePrice,
-					payrollCardInfo,
+					roleNum,
+					roleName,
+					status,
+					remark
 				} = res.data
 				this.form.setFieldsValue({
-					onJobDate: onJobDate ? Moment(onJobDate) : null,
-					employeeNumber,
-					employeeName,
-					employState,
-					sex,
-					ethnic,
-					employeePhone,
-					idCard,
-					emergencyContactName,
-					emergencyContactPhone,
-					originAddress,
-					jobType,
-					area,
-					customerId,
-					deptName,
-					supplierId,
-					employeePrice,
-					payrollCardInfo,
+					roleNum,
+					roleName,
+					status,
+					remark
 				})
 			}
 		},
@@ -356,26 +272,6 @@ export default {
 				}
 			})
 		},
-		/**
-		 * 上传附件
-		 * 如果是已经上传过的，过滤掉
-		 */
-		// async handleFile (id, isUpdate) {
-		//   if (this.fileList.length) {
-		//     await Promise.all(this.fileList.map(async file => {
-		//       const { originFileObj } = file
-		//       if (originFileObj) {
-		//         const formData = new FormData()
-		//         formData.append('file', originFileObj)
-		//         formData.append('id', id)
-		//         await this.$http.post(`/data/supplier/uploadFile/${id}`, formData)
-		//       }
-		//     }))
-		//   }
-		//   this.spinning = false
-		//   this.$message.success(`${isUpdate ? '供应商信息修改成功！' : '新增供应商成功！'}`)
-		//   this.$router.back()
-		// },
 		handleReset() {
 			this.form.resetFields()
 		},

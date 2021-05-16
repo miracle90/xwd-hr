@@ -144,8 +144,8 @@ const columns = [
 export default {
   data () {
     return {
-      customerList: [],
-      supplierList: [],
+      // customerList: [],
+      // supplierList: [],
       locale,
       queryOnJobDateStartTime: '',
       queryOnJobDateEndTime: '',
@@ -166,8 +166,8 @@ export default {
     //
   },
   mounted () {
-    this.findCustomerList()
-    this.findSuppliersList()
+    // this.findCustomerList()
+    // this.findSuppliersList()
     this.handleSearch()
   },
   methods: {
@@ -363,18 +363,18 @@ export default {
     reset () {
       this.form.resetFields()
     },
-    async findCustomerList () {
-      const res = await this.$http.get('/data/customer/find')
-      if (res) {
-        this.customerList = res.data
-      }
-    },
-    async findSuppliersList () {
-      const res = await this.$http.get('/data/supplier/find')
-      if (res) {
-        this.supplierList = res.data
-      }
-    },
+    // async findCustomerList () {
+    //   const res = await this.$http.get('/data/customer/find')
+    //   if (res) {
+    //     this.customerList = res.data
+    //   }
+    // },
+    // async findSuppliersList () {
+    //   const res = await this.$http.get('/data/supplier/find')
+    //   if (res) {
+    //     this.supplierList = res.data
+    //   }
+    // },
     deletePlan () {
       this.$confirm({
         title: '删除提示',

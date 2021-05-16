@@ -127,8 +127,8 @@ import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 const columns = [
 	{
 		title: 'ID',
-		dataIndex: 'id',
-		key: 'id',
+		dataIndex: 'userNum',
+		key: 'userNum',
 	},
 	{
 		title: '用户名',
