@@ -16,9 +16,9 @@
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`employeeNumber`, {
-                    rules: [{ required: true, message: '请输入供应商编码!'}]
+                    rules: [{ required: true, message: '请输入工号!'}]
                   }]"
-                  placeholder="请输入供应商编码"
+                  placeholder="请输入工号"
                 />
               </a-form-item>
             </a-col>
@@ -180,6 +180,7 @@
               <a-form-item label="所属公司" :label-col="{ span: 6 }">
                 <a-select
                   :disabled="type === '0'"
+                  @change="customerIdChange"
                   v-decorator="[`customerId`, {
                     rules: [{ required: true, message: '请选择所属公司!'}]
                   }]"
@@ -192,9 +193,9 @@
             <a-col :span="12">
               <a-form-item label="所在部门" :label-col="{ span: 6 }">
                 <a-input
-                  :disabled="type === '0'"
+                  :disabled="true"
                   v-decorator="[`deptName`]"
-                  placeholder="请输入所在部门"
+                  placeholder="关联公司，自动带出"
                 />
               </a-form-item>
             </a-col>
@@ -300,6 +301,14 @@ export default {
         this.supplierList = res.data
       }
     },
+    async customerIdChange (customerId) {
+      if (customerId || customerId === 0) {
+        const { deptName } = this.customerList.find(item => item.id === customerId)
+        this.form.setFieldsValue({
+          deptName
+        })
+      }
+    },
     // async queryAttachment (id) {
     //   const res = await this.$http.get(`/data/supplier/findFile/${id}`)
     //   if (res) {
@@ -344,20 +353,20 @@ export default {
      * 1、如果是已经上传的附件，调用删除接口
      * 2、如果是还未上传的附件，直接从数组中去掉
      */
-    async handleRemove (file) {
-      const index = this.fileList.indexOf(file)
-      const newFileList = this.fileList.slice()
-      newFileList.splice(index, 1)
-      this.fileList = newFileList
-      // 如果是已经上传的附件
-      if (!file.originFileObj) {
-        const { uid } = file
-        const res = await this.$http.get(`/data/supplier/deleteFile/${uid}`)
-        if (res) {
-          this.$message.success('删除远程附件成功')
-        }
-      }
-    },
+    // async handleRemove (file) {
+    //   const index = this.fileList.indexOf(file)
+    //   const newFileList = this.fileList.slice()
+    //   newFileList.splice(index, 1)
+    //   this.fileList = newFileList
+    //   // 如果是已经上传的附件
+    //   if (!file.originFileObj) {
+    //     const { uid } = file
+    //     const res = await this.$http.get(`/data/supplier/deleteFile/${uid}`)
+    //     if (res) {
+    //       this.$message.success('删除远程附件成功')
+    //     }
+    //   }
+    // },
     async queryDetail (id) {
       this.spinning = true
       const res = await this.$http.get(`/data/employee/get/${id}`)

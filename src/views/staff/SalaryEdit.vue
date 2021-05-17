@@ -359,8 +359,11 @@ export default {
           customerName,
           deptName,
           onJobDate,
-          downJobDate
+          downJobDate,
+          payrollCardInfo,
+          supplierId
         } = res.data
+        const { supplierName } = this.supplierList.find(item => item.id === supplierId)
         this.form.setFieldsValue({
           employeeName,
           age,
@@ -368,7 +371,9 @@ export default {
           customerName,
           deptName,
           onJobDate,
-          downJobDate
+          downJobDate,
+          payrollCardInfo,
+          supplierName
         })
       }
     },
@@ -428,20 +433,20 @@ export default {
      * 1、如果是已经上传的附件，调用删除接口
      * 2、如果是还未上传的附件，直接从数组中去掉
      */
-    async handleRemove (file) {
-      const index = this.fileList.indexOf(file)
-      const newFileList = this.fileList.slice()
-      newFileList.splice(index, 1)
-      this.fileList = newFileList
-      // 如果是已经上传的附件
-      if (!file.originFileObj) {
-        const { uid } = file
-        const res = await this.$http.get(`/data/supplier/deleteFile/${uid}`)
-        if (res) {
-          this.$message.success('删除远程附件成功')
-        }
-      }
-    },
+    // async handleRemove (file) {
+    //   const index = this.fileList.indexOf(file)
+    //   const newFileList = this.fileList.slice()
+    //   newFileList.splice(index, 1)
+    //   this.fileList = newFileList
+    //   // 如果是已经上传的附件
+    //   if (!file.originFileObj) {
+    //     const { uid } = file
+    //     const res = await this.$http.get(`/data/supplier/deleteFile/${uid}`)
+    //     if (res) {
+    //       this.$message.success('删除远程附件成功')
+    //     }
+    //   }
+    // },
     async queryDetail (id) {
       this.spinning = true
       const res = await this.$http.get(`/data/payRoll/get/${id}`)
@@ -498,6 +503,7 @@ export default {
           this.spinning = true
           if (this.id) param.id = this.id
           const res = await this.$http.post('/data/payRoll/saveOrUpdate', param)
+          this.spinning = false
           if (res) {
             this.$message.success(`${this.id ? '工资核算信息修改成功！' : '新增工资核算信息成功！'}`)
             if (submitType === 1) {

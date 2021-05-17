@@ -225,7 +225,7 @@ export default {
           supplierId,
           onJobDate: onJobDate ? Moment(onJobDate) : null,
           downJobDate: downJobDate ? Moment(downJobDate) : null,
-          isProxyPay: isProxyPay === '是',
+          isProxyPay,
           rebateStandard,
           remark
         })

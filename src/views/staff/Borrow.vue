@@ -68,9 +68,9 @@
             :to="{ path: '/archivesedit', query: { id: record.id, type: 0 }}"
           >{{ text }}</router-link> -->
           <span slot="action" slot-scope="record">
-            <router-link style="color: #1890ff" :to="{ path: '/monthedit', query: { id: record.id, type: 1 }}">修改</router-link>
+            <router-link style="color: #1890ff" :to="{ path: '/borrowedit', query: { id: record.id, type: 1 }}">修改</router-link>
             <a-divider type="vertical" />
-            <span slot="status" @click="deleteBorrow">删除</span>
+            <span slot="status" @click="deleteBorrow(record.id)" style="color: red">删除</span>
           </span>
         </a-table>
       </a-col>
@@ -165,15 +165,16 @@ const columns = [
   },
   {
     title: '操作',
-    key: 'action'
+    key: 'action',
+    scopedSlots: { customRender: 'action' }
   }
 ]
 
 export default {
   data () {
     return {
-      customerList: [],
-      supplierList: [],
+      // customerList: [],
+      // supplierList: [],
       locale,
       queryOnJobDateStartTime: '',
       queryOnJobDateEndTime: '',
@@ -194,15 +195,15 @@ export default {
     //
   },
   mounted () {
-    this.findCustomerList()
-    this.findSuppliersList()
+    // this.findCustomerList()
+    // this.findSuppliersList()
     this.handleSearch()
   },
   methods: {
-    beforeUpload (file) {
-      console.log('file ', file)
-      return true
-    },
+    // beforeUpload (file) {
+    //   console.log('file ', file)
+    //   return true
+    // },
     /**
      * 导出
      */
@@ -359,19 +360,19 @@ export default {
     reset () {
       this.form.resetFields()
     },
-    async findCustomerList () {
-      const res = await this.$http.get('/data/customer/find')
-      if (res) {
-        this.customerList = res.data
-      }
-    },
-    async findSuppliersList () {
-      const res = await this.$http.get('/data/supplier/find')
-      if (res) {
-        this.supplierList = res.data
-      }
-    },
-    deleteBorrow () {
+    // async findCustomerList () {
+    //   const res = await this.$http.get('/data/customer/find')
+    //   if (res) {
+    //     this.customerList = res.data
+    //   }
+    // },
+    // async findSuppliersList () {
+    //   const res = await this.$http.get('/data/supplier/find')
+    //   if (res) {
+    //     this.supplierList = res.data
+    //   }
+    // },
+    deleteBorrow (id) {
       this.$confirm({
         title: '删除提示',
         content: '确定要删除所勾选的记录吗？',
@@ -379,31 +380,13 @@ export default {
         okType: 'danger',
         cancelText: '取消',
         onOk: async () => {
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/supplier/delete/${id}`)
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('删除供应商成功!')
-              this.getList()
-            }
-          } else {
-            const res = await this.$http.post('/data/supplier/batchDel', {
-              idsArr: this.selectedIds
-            })
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('批量删除供应商成功!')
-              this.getList()
-            }
+          this.spinning = true
+          const res = await this.$http.post(`/data/borrow/delete/${id}`)
+          this.spinning = false
+          if (res) {
+            this.$message.success('删除成功!')
+            this.handleSearch()
           }
-        },
-        onCancel: () => {
-          console.log('Cancel')
         }
       })
     },

@@ -85,7 +85,7 @@
             style="color: #1890ff"
             :to="{ path: '/archivesedit', query: { id: record.id, type: 0 }}"
           >{{ text }}</router-link>
-          <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span>
+          <!-- <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span> -->
           <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工', '正式工'][text] }}</span>
         </a-table>
       </a-col>
@@ -156,9 +156,9 @@ const columns = [
   },
   {
     title: '所属公司',
-    dataIndex: 'customerId',
-    key: 'customerId',
-    scopedSlots: { customRender: 'customerId' }
+    dataIndex: 'customerName',
+    key: 'customerName'
+    // scopedSlots: { customRender: 'customerId' }
   },
   {
     title: '所在部门',
@@ -205,8 +205,8 @@ const columns = [
 export default {
   data () {
     return {
-      customerList: [],
-      supplierList: [],
+      // customerList: [],
+      // supplierList: [],
       locale,
       queryOnJobDateStartTime: '',
       queryOnJobDateEndTime: '',
@@ -227,8 +227,8 @@ export default {
     //
   },
   mounted () {
-    this.findCustomerList()
-    this.findSuppliersList()
+    // this.findCustomerList()
+    // this.findSuppliersList()
     this.handleSearch()
   },
   methods: {
@@ -404,18 +404,18 @@ export default {
     reset () {
       this.form.resetFields()
     },
-    async findCustomerList () {
-      const res = await this.$http.get('/data/customer/find')
-      if (res) {
-        this.customerList = res.data
-      }
-    },
-    async findSuppliersList () {
-      const res = await this.$http.get('/data/supplier/find')
-      if (res) {
-        this.supplierList = res.data
-      }
-    },
+    // async findCustomerList () {
+    //   const res = await this.$http.get('/data/customer/find')
+    //   if (res) {
+    //     this.customerList = res.data
+    //   }
+    // },
+    // async findSuppliersList () {
+    //   const res = await this.$http.get('/data/supplier/find')
+    //   if (res) {
+    //     this.supplierList = res.data
+    //   }
+    // },
     // deletePlan () {
     //   this.$confirm({
     //     title: '删除提示',

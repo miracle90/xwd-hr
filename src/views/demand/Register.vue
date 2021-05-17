@@ -29,17 +29,11 @@
             </a-col>
             <a-col :span="12">
               <a-form-item label="需求事业部" :label-col="{ span: 6 }">
-                <a-select
-                  :disabled="type === '0'"
-                  v-decorator="['deptId', {
-                    rules: [{ required: true, message: '请选择需求事业部!' }]
-                  }]"
-                  placeholder="请选择需求事业部"
-                >
-                  <a-select-option v-for="(item, index) in deptList" :key="index" :value="item.id">
-                    {{ item.deptName }}
-                  </a-select-option>
-                </a-select>
+                <a-input
+                  :disabled="true"
+                  v-decorator="['deptName']"
+                  placeholder="关联公司，自动带出"
+                />
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -311,12 +305,10 @@ export default {
     // },
     async customerIdChange (customerId) {
       if (customerId || customerId === 0) {
-        const res = await this.$http.get('/data/dept/findByCustomerId', {
-          customerId
+        const { deptName } = this.customerList.find(item => item.id === customerId)
+        this.form.setFieldsValue({
+          deptName
         })
-        if (res) {
-          this.deptList = res.data
-        }
       }
     },
     async findCustomerList () {
@@ -329,18 +321,15 @@ export default {
       const res = await this.$http.get('/data/supplier/find')
       if (res) {
         this.supplierList = res.data
-        // if (this.id) {
-        //   this.findSupplier(this.id)
-        // }
       }
     },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      if (this.type === '0') {
-        return
-      }
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
+    // onSelectChange (selectedRowKeys, selectedRows) {
+    //   if (this.type === '0') {
+    //     return
+    //   }
+    //   this.selectedRowKeys = selectedRowKeys
+    //   this.selectedRows = selectedRows
+    // },
     async queryDetail (id) {
       this.spinning = true
       const res = await this.$http.get(`/data/demand/getDemandReplyInfo/${id}`)
@@ -349,7 +338,7 @@ export default {
         const {
           demand: {
             customerId,
-            deptId,
+            // deptId,
             contactName,
             contactPhone,
             demandPersions,
@@ -375,7 +364,7 @@ export default {
         this.customerIdChange(customerId)
         this.form.setFieldsValue({
           customerId,
-          deptId,
+          // deptId,
           contactName,
           contactPhone,
           demandPersions,
@@ -403,7 +392,7 @@ export default {
           const {
             supplierId,
             customerId,
-            deptId,
+            deptName,
             contactName,
             contactPhone,
             demandPersions,
@@ -425,7 +414,7 @@ export default {
           const param = {
             demandParam: {
               customerId,
-              deptId,
+              deptName,
               contactName,
               contactPhone,
               demandPersions,

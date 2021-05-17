@@ -38,7 +38,7 @@
             </a-col>
             <a-col :span="4">
               <a-form-item label="" :label-col="{ span: 6 }">
-                <a-button type="primary" @click="cancel">查询</a-button>
+                <a-button type="primary" @click="getByEmployeeNumber">查询</a-button>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -81,10 +81,10 @@
               <a-form-item label="借支金额" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`shouldBePay`, {
-                    rules: [{ required: true, message: '请输入应发合计!'}]
+                  v-decorator="[`borrowAmount`, {
+                    rules: [{ required: true, message: '请输入借支金额!'}]
                   }]"
-                  placeholder="请输入应发合计"
+                  placeholder="请输入借支金额"
                 />
               </a-form-item>
             </a-col>
@@ -92,20 +92,20 @@
               <a-form-item label="借支原因" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`totalHours`, {
-                    rules: [{ required: true, message: '请输入总工时!'}]
+                  v-decorator="[`borrowCause`, {
+                    rules: [{ required: true, message: '请输入借支原因!'}]
                   }]"
-                  placeholder="请输入总工时"
+                  placeholder="请输入借支原因"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item label="已支取" :label-col="{ span: 6 }">
                 <a-checkbox v-decorator="[`isReceive`, { valuePropName: 'checked' }]"></a-checkbox>
-                <span style="margin-left: 20px;">支付日期：</span>
+                <span style="margin-left: 20px;">支取日期：</span>
                 <a-date-picker
                   :disabled="type === '0'"
-                  v-decorator="[`borrowDate`]"
+                  v-decorator="[`receiveDate`]"
                   format="YYYY-MM-DD"
                   placeholder="请选择支付日期"
                 />
@@ -115,10 +115,10 @@
               <a-form-item label="已代扣" :label-col="{ span: 6 }">
                 <a-checkbox v-decorator="[`isDeduct`, { valuePropName: 'checked' }]"></a-checkbox>
                 <span style="margin-left: 20px;">代扣月份：</span>
-                <a-date-picker
+                <a-month-picker
                   :disabled="type === '0'"
-                  v-decorator="[`borrowDate`]"
-                  format="YYYY-MM-DD"
+                  v-decorator="[`deductYearMonth`]"
+                  format="YYYY-MM"
                   placeholder="请选择代扣月份"
                 />
               </a-form-item>
@@ -145,8 +145,8 @@ import Moment from 'moment'
 export default {
   data () {
     return {
-      customerList: [],
-      supplierList: [],
+      // customerList: [],
+      // supplierList: [],
       previewVisible: false,
       previewImage: '',
       fileList: [],
@@ -160,8 +160,8 @@ export default {
     //
   },
   mounted () {
-    this.findCustomerList()
-    this.findSuppliersList()
+    // this.findCustomerList()
+    // this.findSuppliersList()
     const { id, type } = this.$route.query
     if (id) {
       this.id = id
@@ -171,18 +171,52 @@ export default {
     }
   },
   methods: {
-    async findCustomerList () {
-      const res = await this.$http.get('/data/customer/find')
+    async getByEmployeeNumber() {
+      const employeeNumber = this.form.getFieldValue('employeeNumber')
+      if (!employeeNumber) {
+        return this.$message.error('工号不得为空！')
+      }
+      this.spinning = true
+      const res = await this.$http.get('/data/employee/getByEmployeeNumber', {
+        employeeNumber
+      })
+      this.spinning = false
       if (res) {
-        this.customerList = res.data
+        const {
+          employeeName,
+          ethnic,
+          customerName,
+          deptName,
+          onJobDate,
+          downJobDate,
+          payrollCardInfo,
+          supplierId
+        } = res.data
+        const { supplierName } = this.supplierList.find(item => item.id === supplierId)
+        this.form.setFieldsValue({
+          employeeName,
+          ethnic,
+          customerName,
+          deptName,
+          onJobDate,
+          downJobDate,
+          payrollCardInfo,
+          supplierName
+        })
       }
     },
-    async findSuppliersList () {
-      const res = await this.$http.get('/data/supplier/find')
-      if (res) {
-        this.supplierList = res.data
-      }
-    },
+    // async findCustomerList () {
+    //   const res = await this.$http.get('/data/customer/find')
+    //   if (res) {
+    //     this.customerList = res.data
+    //   }
+    // },
+    // async findSuppliersList () {
+    //   const res = await this.$http.get('/data/supplier/find')
+    //   if (res) {
+    //     this.supplierList = res.data
+    //   }
+    // },
     // async queryAttachment (id) {
     //   const res = await this.$http.get(`/data/supplier/findFile/${id}`)
     //   if (res) {
@@ -227,76 +261,69 @@ export default {
      * 1、如果是已经上传的附件，调用删除接口
      * 2、如果是还未上传的附件，直接从数组中去掉
      */
-    async handleRemove (file) {
-      const index = this.fileList.indexOf(file)
-      const newFileList = this.fileList.slice()
-      newFileList.splice(index, 1)
-      this.fileList = newFileList
-      // 如果是已经上传的附件
-      if (!file.originFileObj) {
-        const { uid } = file
-        const res = await this.$http.get(`/data/supplier/deleteFile/${uid}`)
-        if (res) {
-          this.$message.success('删除远程附件成功')
-        }
-      }
-    },
+    // async handleRemove (file) {
+    //   const index = this.fileList.indexOf(file)
+    //   const newFileList = this.fileList.slice()
+    //   newFileList.splice(index, 1)
+    //   this.fileList = newFileList
+    //   // 如果是已经上传的附件
+    //   if (!file.originFileObj) {
+    //     const { uid } = file
+    //     const res = await this.$http.get(`/data/supplier/deleteFile/${uid}`)
+    //     if (res) {
+    //       this.$message.success('删除远程附件成功')
+    //     }
+    //   }
+    // },
     async queryDetail (id) {
       this.spinning = true
-      const res = await this.$http.get(`/data/payRoll/get/${id}`)
+      const res = await this.$http.get(`/data/borrow/get/${id}`)
       this.spinning = false
       if (res) {
         const {
+          borrowDate,
           onJobDate,
           employeeNumber,
           employeeName,
-          employState,
-          sex,
-          ethnic,
-          employeePhone,
-          idCard,
-          emergencyContactName,
-          emergencyContactPhone,
-          originAddress,
-          jobType,
-          area,
-          customerId,
+          customerName,
           deptName,
-          supplierId,
-          employeePrice,
-          payrollCardInfo
+          borrowAmount,
+          borrowCause,
+          isDeduct,
+          isReceive,
+          receiveDate,
+          deductYearMonth
         } = res.data
         this.form.setFieldsValue({
-          onJobDate: onJobDate ? Moment(onJobDate) : null,
+          borrowDate: borrowDate ? Moment(borrowDate) : null,
+          onJobDate,
           employeeNumber,
           employeeName,
-          employState,
-          sex,
-          ethnic,
-          employeePhone,
-          idCard,
-          emergencyContactName,
-          emergencyContactPhone,
-          originAddress,
-          jobType,
-          area,
-          customerId,
+          customerName,
           deptName,
-          supplierId,
-          employeePrice,
-          payrollCardInfo
+          borrowAmount,
+          borrowCause,
+          isDeduct: isDeduct === 'true',
+          isReceive: isReceive === 'true',
+          receiveDate: receiveDate ? Moment(receiveDate) : null,
+          deductYearMonth: deductYearMonth ? Moment(deductYearMonth) : null
         })
       }
     },
     handleSearch () {
       this.form.validateFields(async (error, values) => {
         if (!error) {
+          const { borrowDate, receiveDate, deductYearMonth } = values
           const param = {
-            ...values
+            ...values,
+            borrowDate: borrowDate ? (typeof borrowDate === 'string' ? borrowDate : borrowDate.format('YYYY-MM-DD')) : null,
+            receiveDate: receiveDate ? (typeof receiveDate === 'string' ? receiveDate : receiveDate.format('YYYY-MM-DD')) : null,
+            deductYearMonth: deductYearMonth ? (typeof deductYearMonth === 'string' ? deductYearMonth : deductYearMonth.format('YYYY-MM')) : null
           }
           this.spinning = true
           if (this.id) param.id = this.id
           const res = await this.$http.post(`/data/borrow/${this.id ? 'update' : 'add'}`, param)
+          this.spinning = false
           if (res) {
             this.$message.success(`${this.id ? '借支信息修改成功！' : '新增借支信息成功！'}`)
             this.$router.back()
