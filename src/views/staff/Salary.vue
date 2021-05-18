@@ -50,7 +50,7 @@
       </a-col>
       <a-col>
         <a-button @click="add">新增</a-button>
-        <a-button @click="deleteData" :disabled="!selectedIds.length" style="margin-left: 5px;">删除</a-button>
+        <a-button @click="deleteData" type="danger" :disabled="!selectedIds.length" style="margin-left: 5px;">删除</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -68,6 +68,7 @@
         >
           <span slot="action" slot-scope="record">
             <router-link style="color: #1890ff" :to="{ path: '/salaryedit', query: { id: record.id, type: 0 }}">查看</router-link>
+            <a-divider type="vertical" />
             <router-link style="color: #1890ff" :to="{ path: '/salaryedit', query: { id: record.id, type: 1 }}">修改</router-link>
           </span>
         </a-table>
@@ -253,10 +254,10 @@ export default {
         onOk: async () => {
           this.form.validateFields(async (error, values) => {
             if (!error) {
-              const { date, queryEmployeeNumber, queryEmployeeName } = values
+              const { date, employeeName, employeeNumber } = values
               const param = {
-                queryEmployeeNumber,
-                queryEmployeeName,
+                employeeName,
+                employeeNumber,
                 yearMonths: date ? date.format('YYYY-MM') : null
               }
               this.spinning = true
@@ -351,22 +352,22 @@ export default {
     /**
      * 数据推送
      */
-    dataPush () {
-      this.$confirm({
-        title: '数据推送',
-        content: '确定要进行数据推送吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.spinning = true
-          const res = await this.$http.post('/data/employee/dataPush')
-          this.spinning = false
-          if (res) {
-            this.$message.success('数据推送成功!')
-          }
-        }
-      })
-    },
+    // dataPush () {
+    //   this.$confirm({
+    //     title: '数据推送',
+    //     content: '确定要进行数据推送吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       const res = await this.$http.post('/data/employee/dataPush')
+    //       this.spinning = false
+    //       if (res) {
+    //         this.$message.success('数据推送成功!')
+    //       }
+    //     }
+    //   })
+    // },
     /**
      * 模板下载
      */
@@ -385,12 +386,6 @@ export default {
           }
         }
       })
-    },
-    onPickerChange (date, dateString) {
-      console.log(date, dateString)
-    },
-    submit () {
-      //
     },
     reset () {
       this.form.resetFields()

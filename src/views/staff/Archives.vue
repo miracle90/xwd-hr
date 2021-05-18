@@ -13,7 +13,7 @@
         <a-col :span="5">
           <a-form-item label="工号">
             <a-input
-              v-decorator="[`queryEmployeeNumber`]"
+              v-decorator="[`employeeNumber`]"
               placeholder="请输入工号"
             />
           </a-form-item>
@@ -21,7 +21,7 @@
         <a-col :span="5">
           <a-form-item label="姓名">
             <a-input
-              v-decorator="[`queryEmployeeName`]"
+              v-decorator="[`employeeName`]"
               placeholder="请输入姓名"
             />
           </a-form-item>
@@ -29,7 +29,7 @@
         <a-col :span="5">
           <a-form-item label="雇佣状态">
             <a-select
-              v-decorator="['queryEmployState']"
+              v-decorator="['employStateArr']"
               placeholder="请选择雇佣状态"
             >
               <a-select-option value="1">在职</a-select-option>
@@ -260,13 +260,13 @@ export default {
         onOk: async () => {
           this.form.validateFields(async (error, values) => {
             if (!error) {
-              const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+              const { date, employeeNumber, employeeName, employStateArr } = values
               const param = {
-                queryEmployeeNumber,
-                queryEmployeeName,
-                queryEmployState,
-                queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-                queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+                employeeNumber,
+                employeeName,
+                employStateArr,
+                onJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
+                onJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
               }
               this.spinning = true
               const res = await this.$http.get('/data/employee/export', param)
@@ -395,12 +395,6 @@ export default {
         }
       })
     },
-    onPickerChange (date, dateString) {
-      console.log(date, dateString)
-    },
-    submit () {
-      //
-    },
     reset () {
       this.form.resetFields()
     },
@@ -499,16 +493,16 @@ export default {
       if (e) e.preventDefault()
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+          const { date, employeeNumber, employeeName, employStateArr } = values
           const { page, limit } = this
           const param = {
             page,
             limit,
-            queryEmployeeNumber,
-            queryEmployeeName,
-            queryEmployState,
-            queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-            queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+            employeeNumber,
+            employeeName,
+            employStateArr,
+            onJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
+            onJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
           }
           this.spinning = true
           const res = await this.$http.get('/data/employee/list', param)

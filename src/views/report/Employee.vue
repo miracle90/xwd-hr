@@ -365,22 +365,22 @@ export default {
     /**
      * 数据推送
      */
-    dataPush () {
-      this.$confirm({
-        title: '数据推送',
-        content: '确定要进行数据推送吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.spinning = true
-          const res = await this.$http.post('/data/employee/dataPush')
-          this.spinning = false
-          if (res) {
-            this.$message.success('数据推送成功!')
-          }
-        }
-      })
-    },
+    // dataPush () {
+    //   this.$confirm({
+    //     title: '数据推送',
+    //     content: '确定要进行数据推送吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       const res = await this.$http.post('/data/employee/dataPush')
+    //       this.spinning = false
+    //       if (res) {
+    //         this.$message.success('数据推送成功!')
+    //       }
+    //     }
+    //   })
+    // },
     /**
      * 模板下载
      */

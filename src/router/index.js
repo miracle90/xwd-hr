@@ -190,7 +190,7 @@ const routes = [
         meta: {
           openKey: 'sub3',
           selectKey: '/borrow',
-          bread: ['员工管理', '借支管理']
+          bread: ['员工管理', '预支管理']
         }
       },
       {
@@ -199,7 +199,7 @@ const routes = [
         meta: {
           openKey: 'sub3',
           selectKey: '/borrow',
-          bread: ['员工管理', '借支管理-详情']
+          bread: ['员工管理', '预支管理-详情']
         }
       },
       {

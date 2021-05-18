@@ -7,7 +7,7 @@
       <a-row :gutter="24">
         <a-col :span="5">
           <a-form-item label="出勤年月">
-            <a-month-picker v-decorator="[`date`]" placeholder="请选择出勤年月" :locale="locale" />
+            <a-month-picker v-decorator="[`yearMonth`]" placeholder="请选择出勤年月" :locale="locale" style="width: 100%;" />
           </a-form-item>
         </a-col>
         <a-col :span="5">
@@ -34,7 +34,7 @@
     </a-form>
     <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <a-col>
-        <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button>
+        <a-button @click="syncData" style="margin-right: 5px;">数据下载</a-button>
         <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button>
         <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
         <a-upload
@@ -50,7 +50,7 @@
       </a-col>
       <a-col>
         <a-button @click="add">新增</a-button>
-        <a-button @click="deleteData" :disabled="!selectedIds.length" style="margin-left: 5px;">删除</a-button>
+        <a-button @click="deleteData" type="danger" :disabled="!selectedIds.length" style="margin-left: 5px;">删除</a-button>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -168,8 +168,8 @@ const columns = [
   },
   {
     title: '车补',
-    dataIndex: 'carAllowanceFeeFee',
-    key: 'carAllowanceFeeFee'
+    dataIndex: 'carAllowanceFee',
+    key: 'carAllowanceFee'
   },
   {
     title: '厂牌及工衣扣费',
@@ -244,11 +244,11 @@ export default {
         onOk: async () => {
           this.form.validateFields(async (error, values) => {
             if (!error) {
-              const { date, queryEmployeeNumber, queryEmployeeName } = values
+              const { yearMonth, employeeNumber, employeeName } = values
               const param = {
-                queryEmployeeNumber,
-                queryEmployeeName,
-                yearMonth: date ? date.format('YYYY-MM') : null
+                employeeNumber,
+                employeeName,
+                yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null
               }
               this.spinning = true
               const res = await this.$http.get('/data/monthAttence/export', param)
@@ -340,24 +340,43 @@ export default {
     //   })
     // },
     /**
-     * 数据推送
+     * 数据下载
      */
-    dataPush () {
+    syncData () {
       this.$confirm({
-        title: '数据推送',
-        content: '确定要进行数据推送吗？',
+        title: '数据下载',
+        content: '确定要进行数据下载吗？',
         okText: '确定',
         cancelText: '取消',
         onOk: async () => {
           this.spinning = true
-          const res = await this.$http.post('/data/employee/dataPush')
+          const res = await this.$http.get('/data/monthAttence/syncData')
           this.spinning = false
           if (res) {
-            this.$message.success('数据推送成功!')
+            this.$message.success('数据下载成功!')
           }
         }
       })
     },
+    /**
+     * 数据推送
+     */
+    // dataPush () {
+    //   this.$confirm({
+    //     title: '数据推送',
+    //     content: '确定要进行数据推送吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       const res = await this.$http.post('/data/monthAttence/dataPush')
+    //       this.spinning = false
+    //       if (res) {
+    //         this.$message.success('数据推送成功!')
+    //       }
+    //     }
+    //   })
+    // },
     /**
      * 模板下载
      */
@@ -376,12 +395,6 @@ export default {
           }
         }
       })
-    },
-    onPickerChange (date, dateString) {
-      console.log(date, dateString)
-    },
-    submit () {
-      //
     },
     reset () {
       this.form.resetFields()
@@ -479,14 +492,14 @@ export default {
       if (e) e.preventDefault()
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const { date, queryEmployeeNumber, queryEmployeeName } = values
+          const { yearMonth, employeeNumber, employeeName } = values
           const { page, limit } = this
           const param = {
             page,
             limit,
-            queryEmployeeNumber,
-            queryEmployeeName,
-            yearMonth: date ? date.format('YYYY-MM') : null
+            employeeNumber,
+            employeeName,
+            yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null
           }
           this.spinning = true
           const res = await this.$http.get('/data/monthAttence/list', param)

@@ -5,9 +5,9 @@
         <a-form class="ant-advanced-search-form" :form="form" layout="horizontal">
           <a-row style="margin-bottom: 20px;">
             <a-col :span="24">
-              <a-button v-if="type === '1'" type="primary" @click="handleSearch(1)" style="margin-right: 20px;">提交</a-button>
-              <a-button v-if="type === '1'" type="primary" @click="handleSearch(2)" style="margin-right: 20px;">提交后新增</a-button>
-              <a-button v-if="type === '1'" :style="{ marginRight: '20px' }" @click="handleReset">重置</a-button>
+              <a-button v-if="type === '1'" type="primary" @click="handleSearch(1)" style="margin-right: 5px;">提交</a-button>
+              <a-button v-if="type === '1'" type="primary" @click="handleSearch(2)" style="margin-right: 5px;">提交后新增</a-button>
+              <a-button v-if="type === '1'" :style="{ marginRight: '5px' }" @click="handleReset">重置</a-button>
               <a-button @click="cancel">{{ type !== '1' ? '返回' : '取消' }}</a-button>
             </a-col>
           </a-row>
@@ -16,7 +16,7 @@
               <a-form-item label="月份" :label-col="{ span: 6 }">
                 <a-month-picker
                   :disabled="type === '0'"
-                  v-decorator="[`date`, {
+                  v-decorator="[`yearMonth`, {
                     rules: [{ required: true, message: '请选择月份!'}]
                   }]"
                   :locale="locale"
@@ -37,7 +37,7 @@
             </a-col>
             <a-col :span="4">
               <a-form-item label="" :label-col="{ span: 6 }">
-                <a-button type="primary" @click="getByEmployeeNumber">查询</a-button>
+                <a-button type="primary" @click="getByEmployeeNumber" :disabled="type === '0'">查询</a-button>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -195,20 +195,20 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="借支" :label-col="{ span: 18 }">
+              <a-form-item label="预支" :label-col="{ span: 18 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`borrow`]"
-                  placeholder="请输入借支"
+                  placeholder="请输入预支"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="6">
-              <a-form-item label="代扣（工头借支）" :label-col="{ span: 12 }">
+              <a-form-item label="代扣（工头预支）" :label-col="{ span: 12 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`bossBorrow`]"
-                  placeholder="请输入代扣（工头借支）"
+                  placeholder="请输入代扣（工头预支）"
                 />
               </a-form-item>
             </a-col>
@@ -354,26 +354,22 @@ export default {
       if (res) {
         const {
           employeeName,
-          age,
-          ethnic,
-          customerName,
-          deptName,
+          supplierId,
           onJobDate,
           downJobDate,
+          customerName,
+          deptName,
           payrollCardInfo,
-          supplierId
         } = res.data
         const { supplierName } = this.supplierList.find(item => item.id === supplierId)
         this.form.setFieldsValue({
           employeeName,
-          age,
-          ethnic,
-          customerName,
-          deptName,
+          supplierName,
           onJobDate,
           downJobDate,
-          payrollCardInfo,
-          supplierName
+          customerName,
+          deptName,
+          payrollCardInfo
         })
       }
     },
@@ -453,56 +449,82 @@ export default {
       this.spinning = false
       if (res) {
         const {
-          onJobDate,
+          yearMonth,
           employeeNumber,
           employeeName,
-          employState,
-          sex,
-          ethnic,
-          employeePhone,
-          idCard,
-          emergencyContactName,
-          emergencyContactPhone,
-          originAddress,
-          jobType,
-          area,
-          customerId,
+          supplierName,
+          onJobDate,
+          downJobDate,
+          customerName,
           deptName,
-          supplierId,
-          employeePrice,
-          payrollCardInfo
+          payrollCardInfo,
+          shouldBePay,
+          totalHours,
+          price,
+          shouldBeDeduct,
+          waterAndElectricityFee,
+          foodFee,
+          brandAndClothesFee,
+          taxes,
+          insurance,
+          borrow,
+          bossBorrow,
+          actualPay,
+          hasPaid,
+          paidDate,
+          paidRemark,
+          repairPrice,
+          repairDate,
+          payeeMain
         } = res.data
         this.form.setFieldsValue({
-          onJobDate: onJobDate ? Moment(onJobDate) : null,
+          yearMonth: yearMonth ? Moment(yearMonth) : null,
           employeeNumber,
           employeeName,
-          employState,
-          sex,
-          ethnic,
-          employeePhone,
-          idCard,
-          emergencyContactName,
-          emergencyContactPhone,
-          originAddress,
-          jobType,
-          area,
-          customerId,
+          supplierName,
+          onJobDate,
+          downJobDate,
+          customerName,
           deptName,
-          supplierId,
-          employeePrice,
-          payrollCardInfo
+          payrollCardInfo,
+          shouldBePay,
+          totalHours,
+          price,
+          shouldBeDeduct,
+          waterAndElectricityFee,
+          foodFee,
+          brandAndClothesFee,
+          taxes,
+          insurance,
+          borrow,
+          bossBorrow,
+          actualPay,
+          hasPaid,
+          paidDate: paidDate ? Moment(paidDate) : null,
+          paidRemark,
+          repairPrice,
+          repairDate: repairDate ? Moment(repairDate) : null,
+          payeeMain
         })
       }
     },
     handleSearch (submitType) {
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const param = {
-            ...values
-          }
+          const {
+            yearMonth,
+            repairDate,
+            paidDate,
+            ...param
+          } = values
           this.spinning = true
           if (this.id) param.id = this.id
-          const res = await this.$http.post('/data/payRoll/saveOrUpdate', param)
+          const res = await this.$http.post('/data/payRoll/saveOrUpdate', {
+            yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null,
+            repairDate: repairDate ? repairDate.format('YYYY-MM-DD') : null,
+            paidDate: paidDate ? paidDate.format('YYYY-MM-DD') : null,
+            ...param
+          })
           this.spinning = false
           if (res) {
             this.$message.success(`${this.id ? '工资核算信息修改成功！' : '新增工资核算信息成功！'}`)

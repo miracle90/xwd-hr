@@ -39,7 +39,7 @@
           <a-menu-item key="/month"><router-link to="/month">月考勤数据</router-link></a-menu-item>
           <a-menu-item key="/day"><router-link to="/day">日考勤数据</router-link></a-menu-item>
           <a-menu-item key="/salary"><router-link to="/salary">工资核算</router-link></a-menu-item>
-          <a-menu-item key="/borrow"><router-link to="/borrow">借支管理</router-link></a-menu-item>
+          <a-menu-item key="/borrow"><router-link to="/borrow">预支管理</router-link></a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub4">
           <span slot="title">

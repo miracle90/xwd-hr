@@ -6,14 +6,14 @@
       }" layout="horizontal">
       <a-row :gutter="24">
         <a-col :span="5">
-          <a-form-item label="借支时间">
+          <a-form-item label="预支时间">
             <a-range-picker v-decorator="[`date`]" :locale="locale" />
           </a-form-item>
         </a-col>
         <a-col :span="5">
           <a-form-item label="工号">
             <a-input
-              v-decorator="[`queryEmployeeNumber`]"
+              v-decorator="[`employeeNumber`]"
               placeholder="请输入工号"
             />
           </a-form-item>
@@ -21,7 +21,7 @@
         <a-col :span="5">
           <a-form-item label="姓名">
             <a-input
-              v-decorator="[`queryEmployeeName`]"
+              v-decorator="[`employeeName`]"
               placeholder="请输入姓名"
             />
           </a-form-item>
@@ -34,7 +34,7 @@
     </a-form>
     <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <a-col>
-        <a-button @click="applyDownload" style="margin-right: 5px;">下载公众号借支申请</a-button>
+        <a-button @click="applyDownload" style="margin-right: 5px;">下载公众号预支申请</a-button>
         <!-- <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button> -->
         <!-- <a-upload
           :action="`${$http.baseURL}/data/employee/import`"
@@ -103,7 +103,7 @@ import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 
 const columns = [
   {
-    title: '借支日期',
+    title: '预支日期',
     dataIndex: 'borrowDate',
     key: 'borrowDate'
   },
@@ -134,12 +134,12 @@ const columns = [
   },
 
   {
-    title: '借支金额',
+    title: '预支金额',
     dataIndex: 'borrowAmount',
     key: 'borrowAmount'
   },
   {
-    title: '借支原因',
+    title: '预支原因',
     dataIndex: 'borrowCause',
     key: 'borrowCause'
   },
@@ -216,16 +216,15 @@ export default {
         onOk: async () => {
           this.form.validateFields(async (error, values) => {
             if (!error) {
-              const { date, queryEmployeeNumber, queryEmployeeName, queryEmployState } = values
+              const { date, employeeNumber, employeeName } = values
               const param = {
-                queryEmployeeNumber,
-                queryEmployeeName,
-                queryEmployState,
-                queryOnJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-                queryOnJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null
+                employeeNumber,
+                employeeName,
+                borrowStartDate: date ? date[0].format('YYYY-MM-DD') : null,
+                borrowEndDate: date ? date[1].format('YYYY-MM-DD') : null
               }
               this.spinning = true
-              const res = await this.$http.get('/data/employee/export', param)
+              const res = await this.$http.get('/data/borrow/export', param)
               this.spinning = false
               if (res) {
                 const { data } = res
@@ -240,86 +239,86 @@ export default {
     /**
      * 离职
      */
-    dimission () {
-      this.$confirm({
-        title: '离职提示',
-        content: '确定对员工进行离职操作吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.spinning = true
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/employee/resign/${id}`)
-            this.spinning = false
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('离职操作成功!')
-              this.handleSearch()
-            }
-          } else {
-            const res = await this.$http.post('/data/employee/batchResign', {
-              idsArr: this.selectedIds
-            })
-            this.spinning = false
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('批量离职操作成功!')
-              this.handleSearch()
-            }
-          }
-        }
-      })
-    },
+    // dimission () {
+    //   this.$confirm({
+    //     title: '离职提示',
+    //     content: '确定对员工进行离职操作吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       if (this.selectedIds.length === 1) {
+    //         const id = this.selectedIds[0]
+    //         const res = await this.$http.post(`/data/employee/resign/${id}`)
+    //         this.spinning = false
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('离职操作成功!')
+    //           this.handleSearch()
+    //         }
+    //       } else {
+    //         const res = await this.$http.post('/data/employee/batchResign', {
+    //           idsArr: this.selectedIds
+    //         })
+    //         this.spinning = false
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('批量离职操作成功!')
+    //           this.handleSearch()
+    //         }
+    //       }
+    //     }
+    //   })
+    // },
     /**
      * 自离
      */
-    selfDimission () {
-      this.$confirm({
-        title: '自离提示',
-        content: '确定对员工进行自离操作吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.spinning = true
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
-            this.spinning = false
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('自离操作成功!')
-              this.handleSearch()
-            }
-          } else {
-            const res = await this.$http.post('/data/employee/batchResignBySelf', {
-              idsArr: this.selectedIds
-            })
-            this.spinning = false
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('批量自离操作成功!')
-              this.handleSearch()
-            }
-          }
-        }
-      })
-    },
+    // selfDimission () {
+    //   this.$confirm({
+    //     title: '自离提示',
+    //     content: '确定对员工进行自离操作吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       if (this.selectedIds.length === 1) {
+    //         const id = this.selectedIds[0]
+    //         const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
+    //         this.spinning = false
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('自离操作成功!')
+    //           this.handleSearch()
+    //         }
+    //       } else {
+    //         const res = await this.$http.post('/data/employee/batchResignBySelf', {
+    //           idsArr: this.selectedIds
+    //         })
+    //         this.spinning = false
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('批量自离操作成功!')
+    //           this.handleSearch()
+    //         }
+    //       }
+    //     }
+    //   })
+    // },
     /**
      * 数据推送
      */
     applyDownload () {
       this.$confirm({
-        title: '下载公众号借支申请',
-        content: '确定要进行下载公众号借支申请？',
+        title: '下载公众号预支申请',
+        content: '确定要进行下载公众号预支申请？',
         okText: '确定',
         cancelText: '取消',
         onOk: async () => {
@@ -327,7 +326,7 @@ export default {
           const res = await this.$http.get('/data/borrow/publicApply')
           this.spinning = false
           if (res) {
-            this.$message.success('下载公众号借支申请成功!')
+            this.$message.success('下载公众号预支申请成功!')
           }
         }
       })

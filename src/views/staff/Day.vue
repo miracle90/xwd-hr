@@ -7,13 +7,13 @@
       <a-row :gutter="24">
         <a-col :span="5">
           <a-form-item label="出勤年月">
-            <a-month-picker v-decorator="[`date`]" placeholder="请选择出勤年月" :locale="locale" />
+            <a-month-picker v-decorator="[`monthDay`]" placeholder="请选择出勤年月" :locale="locale" />
           </a-form-item>
         </a-col>
         <a-col :span="5">
           <a-form-item label="工号">
             <a-input
-              v-decorator="[`queryEmployeeNumber`]"
+              v-decorator="[`employeeNumber`]"
               placeholder="请输入工号"
             />
           </a-form-item>
@@ -21,7 +21,7 @@
         <a-col :span="5">
           <a-form-item label="姓名">
             <a-input
-              v-decorator="[`queryEmployeeName`]"
+              v-decorator="[`employeeName`]"
               placeholder="请输入姓名"
             />
           </a-form-item>
@@ -43,18 +43,13 @@
           :pagination="false"
           :columns="columns"
           :data-source="data"
-          :row-selection="{
-            selectedRowKeys,
-            selectedRows,
-            onChange: (selectedRowKeys, selectedRows) => onSelectChange(selectedRowKeys, selectedRows)
-          }"
           :rowKey="(record, index) => index"
         >
           <!-- <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span> -->
-          <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工', '正式工'][text] }}</span>
-          <span slot="action" slot-scope="record">
+          <!-- <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工', '正式工'][text] }}</span> -->
+          <!-- <span slot="action" slot-scope="record">
             <router-link style="color: #1890ff" :to="{ path: '/monthedit', query: { id: record.id, type: 1 }}">修改</router-link>
-          </span>
+          </span> -->
         </a-table>
       </a-col>
     </a-row>
@@ -87,8 +82,8 @@ import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 const columns = [
   {
     title: '日期',
-    dataIndex: 'yearMonth',
-    key: 'yearMonth'
+    dataIndex: 'monthDay',
+    key: 'monthDay'
   },
   {
     title: '所属公司',
@@ -111,29 +106,59 @@ const columns = [
     key: 'employeeName'
   },
   {
+    title: '刷卡1',
+    dataIndex: 'time1',
+    key: 'time1'
+  },
+  {
+    title: '刷卡2',
+    dataIndex: 'time2',
+    key: 'time2'
+  },
+  {
+    title: '刷卡3',
+    dataIndex: 'time3',
+    key: 'time3'
+  },
+  {
+    title: '刷卡4',
+    dataIndex: 'time4',
+    key: 'time4'
+  },
+  {
+    title: '刷卡5',
+    dataIndex: 'time5',
+    key: 'time5'
+  },
+  {
+    title: '刷卡6',
+    dataIndex: 'time6',
+    key: 'time6'
+  },
+  {
     title: '工时',
-    dataIndex: 'foodFee',
-    key: 'foodFee'
+    dataIndex: 'workHours',
+    key: 'workHours'
   },
   {
     title: '加班',
-    dataIndex: 'carAllowanceFeeFee',
-    key: 'carAllowanceFeeFee'
+    dataIndex: 'extraHours',
+    key: 'extraHours'
   },
   {
     title: '迟到',
-    dataIndex: 'brandAndClothesFee',
-    key: 'brandAndClothesFee'
+    dataIndex: 'laterHours',
+    key: 'laterHours'
   },
   {
     title: '早退',
-    dataIndex: 'action',
-    key: 'action'
+    dataIndex: 'leaveEarlyHours',
+    key: 'leaveEarlyHours'
   },
   {
     title: '请假',
-    dataIndex: 'action',
-    key: 'action'
+    dataIndex: 'askForLeaveHours',
+    key: 'askForLeaveHours'
   }
 ]
 
@@ -143,8 +168,8 @@ export default {
       headers: {
         token: window.localStorage.getItem('token')
       },
-      customerList: [],
-      supplierList: [],
+      // customerList: [],
+      // supplierList: [],
       locale,
       queryOnJobDateStartTime: '',
       queryOnJobDateEndTime: '',
@@ -165,46 +190,46 @@ export default {
     //
   },
   mounted () {
-    this.findCustomerList()
-    this.findSuppliersList()
+    // this.findCustomerList()
+    // this.findSuppliersList()
     this.handleSearch()
   },
   methods: {
-    beforeUpload (file) {
-      console.log('file ', file)
-      return true
-    },
+    // beforeUpload (file) {
+    //   console.log('file ', file)
+    //   return true
+    // },
     /**
      * 导出
      */
-    exportOpt () {
-      this.$confirm({
-        title: '导出',
-        content: '确定要进行数据导出吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.form.validateFields(async (error, values) => {
-            if (!error) {
-              const { date, queryEmployeeNumber, queryEmployeeName } = values
-              const param = {
-                queryEmployeeNumber,
-                queryEmployeeName,
-                yearMonth: date ? date.format('YYYY-MM') : null
-              }
-              this.spinning = true
-              const res = await this.$http.get('/data/monthAttence/export', param)
-              this.spinning = false
-              if (res) {
-                const { data } = res
-                window.open(data)
-                this.$message.success('导出成功')
-              }
-            }
-          })
-        }
-      })
-    },
+    // exportOpt () {
+    //   this.$confirm({
+    //     title: '导出',
+    //     content: '确定要进行数据导出吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.form.validateFields(async (error, values) => {
+    //         if (!error) {
+    //           const { date, queryEmployeeNumber, queryEmployeeName } = values
+    //           const param = {
+    //             queryEmployeeNumber,
+    //             queryEmployeeName,
+    //             yearMonth: date ? date.format('YYYY-MM') : null
+    //           }
+    //           this.spinning = true
+    //           const res = await this.$http.get('/data/monthAttence/export', param)
+    //           this.spinning = false
+    //           if (res) {
+    //             const { data } = res
+    //             window.open(data)
+    //             this.$message.success('导出成功')
+    //           }
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
     /**
      * 离职
      */
@@ -292,7 +317,7 @@ export default {
         cancelText: '取消',
         onOk: async () => {
           this.spinning = true
-          const res = await this.$http.post('/data/dayAttence/syncData')
+          const res = await this.$http.get('/data/dayAttence/syncData')
           this.spinning = false
           if (res) {
             this.$message.success('数据下载成功!')
@@ -303,90 +328,87 @@ export default {
     /**
      * 模板下载
      */
-    downloadTemplet () {
-      this.$confirm({
-        title: '模板下载',
-        content: '确定要进行模板下载吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.spinning = true
-          const res = await this.$http.get('/data/monthAttence/downloadTemplet')
-          this.spinning = false
-          if (res) {
-            this.$message.success('模板下载成功!')
-          }
-        }
-      })
-    },
-    onPickerChange (date, dateString) {
-      console.log(date, dateString)
-    },
-    submit () {
-      //
-    },
+    // downloadTemplet () {
+    //   this.$confirm({
+    //     title: '模板下载',
+    //     content: '确定要进行模板下载吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       const res = await this.$http.get('/data/monthAttence/downloadTemplet')
+    //       this.spinning = false
+    //       if (res) {
+    //         this.$message.success('模板下载成功!')
+    //       }
+    //     }
+    //   })
+    // },
+    // onPickerChange (date, dateString) {
+    //   console.log(date, dateString)
+    // },
     reset () {
       this.form.resetFields()
     },
-    async findCustomerList () {
-      const res = await this.$http.get('/data/customer/find')
-      if (res) {
-        this.customerList = res.data
-      }
-    },
-    async findSuppliersList () {
-      const res = await this.$http.get('/data/supplier/find')
-      if (res) {
-        this.supplierList = res.data
-      }
-    },
+    // async findCustomerList () {
+    //   const res = await this.$http.get('/data/customer/find')
+    //   if (res) {
+    //     this.customerList = res.data
+    //   }
+    // },
+    // async findSuppliersList () {
+    //   const res = await this.$http.get('/data/supplier/find')
+    //   if (res) {
+    //     this.supplierList = res.data
+    //   }
+    // },
     /**
      * 删除
      */
-    deleteData () {
-      this.$confirm({
-        title: '删除提示',
-        content: '确定要删除所勾选的记录吗？',
-        okText: '确定',
-        okType: 'danger',
-        cancelText: '取消',
-        onOk: async () => {
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/monthAttence/delete/${id}`)
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('删除考勤数据成功!')
-              this.handleSearch()
-            }
-          } else {
-            const res = await this.$http.post('/data/monthAttence/batchDel', {
-              idsArr: this.selectedIds
-            })
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('批量删除考勤数据成功!')
-              this.handleSearch()
-            }
-          }
-        },
-        onCancel: () => {
-          console.log('Cancel')
-        }
-      })
-    },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-      this.selectedIds = selectedRows.map(item => item.id)
-    },
-    add () {
-      this.$router.push('/monthedit')
-    },
+    // deleteData () {
+    //   this.$confirm({
+    //     title: '删除提示',
+    //     content: '确定要删除所勾选的记录吗？',
+    //     okText: '确定',
+    //     okType: 'danger',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       if (this.selectedIds.length === 1) {
+    //         const id = this.selectedIds[0]
+    //         const res = await this.$http.post(`/data/monthAttence/delete/${id}`)
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('删除考勤数据成功!')
+    //           this.handleSearch()
+    //         }
+    //       } else {
+    //         const res = await this.$http.post('/data/monthAttence/batchDel', {
+    //           idsArr: this.selectedIds
+    //         })
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('批量删除考勤数据成功!')
+    //           this.handleSearch()
+    //         }
+    //       }
+    //     },
+    //     onCancel: () => {
+    //       console.log('Cancel')
+    //     }
+    //   })
+    // },
+    // onSelectChange (selectedRowKeys, selectedRows) {
+    //   this.selectedRowKeys = selectedRowKeys
+    //   this.selectedRows = selectedRows
+    //   this.selectedIds = selectedRows.map(item => item.id)
+    // },
+    // add () {
+    //   this.$router.push('/monthedit')
+    // },
     // query () {
     //   this.page = 1
     //   this.getList()
@@ -421,14 +443,14 @@ export default {
       if (e) e.preventDefault()
       this.form.validateFields(async (error, values) => {
         if (!error) {
-          const { date, queryEmployeeNumber, queryEmployeeName } = values
+          const { monthDay, employeeNumber, employeeName } = values
           const { page, limit } = this
           const param = {
             page,
             limit,
-            queryEmployeeNumber,
-            queryEmployeeName,
-            monthDay: date ? date.format('YYYY-MM') : null
+            employeeNumber,
+            employeeName,
+            monthDay: monthDay ? monthDay.format('YYYY-MM') : null
           }
           this.spinning = true
           const res = await this.$http.get('/data/dayAttence/list', param)

@@ -25,7 +25,7 @@
             </a-col>
             <a-col :span="4">
               <a-form-item label="" :label-col="{ span: 6 }">
-                <a-button type="primary" @click="getByEmployeeNumber">查询</a-button>
+                <a-button type="primary" @click="getByEmployeeNumber" :disabled="type === '0'">查询</a-button>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -146,7 +146,7 @@
               <a-form-item label="车补" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
-                  v-decorator="[`carAllowanceFeeFee`]"
+                  v-decorator="[`carAllowanceFee`]"
                   placeholder="请输入车补"
                 />
               </a-form-item>
@@ -330,7 +330,7 @@ export default {
           settlementHours,
           waterAndElectricityFee,
           foodFee,
-          carAllowanceFeeFee,
+          carAllowanceFee,
           brandAndClothesFee
         } = res.data
         this.form.setFieldsValue({
@@ -347,7 +347,7 @@ export default {
           settlementHours,
           waterAndElectricityFee,
           foodFee,
-          carAllowanceFeeFee,
+          carAllowanceFee,
           brandAndClothesFee
         })
       }

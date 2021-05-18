@@ -13,15 +13,15 @@
           </a-row>
           <a-row :gutter="12">
             <a-col :span="12">
-              <a-form-item label="借支日期" :label-col="{ span: 6 }">
+              <a-form-item label="预支日期" :label-col="{ span: 6 }">
                 <a-date-picker
                   :disabled="type === '0'"
                   v-decorator="[`borrowDate`, {
-                    rules: [{ required: true, message: '请选择借支日期!'}]
+                    rules: [{ required: true, message: '请选择预支日期!'}]
                   }]"
                   format="YYYY-MM-DD"
                   style="width: 100%"
-                  placeholder="请选择借支日期"
+                  placeholder="请选择预支日期"
                 />
               </a-form-item>
             </a-col>
@@ -38,7 +38,7 @@
             </a-col>
             <a-col :span="4">
               <a-form-item label="" :label-col="{ span: 6 }">
-                <a-button type="primary" @click="getByEmployeeNumber">查询</a-button>
+                <a-button type="primary" @click="getByEmployeeNumber" :disabled="type === '0'">查询</a-button>
               </a-form-item>
             </a-col>
             <a-col :span="12">
@@ -78,24 +78,24 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="借支金额" :label-col="{ span: 6 }">
+              <a-form-item label="预支金额" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`borrowAmount`, {
-                    rules: [{ required: true, message: '请输入借支金额!'}]
+                    rules: [{ required: true, message: '请输入预支金额!'}]
                   }]"
-                  placeholder="请输入借支金额"
+                  placeholder="请输入预支金额"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="借支原因" :label-col="{ span: 6 }">
+              <a-form-item label="预支原因" :label-col="{ span: 6 }">
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`borrowCause`, {
-                    rules: [{ required: true, message: '请输入借支原因!'}]
+                    rules: [{ required: true, message: '请输入预支原因!'}]
                   }]"
-                  placeholder="请输入借支原因"
+                  placeholder="请输入预支原因"
                 />
               </a-form-item>
             </a-col>
@@ -184,24 +184,15 @@ export default {
       if (res) {
         const {
           employeeName,
-          ethnic,
-          customerName,
-          deptName,
           onJobDate,
-          downJobDate,
-          payrollCardInfo,
-          supplierId
+          customerName,
+          deptName
         } = res.data
-        const { supplierName } = this.supplierList.find(item => item.id === supplierId)
         this.form.setFieldsValue({
           employeeName,
-          ethnic,
-          customerName,
-          deptName,
           onJobDate,
-          downJobDate,
-          payrollCardInfo,
-          supplierName
+          customerName,
+          deptName
         })
       }
     },
@@ -316,16 +307,16 @@ export default {
           const { borrowDate, receiveDate, deductYearMonth } = values
           const param = {
             ...values,
-            borrowDate: borrowDate ? (typeof borrowDate === 'string' ? borrowDate : borrowDate.format('YYYY-MM-DD')) : null,
-            receiveDate: receiveDate ? (typeof receiveDate === 'string' ? receiveDate : receiveDate.format('YYYY-MM-DD')) : null,
-            deductYearMonth: deductYearMonth ? (typeof deductYearMonth === 'string' ? deductYearMonth : deductYearMonth.format('YYYY-MM')) : null
+            borrowDate: borrowDate ? (typeof borrowDate === 'string' ? borrowDate : borrowDate.format('YYYY-MM-DD')) : '',
+            receiveDate: receiveDate ? (typeof receiveDate === 'string' ? receiveDate : receiveDate.format('YYYY-MM-DD')) : '',
+            deductYearMonth: deductYearMonth ? (typeof deductYearMonth === 'string' ? deductYearMonth : deductYearMonth.format('YYYY-MM')) : ''
           }
           this.spinning = true
           if (this.id) param.id = this.id
           const res = await this.$http.post(`/data/borrow/${this.id ? 'update' : 'add'}`, param)
           this.spinning = false
           if (res) {
-            this.$message.success(`${this.id ? '借支信息修改成功！' : '新增借支信息成功！'}`)
+            this.$message.success(`${this.id ? '预支信息修改成功！' : '新增预支信息成功！'}`)
             this.$router.back()
           }
         }
