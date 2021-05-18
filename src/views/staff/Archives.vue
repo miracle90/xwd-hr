@@ -390,6 +390,8 @@ export default {
           const res = await this.$http.get('/data/employee/downloadTemplet')
           this.spinning = false
           if (res) {
+            const { data } = res
+            window.open(data)
             this.$message.success('模板下载成功!')
           }
         }

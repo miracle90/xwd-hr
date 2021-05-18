@@ -42,7 +42,7 @@
 					style="margin-right: 5px"
 					>删除</a-button
 				>
-				<a-button @click="exportOpt" style="margin-right: 5px">导出</a-button>
+				<!-- <a-button @click="exportOpt" style="margin-right: 5px">导出</a-button>
 				<a-upload
 					:action="`${$http.baseURL}/data/user/import`"
 					:showUploadList="false"
@@ -51,7 +51,7 @@
 					@change="handleChange"
 				>
 					<a-button>导入</a-button>
-				</a-upload>
+				</a-upload> -->
 			</a-col>
 			<!-- <a-col>
         <a-button @click="add">新增</a-button>

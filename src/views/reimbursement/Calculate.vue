@@ -1,16 +1,20 @@
 <template>
   <a-spin class="page-wrapper" :spinning="spinning">
     <a-form :form="form" @submit="() => {
-        page = 1;
-        handleSearch();
+        cal();
       }" layout="horizontal">
       <a-row :gutter="24">
-        <a-col :span="5">
+        <a-col :span="6">
           <a-form-item label="核算月份">
-            <a-month-picker v-decorator="[`yearMonth`]" placeholder="请选择核算月份" :locale="locale" />
+            <a-month-picker
+              v-decorator="[`yearMonth`]"
+              placeholder="请选择核算月份"
+              :locale="locale"
+              style="width: 100%;"
+            />
           </a-form-item>
         </a-col>
-        <a-col :span="4" style="padding-top: 43px;">
+        <a-col :span="6" style="padding-top: 43px;">
           <a-button type="primary" html-type="submit" style="margin-right: 5px;">计算</a-button>
           <a-button @click="reset">重置</a-button>
         </a-col>
@@ -404,6 +408,28 @@ export default {
     //     this.total = count
     //   }
     // },
+    cal (e) {
+      if (e) e.preventDefault()
+      this.form.validateFields(async (error, values) => {
+        if (!error) {
+          const { yearMonth } = values
+          const param = {
+            yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null
+          }
+          this.spinning = true
+          const res = await this.$http.get('/data/supplierRebate/cal', param)
+          this.spinning = false
+          if (res) {
+            const { count, data } = res
+            console.log(count)
+            console.log(data)
+            this.handleSearch()
+            // this.data = data
+            // this.total = count
+          }
+        }
+      })
+    },
     handleSearch (e) {
       if (e) e.preventDefault()
       this.form.validateFields(async (error, values) => {

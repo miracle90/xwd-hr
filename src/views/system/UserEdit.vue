@@ -29,20 +29,15 @@
 						</a-col>
 					</a-row>
 					<a-row :gutter="12">
-						<a-col :span="12">
+						<!-- <a-col :span="12">
 							<a-form-item label="用户ID" :label-col="{ span: 6 }">
 								<a-input
-									:disabled="type === '0'"
-									v-decorator="[
-										`userNum`,
-										{
-											rules: [{ required: true, message: '请输入用户ID!' }],
-										},
-									]"
-									placeholder="请输入用户ID"
+									:disabled="true"
+									v-decorator="[`userNum`]"
+									placeholder="系统自动生成"
 								/>
 							</a-form-item>
-						</a-col>
+						</a-col> -->
 						<!-- <a-col :span="12">
               <a-form-item label="租户代码" :label-col="{ span: 6 }">
                 <a-input
@@ -140,7 +135,7 @@
 								</a-radio-group>
 							</a-form-item>
 						</a-col>
-						<a-col :span="12">
+						<!-- <a-col :span="12">
 							<a-form-item label="头像" :label-col="{ span: 6 }">
 								<a-input
 									:disabled="type === '0'"
@@ -148,7 +143,7 @@
 									placeholder="头像存储地址链接"
 								/>
 							</a-form-item>
-						</a-col>
+						</a-col> -->
 						<a-col :span="12">
 							<a-form-item label="状态" :label-col="{ span: 6 }">
 								<a-radio-group
@@ -295,7 +290,7 @@ export default {
 			this.spinning = false
 			if (res) {
 				const {
-					userNum,
+					// userNum,
 					loginName,
 					name,
 					// userType,
@@ -304,11 +299,11 @@ export default {
 					email,
 					remarks,
 					sex,
-					headImg,
+					// headImg,
 					status,
 				} = res.data
 				this.form.setFieldsValue({
-					userNum,
+					// userNum,
 					loginName,
 					name,
 					// userType,
@@ -317,7 +312,7 @@ export default {
 					email,
 					remarks,
 					sex,
-					headImg,
+					// headImg,
 					status,
 				})
 			}

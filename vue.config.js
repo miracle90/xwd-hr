@@ -8,7 +8,7 @@ module.exports = {
   // devServer: {
   //   port: 8888
   // },
-  // productionSourceMap: false
+  productionSourceMap: false,
   chainWebpack: config => {
     config.resolve.alias
       .set("@", resolve("src"))

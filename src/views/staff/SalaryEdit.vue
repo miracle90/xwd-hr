@@ -240,9 +240,7 @@
               <a-form-item label="支付日期" :label-col="{ span: 12 }">
                 <a-date-picker
                   :disabled="type === '0'"
-                  v-decorator="[`paidDate`, {
-                    rules: [{ required: true, message: '请选择支付日期!'}]
-                  }]"
+                  v-decorator="[`paidDate`]"
                   format="YYYY-MM-DD"
                   style="width: 100%"
                   placeholder="请选择支付日期"
@@ -273,9 +271,7 @@
               <a-form-item label="补发日期" :label-col="{ span: 12 }">
                 <a-date-picker
                   :disabled="type === '0'"
-                  v-decorator="[`repairDate`, {
-                    rules: [{ required: true, message: '请选择补发日期!'}]
-                  }]"
+                  v-decorator="[`repairDate`]"
                   format="YYYY-MM-DD"
                   style="width: 100%"
                   placeholder="请选择补发日期"

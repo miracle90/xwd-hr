@@ -29,7 +29,7 @@
 						</a-col>
 					</a-row>
 					<a-row :gutter="12">
-						<a-col :span="12">
+						<!-- <a-col :span="12">
 							<a-form-item label="角色ID" :label-col="{ span: 6 }">
 								<a-input
 									:disabled="type === '0'"
@@ -42,7 +42,7 @@
 									placeholder="请输入角色ID"
 								/>
 							</a-form-item>
-						</a-col>
+						</a-col> -->
 						<a-col :span="12">
 							<a-form-item label="角色名称" :label-col="{ span: 6 }">
 								<a-input
@@ -82,6 +82,8 @@
 								/>
 							</a-form-item>
 						</a-col>
+					</a-row>
+					<a-row :gutter="12">
 						<a-col :span="12" style="margin-top: 30px;">
 							<a-form-item label="角色授权" :label-col="{ span: 6 }">
 								<a-tree
@@ -178,6 +180,19 @@ export default {
 		async getRuleList() {
 			const res = await this.$http.get('/data/role/getRightsTree/0')
 			if (res) {
+				res.data.forEach((item1, index1) => {
+					item1.key = `0-${index1}`
+					if (item1.children && item1.children.length) {
+						item1.children.forEach((item2, index2) => {
+							item2.key = `0-${index1}-${index2}`
+							if (item2.children && item2.children.length) {
+								item2.children.forEach((item3, index3) => {
+									item3.key = `0-${index1}-${index2}-${index3}`
+								})
+							}
+						})
+					}
+				})
 				this.ruleList = res.data
 			}
 		},
@@ -189,7 +204,6 @@ export default {
 					userIdArr
 				})
 			}
-			console.log(res)
 		},
 		async getRightsTree(id) {
 			const list = []
@@ -197,12 +211,22 @@ export default {
 			if (res) {
 				const { data } = res
 				data.forEach((l1, i1) => {
-					const { checked: checked1, id: id1 } = l1
+					const { checked: checked1, children: children1 } = l1
 					if (checked1) {
-						list.push(`0-${id1 - 1}`)
-					} else {
-						//
+						list.push(`0-${i1}`)
 					}
+					children1.forEach((l2, i2) => {
+						const { checked: checked2, children: children2 } = l2
+						if (checked2) {
+							list.push(`0-${i1}-${i2}`)
+						}
+						children2.forEach((l3, i3) => {
+							const { checked: checked3 } = l3
+							if (checked3) {
+								list.push(`0-${i1}-${i2}-${i3}`)
+							}
+						})
+					})
 				})
 				console.log(list)
 				this.checkedKeys = list
@@ -214,13 +238,13 @@ export default {
 			this.spinning = false
 			if (res) {
 				const {
-					roleNum,
+					// roleNum,
 					roleName,
 					status,
 					remark
 				} = res.data
 				this.form.setFieldsValue({
-					roleNum,
+					// roleNum,
 					roleName,
 					status,
 					remark

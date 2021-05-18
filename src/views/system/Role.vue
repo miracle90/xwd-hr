@@ -25,7 +25,7 @@
         <!-- <a-button @click="deletePlan" :disabled="!selectedIds.length" type="danger" style="margin-right: 5px;">删除</a-button> -->
         <!-- <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button>
         <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button> -->
-        <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
+        <!-- <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
         <a-upload
           :action="`${$http.baseURL}/data/role/import`"
           :showUploadList="false"
@@ -34,7 +34,7 @@
           @change="handleChange"
         >
           <a-button>导入</a-button>
-        </a-upload>
+        </a-upload> -->
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 20px;">
@@ -43,11 +43,6 @@
           :pagination="false"
           :columns="columns"
           :data-source="data"
-          :row-selection="{
-            selectedRowKeys,
-            selectedRows,
-            onChange: (selectedRowKeys, selectedRows) => onSelectChange(selectedRowKeys, selectedRows)
-          }"
           :rowKey="(record, index) => index"
         >
           <span slot="status" slot-scope="record">{{ ['停用', '启用'][record.status] }}</span>
