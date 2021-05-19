@@ -83,25 +83,21 @@
 							</a-form-item>
 						</a-col>
 					</a-row>
-					<a-row :gutter="12">
-						<a-col :span="12" style="margin-top: 30px;">
-							<a-form-item label="角色授权" :label-col="{ span: 6 }">
-								<a-tree
-									:disabled="type === '0'"
-									v-decorator="['roleRights']"
-									:defaultExpandAll="true"
-									checkable
-									:expanded-keys="expandedKeys"
-									:auto-expand-parent="true"
-									:selected-keys="selectedKeys"
-									:tree-data="ruleList"
-									@expand="onExpand"
-									@select="onSelect"
-									@check="onCheck"
-								/>
-							</a-form-item>
+					<a-row :gutter="12" style="margin-top: 30px;">
+						<a-col :span="3" style="line-height: 40px; text-align: right;">角色授权：</a-col>
+						<a-col :span="9">
+							<a-tree
+								v-model="checkedKeys"
+								:defaultExpandAll="true"
+								checkable
+								:expanded-keys="expandedKeys"
+								:auto-expand-parent="true"
+								:tree-data="ruleList"
+								@expand="onExpand"
+								@check="onCheck"
+							/>
 						</a-col>
-						<a-col :span="12" style="margin-top: 30px;">
+						<a-col :span="12">
 							<a-form-item label="分配用户" :label-col="{ span: 6 }">
 								<a-checkbox-group
 									:disabled="type === '0'"
@@ -127,10 +123,8 @@
 export default {
 	data() {
 		return {
+			checkedKeys: [],
 			expandedKeys: [],
-      autoExpandParent: true,
-      checkedKeys: [],
-      selectedKeys: [],
 			ruleList: [],
 			userList: [],
 			spinning: false,
@@ -149,32 +143,21 @@ export default {
 		if (id) {
 			this.id = id
 			this.type = type
-			this.queryDetail(id)
-			this.findDispaterUsers(id)
-			this.getRightsTree(id)
-			// this.queryAttachment(id)
+			// this.getRightsTree(id)
 		}
 	},
 	methods: {
 		onExpand(expandedKeys) {
-      console.log('onExpand', expandedKeys)
-      // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-      // or, you can remove all expanded children keys.
-      this.expandedKeys = expandedKeys
-      // this.autoExpandParent = false
-    },
-    onCheck(checkedKeys) {
-      console.log('onCheck', checkedKeys)
-      this.checkedKeys = checkedKeys
-    },
-    onSelect(selectedKeys, info) {
-      console.log('onSelect', info)
-      this.selectedKeys = selectedKeys
-    },
+			this.expandedKeys = expandedKeys
+		},
+		onCheck(checkedKeys) {
+			this.checkedKeys = checkedKeys
+		},
 		async getUserList() {
 			const res = await this.$http.get('/data/user/list')
 			if (res) {
 				this.userList = res.data
+				if (this.id) this.findDispaterUsers(this.id)
 			}
 		},
 		async getRuleList() {
@@ -182,18 +165,22 @@ export default {
 			if (res) {
 				res.data.forEach((item1, index1) => {
 					item1.key = `0-${index1}`
+					item1.disabled = this.type === '0'
 					if (item1.children && item1.children.length) {
 						item1.children.forEach((item2, index2) => {
 							item2.key = `0-${index1}-${index2}`
+							item2.disabled = this.type === '0'
 							if (item2.children && item2.children.length) {
 								item2.children.forEach((item3, index3) => {
 									item3.key = `0-${index1}-${index2}-${index3}`
+									item3.disabled = this.type === '0'
 								})
 							}
 						})
 					}
 				})
 				this.ruleList = res.data
+				if (this.id) this.queryDetail(this.id)
 			}
 		},
 		async findDispaterUsers(id) {
@@ -205,46 +192,62 @@ export default {
 				})
 			}
 		},
-		async getRightsTree(id) {
-			const list = []
-			const res = await this.$http.get(`/data/role/getRightsTree/${id}`)
-			if (res) {
-				const { data } = res
-				data.forEach((l1, i1) => {
-					const { checked: checked1, children: children1 } = l1
-					if (checked1) {
-						list.push(`0-${i1}`)
-					}
-					children1.forEach((l2, i2) => {
-						const { checked: checked2, children: children2 } = l2
-						if (checked2) {
-							list.push(`0-${i1}-${i2}`)
-						}
-						children2.forEach((l3, i3) => {
-							const { checked: checked3 } = l3
-							if (checked3) {
-								list.push(`0-${i1}-${i2}-${i3}`)
-							}
-						})
-					})
-				})
-				console.log(list)
-				this.checkedKeys = list
-			}
-		},
+		// async getRightsTree(id) {
+		// 	const list = []
+		// 	const res = await this.$http.get(`/data/role/getRightsTree/${id}`)
+		// 	if (res) {
+		// 		const { data } = res
+		// 		data.forEach((l1, i1) => {
+		// 			const { checked: checked1, children: children1 } = l1
+		// 			if (checked1) {
+		// 				list.push(`0-${i1}`)
+		// 			}
+		// 			children1.forEach((l2, i2) => {
+		// 				const { checked: checked2, children: children2 } = l2
+		// 				if (checked2) {
+		// 					list.push(`0-${i1}-${i2}`)
+		// 				}
+		// 				children2.forEach((l3, i3) => {
+		// 					const { checked: checked3 } = l3
+		// 					if (checked3) {
+		// 						list.push(`0-${i1}-${i2}-${i3}`)
+		// 					}
+		// 				})
+		// 			})
+		// 		})
+		// 		console.log(list)
+		// 		this.expandedKeys = ['0-0', '0-0-0', '0-0-0-0', '0-0-0-1', '0-0-0-2', '0-0-0-3', '0-0-0-4', '0-0-1', '0-0-1-0', '0-0-1-1', '0-0-1-2', '0-0-1-3', '0-0-1-4']
+		// 		this.form.setFieldsValue({
+		// 			roleRights: ['0-0', '0-0-0', '0-0-0-0', '0-0-0-1', '0-0-0-2', '0-0-0-3', '0-0-0-4', '0-0-1', '0-0-1-0', '0-0-1-1', '0-0-1-2', '0-0-1-3', '0-0-1-4']
+		// 		})
+		// 	}
+		// },
 		async queryDetail(id) {
 			this.spinning = true
 			const res = await this.$http.get(`/data/role/get/${id}`)
 			this.spinning = false
 			if (res) {
 				const {
-					// roleNum,
 					roleName,
 					status,
-					remark
+					remark,
+					rights
 				} = res.data
+				const list = rights.split(', ')
+				const checkedKeys = []
+				const expandedKeys = []
+				list.forEach(item => {
+					const arr = item.split('')
+					const newArr = arr.map(i => i - 1)
+					checkedKeys.push(`0-${newArr.join('-')}`)
+					if (newArr.length === 3) {
+						expandedKeys.push(`0-${newArr.slice(0, 1).join('-')}`)
+						expandedKeys.push(`0-${newArr.slice(0, 2).join('-')}`)
+					}
+				})
+				this.expandedKeys = [...new Set(expandedKeys)]
+				this.checkedKeys = checkedKeys
 				this.form.setFieldsValue({
-					// roleNum,
 					roleName,
 					status,
 					remark
@@ -255,11 +258,12 @@ export default {
 			e.preventDefault()
 			this.form.validateFields(async (error, values) => {
 				if (!error) {
-					const { userIdArr, roleRights, ...obj } = values
+					const { userIdArr, ...obj } = values
 					const resultList = []
 					const param = {
 						...obj
 					}
+
 					for (let i = 0; i < this.checkedKeys.length; i++) {
 						const item = this.checkedKeys[i]
 						const index = item.split('-')
@@ -272,6 +276,9 @@ export default {
 						}
 						resultList.push(result.id)
 					}
+
+					console.log(resultList)
+
 					this.spinning = true
 					if (this.id) param.id = this.id
 					const res1 = await this.$http.post(`/data/role/${this.id ? 'update' : 'add'}`, param)
@@ -298,6 +305,8 @@ export default {
 		},
 		handleReset() {
 			this.form.resetFields()
+			this.expandedKeys = []
+			this.checkedKeys = []
 		},
 		cancel() {
 			this.$router.back()

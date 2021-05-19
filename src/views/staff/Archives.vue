@@ -69,6 +69,7 @@
     <a-row style="margin-bottom: 20px;">
       <a-col>
         <a-table
+          :scroll="{ x: 2000 }"
           :pagination="false"
           :columns="columns"
           :data-source="data"
@@ -121,12 +122,16 @@ const columns = [
     title: '工号',
     dataIndex: 'employeeNumber',
     key: 'employeeNumber',
-    scopedSlots: { customRender: 'employeeNumber' }
+    scopedSlots: { customRender: 'employeeNumber' },
+    fixed: 'left',
+    width: 120
   },
   {
     title: '姓名',
     dataIndex: 'employeeName',
-    key: 'employeeName'
+    key: 'employeeName',
+    fixed: 'left',
+    width: 120
   },
   {
     title: '入职日期',
@@ -191,15 +196,17 @@ const columns = [
     key: 'payrollCardInfo'
   },
   {
-    title: '招聘来源',
-    dataIndex: 'supplierName',
-    key: 'supplierName'
-  },
-  {
     title: '性别',
     dataIndex: 'sex',
     key: 'sex'
-  }
+  },
+  {
+    title: '招聘来源',
+    dataIndex: 'supplierName',
+    key: 'supplierName',
+    fixed: 'right',
+    width: 120
+  },
 ]
 
 export default {

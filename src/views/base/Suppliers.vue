@@ -35,7 +35,20 @@
 		</a-row>
 		<a-row style="margin-bottom: 20px">
 			<a-col>
+				<!-- <Drag-Table
+					:data="data"
+					:columns="columns"
+				>
+					<router-link
+						slot="supplierName"
+						slot-scope="record"
+						style="color: #1890ff"
+						:to="{ path: '/suppliersedit', query: { id: record.id, type: 0 } }"
+						>{{ record.supplierName }}</router-link
+					>
+				</Drag-Table> -->
 				<a-table
+					:scroll="{ x: 1500 }"
 					:pagination="false"
 					:columns="columns"
 					:data-source="data"
@@ -81,8 +94,7 @@
 </template>
 
 <script>
-import DragTable from '@/components/DragTable.vue'
-console.log(DragTable)
+// import DragTable from '@/components/DragTable.vue'
 
 const columns = [
 	{
@@ -139,6 +151,9 @@ const columns = [
 ]
 
 export default {
+	components: {
+		// DragTable
+	},
 	data() {
 		return {
 			spinning: false,

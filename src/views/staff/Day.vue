@@ -40,6 +40,7 @@
     <a-row style="margin-bottom: 20px;">
       <a-col>
         <a-table
+          :scroll="{ x: 1600 }"
           :pagination="false"
           :columns="columns"
           :data-source="data"
@@ -83,12 +84,16 @@ const columns = [
   {
     title: '日期',
     dataIndex: 'monthDay',
-    key: 'monthDay'
+    key: 'monthDay',
+    fixed: 'left',
+    width: 120
   },
   {
     title: '所属公司',
     dataIndex: 'customerName',
-    key: 'customerName'
+    key: 'customerName',
+    fixed: 'left',
+    width: 120
   },
   {
     title: '所属部门',

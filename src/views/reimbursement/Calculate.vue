@@ -39,12 +39,12 @@
           }"
           :rowKey="(record, index) => index"
         >
-          <span slot="supplierCode" slot-scope="record">
+          <!-- <span slot="supplierCode" slot-scope="record">
             {{ supplierList.find(item => item.id === record.supplierId) ? supplierList.find(item => item.id === record.supplierId).supplierCode : '' }}
           </span>
           <span slot="supplierName" slot-scope="record">
             {{ supplierList.find(item => item.id === record.supplierId) ? supplierList.find(item => item.id === record.supplierId).supplierName : '' }}
-          </span>
+          </span> -->
           <span slot="action" slot-scope="record">
             <router-link style="color: #1890ff" :to="{
               path: '/calculateedit',
@@ -92,13 +92,13 @@ const columns = [
   },
   {
     title: '供应商代码',
-    key: 'supplierCode',
-    scopedSlots: { customRender: 'supplierCode' }
+    dataIndex: 'supplierCode',
+    key: 'supplierCode'
   },
   {
     title: '供应商',
-    key: 'supplierName',
-    scopedSlots: { customRender: 'supplierName' }
+    dataIndex: 'supplierName',
+    key: 'supplierName'
   },
   {
     title: '核算人数',
@@ -170,22 +170,22 @@ export default {
     this.handleSearch()
   },
   methods: {
-    handleChange (info) {
-      if (info.file.status === 'done') {
-        this.$message.success('上传成功')
-      } else if (info.file.status === 'error') {
-        this.$message.error('上传失败')
-      }
-    },
-    beforeUpload (file) {
-      const { name } = file
-      const type = name.split('.').pop()
-      if (['xlsx', 'xls', 'xltx', 'xlt', 'xlsm', 'xlsm', 'xlsb', 'xltm', 'csv'].includes(type)) {
-        return true
-      }
-      this.$message.error('请上传正确格式的表格文件')
-      return false
-    },
+    // handleChange (info) {
+    //   if (info.file.status === 'done') {
+    //     this.$message.success('上传成功')
+    //   } else if (info.file.status === 'error') {
+    //     this.$message.error('上传失败')
+    //   }
+    // },
+    // beforeUpload (file) {
+    //   const { name } = file
+    //   const type = name.split('.').pop()
+    //   if (['xlsx', 'xls', 'xltx', 'xlt', 'xlsm', 'xlsm', 'xlsb', 'xltm', 'csv'].includes(type)) {
+    //     return true
+    //   }
+    //   this.$message.error('请上传正确格式的表格文件')
+    //   return false
+    // },
     /**
      * 导出
      */
@@ -413,6 +413,9 @@ export default {
       this.form.validateFields(async (error, values) => {
         if (!error) {
           const { yearMonth } = values
+          if (!yearMonth) {
+            return this.$message.error('请选择核算月份')
+          }
           const param = {
             yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null
           }

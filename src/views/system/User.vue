@@ -63,6 +63,7 @@
 		<a-row style="margin-bottom: 20px">
 			<a-col>
 				<a-table
+					:scroll="{ x: 1400 }"
 					:pagination="false"
 					:columns="columns"
 					:data-source="data"
@@ -159,6 +160,7 @@ const columns = [
 		title: '角色',
 		dataIndex: 'roleNames',
 		key: 'roleNames',
+		width: 200
 	},
 	{
 		title: '更新人',
@@ -179,6 +181,8 @@ const columns = [
 		title: '操作',
 		key: 'action',
 		scopedSlots: { customRender: 'action' },
+		fixed: 'right',
+    width: 200
 	},
 ]
 

@@ -30,6 +30,7 @@
     <a-row style="margin-bottom: 20px;">
       <a-col>
         <a-table
+          :scroll="{ x: 2000 }"
           :pagination="false"
           :columns="columns"
           :data-source="data"
@@ -165,7 +166,9 @@ const columns = [
   {
     title: '操作',
     key: 'action',
-    scopedSlots: { customRender: 'action' }
+    scopedSlots: { customRender: 'action' },
+    fixed: 'right',
+    width: 120,
   }
 ]
 

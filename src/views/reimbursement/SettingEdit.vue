@@ -236,10 +236,9 @@ export default {
       this.form.validateFields(async (error, values) => {
         if (!error) {
           console.log('values ', values)
-          const { onJobDate, downJobDate, isProxyPay } = values
+          const { onJobDate, downJobDate } = values
           const param = {
             ...values,
-            isProxyPay: isProxyPay ? '是' : '否',
             onJobDate: onJobDate ? (typeof onJobDate === 'string' ? onJobDate : onJobDate.format('YYYY-MM-DD')) : null,
             downJobDate: downJobDate ? (typeof downJobDate === 'string' ? downJobDate : downJobDate.format('YYYY-MM-DD')) : null
           }

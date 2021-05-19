@@ -6,7 +6,7 @@ import store from './store'
 // import 'ant-design-vue/dist/antd.css'
 // 引入 网络请求模块
 import http from './common/axios.js'
-import VueDraggableResizable from 'vue-draggable-resizable'
+// import VueDraggableResizable from 'vue-draggable-resizable'
 // import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 
 import {
@@ -57,7 +57,7 @@ Vue.use(Result)
 Vue.use(Tree)
 
 // 引入拖拽组件
-Vue.component('vue-draggable-resizable', VueDraggableResizable)
+// Vue.component('vue-draggable-resizable', VueDraggableResizable)
 
 Vue.prototype.$message = message
 Vue.prototype.$confirm = Modal.confirm
