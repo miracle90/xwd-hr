@@ -16,52 +16,7 @@
           <a-menu-item v-for="item in menu.list" :key="`/${item.name}`">
             <router-link :to="`/${item.name}`">{{ item.title }}</router-link>
           </a-menu-item>
-          <!-- <a-menu-item key="/customer">
-            <router-link to="/customer">客户管理</router-link>
-          </a-menu-item> -->
         </a-sub-menu>
-        <!-- <a-sub-menu key="sub2">
-          <span slot="title">
-            <a-icon type="control" />
-          <span>供需协同</span></span>
-          <a-menu-item key="/plan">
-            <router-link to="/plan">需求计划</router-link>
-          </a-menu-item>
-          <a-menu-item key="/feedback">
-            <router-link to="/feedback">需求反馈</router-link>
-          </a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub3">
-          <span slot="title">
-            <a-icon type="user" />
-          <span>员工管理</span></span>
-          <a-menu-item key="/archives"><router-link to="/archives">员工档案</router-link></a-menu-item>
-          <a-menu-item key="/month"><router-link to="/month">月考勤数据</router-link></a-menu-item>
-          <a-menu-item key="/day"><router-link to="/day">日考勤数据</router-link></a-menu-item>
-          <a-menu-item key="/salary"><router-link to="/salary">工资核算</router-link></a-menu-item>
-          <a-menu-item key="/borrow"><router-link to="/borrow">预支管理</router-link></a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub4">
-          <span slot="title">
-            <a-icon type="pay-circle" />
-          <span>返费管理</span></span>
-          <a-menu-item key="/setting"><router-link to="/setting">返费设定</router-link></a-menu-item>
-          <a-menu-item key="/calculate"><router-link to="/calculate">返费计算</router-link></a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub5">
-          <span slot="title">
-            <a-icon type="bar-chart" />
-          <span>报表分析</span></span>
-          <a-menu-item key="/employee"><router-link to="/employee">员工花名册</router-link></a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub6">
-          <span slot="title">
-            <a-icon type="appstore" />
-          <span>系统管理</span></span>
-          <a-menu-item key="/hirer"><router-link to="/hirer">租户管理</router-link></a-menu-item>
-          <a-menu-item key="/user"><router-link to="/user">用户管理</router-link></a-menu-item>
-          <a-menu-item key="/role"><router-link to="/role">角色管理</router-link></a-menu-item>
-        </a-sub-menu> -->
       </a-menu>
     </a-layout-sider>
     <a-layout>

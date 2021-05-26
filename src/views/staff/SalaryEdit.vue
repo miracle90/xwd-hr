@@ -19,7 +19,6 @@
                   v-decorator="[`yearMonth`, {
                     rules: [{ required: true, message: '请选择月份!'}]
                   }]"
-                  :locale="locale"
                   placeholder="请选择月份"
                 />
               </a-form-item>
@@ -296,7 +295,8 @@
 
 <script>
 import Moment from 'moment'
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
+import 'moment/locale/zh-cn'
+Moment.locale('zh-cn')
 
 // function getBase64 (file) {
 //   return new Promise((resolve, reject) => {
@@ -310,7 +310,6 @@ import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 export default {
   data () {
     return {
-      locale,
       customerList: [],
       supplierList: [],
       previewVisible: false,

@@ -175,6 +175,8 @@
 
 <script>
 import Moment from 'moment'
+import 'moment/locale/zh-cn'
+Moment.locale('zh-cn')
 
 const columns = [
   {

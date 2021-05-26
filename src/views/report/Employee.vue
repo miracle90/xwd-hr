@@ -20,7 +20,7 @@
         </a-col>
         <a-col :span="6">
           <a-form-item label="入职日期">
-            <a-range-picker v-decorator="[`date`]" :locale="locale" />
+            <a-range-picker v-decorator="[`date`]" />
           </a-form-item>
         </a-col>
         <a-col :span="6">
@@ -119,8 +119,6 @@
 </template>
 
 <script>
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
-
 const columns = [
   {
     title: '工号',
@@ -212,7 +210,6 @@ export default {
     return {
       customerList: [],
       supplierList: [],
-      locale,
       queryOnJobDateStartTime: '',
       queryOnJobDateEndTime: '',
       spinning: false,

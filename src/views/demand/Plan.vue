@@ -2,7 +2,7 @@
   <a-spin class="page-wrapper" :spinning="spinning">
     <a-row type="flex" style="margin-bottom: 20px;">
       <a-col style="display: flex; align-items: center;">需求日期：</a-col>
-      <a-col><a-range-picker v-model="rangePicker" @change="onPickerChange" :locale="locale" /></a-col>
+      <a-col><a-range-picker v-model="rangePicker" @change="onPickerChange" /></a-col>
     </a-row>
     <a-row type="flex" style="margin-bottom: 20px;">
       <a-col style="display: flex; align-items: center;">单据状态：</a-col>
@@ -85,8 +85,6 @@
 </template>
 
 <script>
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
-
 const columns = [
   {
     title: '需求编号',
@@ -176,7 +174,6 @@ export default {
   data () {
     return {
       customerList: [],
-      locale,
       rangePicker: null,
       status: '',
       spinning: false,

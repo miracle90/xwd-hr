@@ -132,6 +132,8 @@
 
 <script>
 import Moment from 'moment'
+import 'moment/locale/zh-cn'
+Moment.locale('zh-cn')
 
 // function getBase64 (file) {
 //   return new Promise((resolve, reject) => {

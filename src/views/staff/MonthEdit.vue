@@ -99,7 +99,6 @@
                     rules: [{ required: true, message: '请选择出勤月份!'}]
                   }]"
                   placeholder="请选择出勤月份"
-                  :locale="locale"
                   style="width: 100%;"
                 />
               </a-form-item>
@@ -169,8 +168,8 @@
 
 <script>
 import Moment from 'moment'
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
-
+import 'moment/locale/zh-cn'
+Moment.locale('zh-cn')
 // function getBase64 (file) {
 //   return new Promise((resolve, reject) => {
 //     const reader = new FileReader()
@@ -183,7 +182,6 @@ import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 export default {
   data () {
     return {
-      locale,
       customerList: [],
       supplierList: [],
       previewVisible: false,

@@ -2,7 +2,7 @@ import axios from 'axios'
 import Router from '../router/index.js'
 import { message } from 'ant-design-vue'
 
-const baseURL = 'http://hrsys.zero-yun.cn'
+const baseURL = 'http://hrsys.zero-yun.com'
 
 axios.defaults.baseURL = baseURL
 

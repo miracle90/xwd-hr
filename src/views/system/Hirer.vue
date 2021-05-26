@@ -96,8 +96,6 @@
 </template>
 
 <script>
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
-
 const columns = [
   {
     title: 'ID',
@@ -151,7 +149,6 @@ export default {
     return {
       customerList: [],
       supplierList: [],
-      locale,
       queryOnJobDateStartTime: '',
       queryOnJobDateEndTime: '',
       spinning: false,

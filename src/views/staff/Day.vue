@@ -7,7 +7,7 @@
       <a-row :gutter="24">
         <a-col :span="5">
           <a-form-item label="出勤年月">
-            <a-month-picker v-decorator="[`monthDay`]" placeholder="请选择出勤年月" :locale="locale" />
+            <a-month-picker v-decorator="[`monthDay`]" placeholder="请选择出勤年月" />
           </a-form-item>
         </a-col>
         <a-col :span="5">
@@ -78,8 +78,6 @@
 </template>
 
 <script>
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
-
 const columns = [
   {
     title: '日期',
@@ -175,7 +173,6 @@ export default {
       },
       // customerList: [],
       // supplierList: [],
-      locale,
       queryOnJobDateStartTime: '',
       queryOnJobDateEndTime: '',
       spinning: false,

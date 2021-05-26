@@ -9,7 +9,6 @@
             <a-month-picker
               v-decorator="[`yearMonth`]"
               placeholder="请选择核算月份"
-              :locale="locale"
               style="width: 100%;"
             />
           </a-form-item>
@@ -82,8 +81,6 @@
 </template>
 
 <script>
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
-
 const columns = [
   {
     title: '核算月份',
@@ -145,7 +142,6 @@ export default {
       },
       customerList: [],
       supplierList: [],
-      locale,
       queryOnJobDateStartTime: '',
       queryOnJobDateEndTime: '',
       spinning: false,

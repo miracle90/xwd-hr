@@ -6,7 +6,6 @@
 				><a-range-picker
 					v-model="rangePicker"
 					@change="onPickerChange"
-					:locale="locale"
 			/></a-col>
 			<a-col style="display: flex; align-items: center">状态：</a-col>
 			<a-col>
@@ -145,8 +144,6 @@
 </template>
 
 <script>
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
-
 const columns = [
 	{
 		title: '序号',
@@ -241,7 +238,6 @@ export default {
 	data() {
 		return {
 			customerList: [],
-			locale,
 			rangePicker: null,
 			status: '',
 			spinning: false,
