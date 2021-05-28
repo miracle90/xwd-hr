@@ -151,16 +151,12 @@ const columns = [
 		title: '工号',
 		dataIndex: 'employeeNumber',
 		key: 'employeeNumber',
-		scopedSlots: { customRender: 'employeeNumber' },
-		fixed: 'left',
-		width: 120,
+		scopedSlots: { customRender: 'employeeNumber' }
 	},
 	{
 		title: '姓名',
 		dataIndex: 'employeeName',
-		key: 'employeeName',
-		fixed: 'left',
-		width: 120,
+		key: 'employeeName'
 	},
 	{
 		title: '入职日期',
@@ -415,7 +411,7 @@ export default {
 			})
 		},
 		/**
-		 * 数据推送
+		 * 数据下载
 		 */
 		dataPush() {
 			this.$confirm({
@@ -428,7 +424,7 @@ export default {
 					const res = await this.$http.post('/data/employee/dataPush')
 					this.spinning = false
 					if (res) {
-						this.$message.success('数据推送成功!')
+						this.$message.success('正在同步数据，请稍后刷新页面查看!')
 					}
 				},
 			})

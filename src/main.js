@@ -10,6 +10,7 @@ import http from './common/axios.js'
 // import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 
 import {
+  ConfigProvider,
   Button,
   Layout,
   Menu,
@@ -34,6 +35,7 @@ import {
   message
 } from 'ant-design-vue'
 
+Vue.use(ConfigProvider)
 Vue.use(Button)
 Vue.use(Layout)
 Vue.use(Menu)

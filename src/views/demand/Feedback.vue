@@ -2,11 +2,12 @@
 	<a-spin class="page-wrapper" :spinning="spinning">
 		<a-row type="flex" style="margin-bottom: 20px">
 			<a-col style="display: flex; align-items: center">需求日期：</a-col>
-			<a-col style="margin-right: 30px"
-				><a-range-picker
+			<a-col style="margin-right: 30px">
+				<a-range-picker
 					v-model="rangePicker"
 					@change="onPickerChange"
-			/></a-col>
+				/>
+			</a-col>
 			<a-col style="display: flex; align-items: center">状态：</a-col>
 			<a-col>
 				<a-radio-group v-model="status" button-style="solid">
@@ -384,6 +385,4 @@ export default {
 </script>
 
 <style lang="less">
-.page-wrapper {
-}
 </style>

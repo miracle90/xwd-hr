@@ -1,6 +1,8 @@
 import axios from 'axios'
 import Router from '../router/index.js'
-import { message } from 'ant-design-vue'
+import {
+  message
+} from 'ant-design-vue'
 
 const baseURL = 'http://hrsys.zero-yun.com'
 
@@ -24,7 +26,9 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(response => {
   if (response.status === 200 && response.data.code === '1001') {
     window.localStorage.removeItem('token')
-    Router.push({ path: '/' })
+    Router.push({
+      path: '/'
+    })
     return response
   } else {
     return response
@@ -36,10 +40,13 @@ const http = {
   get: function (url, params) {
     return new Promise((resolve, reject) => {
       axios.get(url, {
-        params: params
-      })
+          params: params
+        })
         .then((response) => {
-          const { code, msg } = response.data
+          const {
+            code,
+            msg
+          } = response.data
           if (code === '0') {
             resolve(response.data)
           } else {
@@ -57,7 +64,10 @@ const http = {
     return new Promise((resolve, reject) => {
       axios.post(url, data)
         .then((response) => {
-          const { code, msg } = response.data
+          const {
+            code,
+            msg
+          } = response.data
           if (code === '0') {
             resolve(response.data)
           } else {

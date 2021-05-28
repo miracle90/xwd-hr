@@ -400,7 +400,7 @@ export default {
 					const res = await this.$http.get('/data/monthAttence/syncData')
 					this.spinning = false
 					if (res) {
-						this.$message.success('数据下载成功!')
+						this.$message.success('正在同步数据，请稍后刷新页面查看!')
 					}
 				},
 			})
