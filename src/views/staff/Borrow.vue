@@ -34,7 +34,7 @@
     </a-form>
     <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <a-col>
-        <a-button @click="applyDownload" style="margin-right: 5px;">下载公众号预支申请</a-button>
+        <!-- <a-button @click="applyDownload" style="margin-right: 5px;">下载公众号预支申请</a-button> -->
         <!-- <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button> -->
         <!-- <a-upload
           :action="`${$http.baseURL}/data/employee/import`"

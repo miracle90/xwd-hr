@@ -46,7 +46,7 @@
     </a-form>
     <a-row type="flex" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <a-col>
-        <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button>
+        <a-button @click="dataPush" style="margin-right: 5px;">数据下载</a-button>
         <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button>
         <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
         <a-upload
