@@ -23,6 +23,7 @@ axios.interceptors.request.use(
 // token过期，重新登录
 axios.interceptors.response.use(response => {
   if (response.status === 200 && response.data.code === '1001') {
+    window.localStorage.removeItem('token')
     Router.push({ path: '/' })
     return response
   } else {

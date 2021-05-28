@@ -124,11 +124,11 @@
 
 <script>
 const columns = [
-	{
-		title: 'ID',
-		dataIndex: 'userNum',
-		key: 'userNum',
-	},
+	// {
+	// 	title: 'ID',
+	// 	dataIndex: 'userNum',
+	// 	key: 'userNum',
+	// },
 	{
 		title: '用户名',
 		dataIndex: 'loginName',
@@ -180,7 +180,7 @@ const columns = [
 		key: 'action',
 		scopedSlots: { customRender: 'action' },
 		fixed: 'right',
-    width: 200
+		width: 200
 	},
 ]
 

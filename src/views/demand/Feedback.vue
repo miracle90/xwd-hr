@@ -230,7 +230,7 @@ const columns = [
 		key: 'action',
 		scopedSlots: { customRender: 'action' },
 		fixed: 'right',
-    width: 120,
+		width: 120,
 	},
 ]
 
