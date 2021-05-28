@@ -8,8 +8,8 @@
 					@submit="handleSearch"
 					layout="horizontal"
 				>
-					<a-row style="margin-bottom: 20px">
-						<a-col :span="24">
+					<a-row class="user-header">
+						<a-col>
 							<a-button
 								v-if="type === '1'"
 								type="primary"
@@ -22,6 +22,13 @@
 								:style="{ marginRight: '20px' }"
 								@click="handleReset"
 								>重置</a-button
+							>
+							<a-button
+								v-if="type === '1'"
+								type="danger"
+								:style="{ marginRight: '20px' }"
+								@click="resetPassword"
+								>重置密码</a-button
 							>
 							<a-button @click="cancel">{{
 								type !== '1' ? '返回' : '取消'
@@ -219,6 +226,22 @@ export default {
 		}
 	},
 	methods: {
+		resetPassword() {
+			this.$confirm({
+				title: '重置密码',
+				content: '确定要重置该用户的登录密码吗？',
+				okText: '确定',
+				cancelText: '取消',
+				onOk: async () => {
+					// this.spinning = true
+					// const res = await this.$http.post('/data/employee/dataPush')
+					// this.spinning = false
+					// if (res) {
+					// 	this.$message.success('重置密码成功！!')
+					// }
+				},
+			})
+		},
 		async getRoleList() {
 			// const res = await this.$http.get('/data/customer/find')
 			const res = await this.$http.get('/data/role/list')
@@ -387,5 +410,12 @@ export default {
 .ant-upload-select-picture-card .ant-upload-text {
 	margin-top: 8px;
 	color: #666;
+}
+.user-header {
+	display: flex;
+	flex-direction: row;
+	// justify-content: space-between;
+	margin-bottom: 20px;
+	width: 100%;
 }
 </style>

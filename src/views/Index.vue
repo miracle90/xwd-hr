@@ -117,7 +117,7 @@ export default {
 			})
 		},
 		handleCancel() {
-      this.form.resetFields()
+			this.form.resetFields()
 			this.visible = false
 		},
 		reset() {
