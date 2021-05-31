@@ -24,7 +24,7 @@
 								>重置</a-button
 							>
 							<a-button
-								v-if="type === '1'"
+								v-if="type === '1' && (!!id || id === 0)"
 								type="danger"
 								:style="{ marginRight: '20px' }"
 								@click="resetPassword"
@@ -233,18 +233,20 @@ export default {
 				okText: '确定',
 				cancelText: '取消',
 				onOk: async () => {
-					// this.spinning = true
-					// const res = await this.$http.post('/data/employee/dataPush')
-					// this.spinning = false
-					// if (res) {
-					// 	this.$message.success('重置密码成功！!')
-					// }
+					this.spinning = true
+					const res = await this.$http.post('/data/user/resetPwd', {
+						id: this.id
+					})
+					this.spinning = false
+					if (res) {
+						this.$message.success('重置密码成功！!')
+					}
 				},
 			})
 		},
 		async getRoleList() {
 			// const res = await this.$http.get('/data/customer/find')
-			const res = await this.$http.get('/data/role/list')
+			const res = await this.$http.get('/data/role/find')
 			if (res) {
 				this.roleList = res.data
 			}

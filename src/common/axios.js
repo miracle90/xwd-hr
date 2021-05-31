@@ -26,6 +26,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(response => {
   if (response.status === 200 && response.data.code === '1001') {
     window.localStorage.removeItem('token')
+    window.localStorage.removeItem('xwdid')
     Router.push({
       path: '/'
     })

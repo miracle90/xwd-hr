@@ -57,7 +57,7 @@
 						type="password"
 						placeholder="请输入原密码"
 						v-decorator="[
-							'oldPsd',
+							'loginPassword',
 							{ rules: [{ required: true, message: '请输入原密码!' }] },
 						]"
 					/>
@@ -67,7 +67,7 @@
 						type="password"
 						placeholder="请输入新密码"
 						v-decorator="[
-							'newPsd',
+							'newPwd',
 							{ rules: [{ required: true, message: '请输入新密码!' }] },
 						]"
 					/>
@@ -108,11 +108,27 @@ export default {
 			}
 		},
 		handleOk() {
-			this.form.validateFields((err, values) => {
+			this.form.validateFields(async (err, values) => {
 				if (!err) {
-					console.log('Received values of form: ', values)
+					const { loginPassword, newPwd } = values
 					// 调用接口
 					// 清token，返回登录页
+					this.spinning = true
+					const res = await this.$http.post('/data/user/resetPwd', {
+						id: window.localStorage.getItem('xwdid'),
+						loginPassword,
+						newPwd
+					})
+					this.spinning = false
+					if (res) {
+						this.$message.success('密码修改成功，请使用新密码重新登录！')
+						setTimeout(() => {
+							window.localStorage.removeItem('token')
+							window.localStorage.removeItem('xwdid')
+							this.$router.push('/')
+						}, 1000)
+						this.visible = false
+					}
 				}
 			})
 		},
@@ -131,6 +147,7 @@ export default {
 				cancelText: '取消',
 				onOk: async () => {
 					window.localStorage.removeItem('token')
+					window.localStorage.removeItem('xwdid')
 					this.$router.push('/')
 				},
 			})

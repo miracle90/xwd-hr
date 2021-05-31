@@ -20,6 +20,7 @@ module.exports = {
     'space-before-function-paren': 0,
     'Unexpected-trailing-comma': 0,
     'comma-dangle': 0,
-    'camelcase': 0
+    'camelcase': 0,
+    'indent': 0
   }
 }
