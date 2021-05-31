@@ -114,7 +114,7 @@ export default {
 					// 调用接口
 					// 清token，返回登录页
 					this.spinning = true
-					const res = await this.$http.post('/data/user/resetPwd', {
+					const res = await this.$http.post('/data/user/updatePwd', {
 						id: window.localStorage.getItem('xwdid'),
 						loginPassword,
 						newPwd
