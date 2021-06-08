@@ -228,9 +228,7 @@ const columns = [
 	{
 		title: '招聘来源',
 		dataIndex: 'supplierName',
-		key: 'supplierName',
-		fixed: 'right',
-		width: 120,
+		key: 'supplierName'
 	},
 ]
 
