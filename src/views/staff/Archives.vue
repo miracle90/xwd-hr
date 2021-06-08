@@ -415,8 +415,8 @@ export default {
 		 */
 		dataPush() {
 			this.$confirm({
-				title: '数据推送',
-				content: '确定要进行数据推送吗？',
+				title: '数据下载',
+				content: '确定要进行数据下载吗？',
 				okText: '确定',
 				cancelText: '取消',
 				onOk: async () => {
