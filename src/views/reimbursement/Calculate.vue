@@ -107,11 +107,11 @@ const columns = [
     dataIndex: 'totalHours',
     key: 'totalHours'
   },
-  {
-    title: '返费标准（元/工时）',
-    dataIndex: 'rebateStandard',
-    key: 'rebateStandard'
-  },
+  // {
+  //   title: '返费标准（元/工时）',
+  //   dataIndex: 'rebateStandard',
+  //   key: 'rebateStandard'
+  // },
   {
     title: '返费合计（元）',
     dataIndex: 'rebateTotal',
