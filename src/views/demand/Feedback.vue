@@ -146,10 +146,15 @@
 
 <script>
 const columns = [
+	// {
+	// 	title: '序号',
+	// 	key: 'sort',
+	// 	scopedSlots: { customRender: 'sort' },
+	// },
 	{
-		title: '序号',
-		key: 'sort',
-		scopedSlots: { customRender: 'sort' },
+		title: '供应商',
+		dataIndex: 'supplierName',
+		key: 'supplierName'
 	},
 	{
 		title: '需求类型',

@@ -185,10 +185,10 @@
 									]"
 									placeholder="请选择工种"
 								>
-									<a-select-option :value="1">学生工</a-select-option>
-									<a-select-option :value="2">农民工</a-select-option>
-									<a-select-option :value="3">社会工</a-select-option>
-									<a-select-option :value="4">正式工</a-select-option>
+									<a-select-option value="学生工">学生工</a-select-option>
+									<a-select-option value="农民工">农民工</a-select-option>
+									<a-select-option value="社会工">社会工</a-select-option>
+									<a-select-option value="正式工">正式工</a-select-option>
 								</a-select>
 							</a-form-item>
 						</a-col>

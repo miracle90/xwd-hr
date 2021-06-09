@@ -155,8 +155,8 @@ const columns = [
 	{
 		title: '工种',
 		dataIndex: 'jobType',
-		key: 'jobType',
-		scopedSlots: { customRender: 'jobType' },
+		key: 'jobType'
+		// scopedSlots: { customRender: 'jobType' },
 	},
 	{
 		title: '区域',
@@ -236,7 +236,7 @@ export default {
 	},
 	mounted() {
 		// this.findCustomerList()
-		// this.findSuppliersList()
+		this.findSuppliersList()
 		// this.handleSearch()
 	},
 	methods: {
@@ -418,12 +418,12 @@ export default {
 		//     this.customerList = res.data
 		//   }
 		// },
-		// async findSuppliersList () {
-		//   const res = await this.$http.get('/data/supplier/find')
-		//   if (res) {
-		//     this.supplierList = res.data
-		//   }
-		// },
+		async findSuppliersList () {
+			const res = await this.$http.get('/data/supplier/find')
+			if (res) {
+				this.supplierList = res.data
+			}
+		},
 		// deletePlan () {
 		//   this.$confirm({
 		//     title: '删除提示',

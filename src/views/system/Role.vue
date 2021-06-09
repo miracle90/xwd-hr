@@ -330,22 +330,22 @@ export default {
     /**
      * 模板下载
      */
-    downloadTemplet () {
-      this.$confirm({
-        title: '模板下载',
-        content: '确定要进行模板下载吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.spinning = true
-          const res = await this.$http.get('/data/employee/downloadTemplet')
-          this.spinning = false
-          if (res) {
-            this.$message.success('模板下载成功!')
-          }
-        }
-      })
-    },
+    // downloadTemplet () {
+    //   this.$confirm({
+    //     title: '模板下载',
+    //     content: '确定要进行模板下载吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       const res = await this.$http.get('/data/employee/downloadTemplet')
+    //       this.spinning = false
+    //       if (res) {
+    //         this.$message.success('模板下载成功!')
+    //       }
+    //     }
+    //   })
+    // },
     onPickerChange (date, dateString) {
       console.log(date, dateString)
     },

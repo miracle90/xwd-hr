@@ -116,9 +116,9 @@
 						>{{ text }}</router-link
 					>
 					<!-- <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span> -->
-					<span slot="jobType" slot-scope="text">{{
+					<!-- <span slot="jobType" slot-scope="text">{{
 						['', '学生工', '农民工', '社会工', '正式工'][text]
-					}}</span>
+					}}</span> -->
 				</a-table>
 			</a-col>
 		</a-row>
@@ -176,8 +176,8 @@ const columns = [
 	{
 		title: '工种',
 		dataIndex: 'jobType',
-		key: 'jobType',
-		scopedSlots: { customRender: 'jobType' },
+		key: 'jobType'
+		// scopedSlots: { customRender: 'jobType' },
 	},
 	{
 		title: '区域',

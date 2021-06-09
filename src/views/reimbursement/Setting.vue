@@ -301,6 +301,7 @@ export default {
           const res = await this.$http.get('/data/rebate/downloadTemplet')
           this.spinning = false
           if (res) {
+            window.open(res.data)
             this.$message.success('模板下载成功!')
           }
         }

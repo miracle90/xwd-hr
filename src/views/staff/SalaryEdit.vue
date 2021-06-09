@@ -403,12 +403,10 @@ export default {
 					deptName,
 					payrollCardInfo,
 				} = res.data
-				const { supplierName } = this.supplierList.find(
-					(item) => item.id === supplierId
-				)
+				const obj = this.supplierList.find(item => item.id === supplierId)
 				this.form.setFieldsValue({
 					employeeName,
-					supplierName,
+					supplierName: obj ? obj.supplierName : '',
 					onJobDate,
 					downJobDate,
 					customerName,
