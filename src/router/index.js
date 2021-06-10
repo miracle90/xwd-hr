@@ -8,12 +8,12 @@ const originalPush = VueRouter.prototype.push
 const originalReplace = VueRouter.prototype.replace
 
 // push
-VueRouter.prototype.push = function push (location, onResolve, onReject) {
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
   return originalPush.call(this, location).catch(err => err)
 }
 // replace
-VueRouter.prototype.replace = function push (location, onResolve, onReject) {
+VueRouter.prototype.replace = function push(location, onResolve, onReject) {
   if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject)
   return originalReplace.call(this, location).catch(err => err)
 }
@@ -280,7 +280,8 @@ const routes = [
         meta: {
           openKey: 'sub6',
           selectKey: '/user',
-          bread: ['系统管理', '用户管理-详情']
+          bread: ['系统管理', '用户管理'],
+          isDetail: true
         }
       },
       {
@@ -298,7 +299,8 @@ const routes = [
         meta: {
           openKey: 'sub6',
           selectKey: '/role',
-          bread: ['系统管理', '角色管理-详情']
+          bread: ['系统管理', '角色管理'],
+          isDetail: true
         }
       }
     ]
@@ -311,6 +313,22 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const { isDetail, bread } = to.meta
+  const { id, type } = to.query
+  if (isDetail) {
+    let newBread
+    const str = bread[1].split('-')[0]
+    if (id) {
+      newBread = type === '1' ? [bread[0], `${str}-修改`] : [bread[0], `${str}-查看`]
+    } else {
+      newBread = [bread[0], `${str}-新增`]
+    }
+    to.meta.bread = newBread
+  }
+  next()
 })
 
 export default router

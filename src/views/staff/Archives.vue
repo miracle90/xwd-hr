@@ -63,6 +63,7 @@
 				<a-button @click="exportOpt" style="margin-right: 5px">导出</a-button>
 				<a-upload
 					:action="`${$http.baseURL}/data/employee/import`"
+					:headers="headers"
 					:showUploadList="false"
 					name="file"
 					:before-upload="beforeUpload"
@@ -235,6 +236,9 @@ const columns = [
 export default {
 	data() {
 		return {
+			headers: {
+				token: window.localStorage.getItem('token'),
+			},
 			// customerList: [],
 			// supplierList: [],
 			queryOnJobDateStartTime: '',

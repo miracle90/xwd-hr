@@ -64,7 +64,7 @@
 									v-decorator="[
 										'status',
 										{
-											rules: [{ required: true, message: '请选择租户状态!' }],
+											rules: [{ required: true, message: '请选择角色状态!' }],
 										},
 									]"
 								>
@@ -136,16 +136,36 @@ export default {
 	computed: {
 		//
 	},
-	mounted() {
+	created() {
 		this.getUserList()
 		this.getRuleList()
 		const { id, type } = this.$route.query
+		// let bread = ['系统管理', '新建角色']
 		if (id) {
+			// bread = type === '1' ? ['系统管理', '修改角色'] : ['系统管理', '角色详情']
 			this.id = id
 			this.type = type
 			// this.getRightsTree(id)
 		}
+		// this.$emit('changetitle', bread)
+		// console.log(this.$route.meta.bread)
 	},
+	mounted() {
+	},
+	// beforeRouteEnter(to, from, next) {
+	// 	console.log(to)
+	// 	const { id, type } = to.query
+	// 	let bread = ['系统管理', '新建角色']
+	// 	if (id) {
+	// 		bread = type === '1' ? ['系统管理', '修改角色'] : ['系统管理', '角色详情']
+	// 		// to.meta.bread = type === '1' ? ['系统管理', '修改角色'] : ['系统管理', '角色详情']
+	// 	}
+	// 	to.meta.bread = bread
+	// 	next()
+  //   // 在渲染该组件的对应路由被 confirm 前调用
+  //   // 不！能！获取组件实例 `this`
+  //   // 因为当守卫执行前，组件实例还没被创建
+  // },
 	methods: {
 		onExpand(expandedKeys) {
 			this.expandedKeys = expandedKeys
@@ -233,7 +253,7 @@ export default {
 					remark,
 					rights
 				} = res.data
-				const list = rights.split(', ')
+				const list = rights ? rights.split(', ') : []
 				const checkedKeys = []
 				const expandedKeys = []
 				list.forEach(item => {
@@ -276,8 +296,6 @@ export default {
 						}
 						resultList.push(result.id)
 					}
-
-					console.log(resultList)
 
 					this.spinning = true
 					if (this.id) param.id = this.id

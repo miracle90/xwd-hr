@@ -71,6 +71,14 @@ export {
 } from '@ant-design/icons/lib/outline/ExclamationCircleOutline'
 
 export {
+  default as LeftOutline
+} from '@ant-design/icons/lib/outline/LeftOutline'
+
+export {
+  default as RightOutline
+} from '@ant-design/icons/lib/outline/RightOutline'
+
+export {
   default as CaretDownFill
 } from '@ant-design/icons/lib/fill/CaretDownFill'
 

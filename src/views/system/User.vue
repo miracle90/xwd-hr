@@ -12,10 +12,10 @@
 		>
 			<a-row :gutter="24">
 				<a-col :span="6">
-					<a-form-item label="编号搜索">
+					<a-form-item label="关键字">
 						<a-input
 							v-decorator="[`keyword`]"
-							placeholder="请输入编号/代码搜索"
+							placeholder="请输入关键字搜索"
 						/>
 					</a-form-item>
 				</a-col>
@@ -42,23 +42,7 @@
 					style="margin-right: 5px"
 					>删除</a-button
 				>
-				<!-- <a-button @click="exportOpt" style="margin-right: 5px">导出</a-button>
-				<a-upload
-					:action="`${$http.baseURL}/data/user/import`"
-					:showUploadList="false"
-					name="file"
-					:before-upload="beforeUpload"
-					@change="handleChange"
-				>
-					<a-button>导入</a-button>
-				</a-upload> -->
 			</a-col>
-			<!-- <a-col>
-        <a-button @click="add">新增</a-button>
-        <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-left: 5px;">修改</a-button>
-        <a-button @click="dimission" :disabled="!selectedIds.length" style="margin-left: 5px;">离职</a-button>
-        <a-button @click="selfDimission" :disabled="!selectedIds.length" style="margin-left: 5px;">自离</a-button>
-      </a-col> -->
 		</a-row>
 		<a-row style="margin-bottom: 20px">
 			<a-col>
@@ -447,9 +431,6 @@ export default {
 		// 		},
 		// 	})
 		// },
-		onPickerChange(date, dateString) {
-			console.log(date, dateString)
-		},
 		submit() {
 			//
 		},

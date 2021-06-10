@@ -42,18 +42,6 @@
 			style="display: flex; justify-content: space-between; margin-bottom: 10px"
 		>
 			<a-col>
-				<!-- <a-button @click="applyDownload" style="margin-right: 5px;">下载公众号预支申请</a-button> -->
-				<!-- <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button> -->
-				<!-- <a-upload
-          :action="`${$http.baseURL}/data/employee/import`"
-          :showUploadList="false"
-          name="file"
-          :before-upload="beforeUpload"
-        >
-          <a-button>导入</a-button>
-        </a-upload> -->
-			</a-col>
-			<a-col>
 				<a-button @click="add">新增</a-button>
 				<a-button @click="exportOpt" style="margin-left: 5px">导出</a-button>
 				<!-- <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-left: 5px;">修改</a-button>
