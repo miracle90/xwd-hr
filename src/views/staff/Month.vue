@@ -50,7 +50,7 @@
 		>
 			<a-col>
 				<a-button @click="syncData" style="margin-right: 5px"
-					>数据下载</a-button
+					>数据同步</a-button
 				>
 				<a-button @click="downloadTemplet" style="margin-right: 5px"
 					>模板下载</a-button
@@ -391,8 +391,8 @@ export default {
 		 */
 		syncData() {
 			this.$confirm({
-				title: '数据下载',
-				content: '确定要进行数据下载吗？',
+				title: '数据同步',
+				content: '确定要进行数据同步吗？',
 				okText: '确定',
 				cancelText: '取消',
 				onOk: async () => {

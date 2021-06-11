@@ -12,7 +12,11 @@
           </a-row>
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-item label="客户编码" :label-col="{ span: 6 }">
+              <a-form-item
+                label="客户编码"
+                :label-col="{ span: 6 }"
+                help="编码采用地区简码+引入日期+序号；例如：SZ20210201001"
+              >
                 <a-input
                   :disabled="type === '0'"
                   v-decorator="[`customerCode`, {

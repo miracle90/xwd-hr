@@ -46,7 +46,7 @@
 		>
 			<a-col>
 				<a-button @click="syncData" style="margin-right: 5px"
-					>数据下载</a-button
+					>数据同步</a-button
 				>
 			</a-col>
 		</a-row>
@@ -59,6 +59,12 @@
 					:data-source="data"
 					:rowKey="(record, index) => index"
 				>
+					<span slot="time1" slot-scope="text">{{ text && text !== 'null' ? text : '' }}</span>
+					<span slot="time2" slot-scope="text">{{ text && text !== 'null' ? text : '' }}</span>
+					<span slot="time3" slot-scope="text">{{ text && text !== 'null' ? text : '' }}</span>
+					<span slot="time4" slot-scope="text">{{ text && text !== 'null' ? text : '' }}</span>
+					<span slot="time5" slot-scope="text">{{ text && text !== 'null' ? text : '' }}</span>
+					<span slot="time6" slot-scope="text">{{ text && text !== 'null' ? text : '' }}</span>
 					<!-- <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span> -->
 					<!-- <span slot="jobType" slot-scope="text">{{ ['', '学生工', '农民工', '社会工', '正式工'][text] }}</span> -->
 					<!-- <span slot="action" slot-scope="record">
@@ -121,31 +127,37 @@ const columns = [
 		title: '刷卡1',
 		dataIndex: 'time1',
 		key: 'time1',
+		scopedSlots: { customRender: 'time1' }
 	},
 	{
 		title: '刷卡2',
 		dataIndex: 'time2',
 		key: 'time2',
+		scopedSlots: { customRender: 'time2' }
 	},
 	{
 		title: '刷卡3',
 		dataIndex: 'time3',
 		key: 'time3',
+		scopedSlots: { customRender: 'time3' }
 	},
 	{
 		title: '刷卡4',
 		dataIndex: 'time4',
 		key: 'time4',
+		scopedSlots: { customRender: 'time4' }
 	},
 	{
 		title: '刷卡5',
 		dataIndex: 'time5',
 		key: 'time5',
+		scopedSlots: { customRender: 'time5' }
 	},
 	{
 		title: '刷卡6',
 		dataIndex: 'time6',
 		key: 'time6',
+		scopedSlots: { customRender: 'time6' }
 	},
 	{
 		title: '工时',
@@ -322,8 +334,8 @@ export default {
 		 */
 		syncData() {
 			this.$confirm({
-				title: '数据下载',
-				content: '确定要进行数据下载吗？',
+				title: '数据同步',
+				content: '确定要进行数据同步吗？',
 				okText: '确定',
 				cancelText: '取消',
 				onOk: async () => {

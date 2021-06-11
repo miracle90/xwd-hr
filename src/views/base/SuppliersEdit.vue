@@ -30,7 +30,11 @@
 					</a-row>
 					<a-row :gutter="24">
 						<a-col :span="12">
-							<a-form-item label="供应商编码" :label-col="{ span: 6 }">
+							<a-form-item
+								label="供应商编码"
+								:label-col="{ span: 6 }"
+								help="编码采用地区简码+引入日期+序号；例如：SZ20210201001"
+							>
 								<a-input
 									:disabled="type === '0'"
 									v-decorator="[
@@ -152,11 +156,20 @@
 						</a-col>
 						<a-col :span="12">
 							<a-form-item label="供应商级别" :label-col="{ span: 6 }">
-								<a-input
+								<!-- <a-input
 									:disabled="type === '0'"
 									v-decorator="[`supplierLevel`]"
 									placeholder="请输入供应商级别"
-								/>
+								/> -->
+								<a-select
+									:disabled="type === '0'"
+									v-decorator="['supplierLevel']"
+									placeholder="请选择供应商级别"
+								>
+									<a-select-option value="A">A</a-select-option>
+									<a-select-option value="B">B</a-select-option>
+									<a-select-option value="C">C</a-select-option>
+								</a-select>
 							</a-form-item>
 						</a-col>
 						<a-col :span="12">
@@ -183,7 +196,12 @@
 							<a-form-item label="引荐人" :label-col="{ span: 6 }">
 								<a-input
 									:disabled="type === '0'"
-									v-decorator="[`recommendPersion`]"
+									v-decorator="[
+										`recommendPersion`,
+										{
+											rules: [{ required: true, message: '请输入引荐人!' }],
+										},
+									]"
 									placeholder="请输入引荐人"
 								/>
 							</a-form-item>
@@ -192,7 +210,12 @@
 							<a-form-item label="资源强项" :label-col="{ span: 6 }">
 								<a-input
 									:disabled="type === '0'"
-									v-decorator="[`resourceAdvantage`]"
+									v-decorator="[
+										`resourceAdvantage`,
+										{
+											rules: [{ required: true, message: '请输入资源强项!' }],
+										},
+									]"
 									placeholder="请输入资源强项"
 								/>
 							</a-form-item>

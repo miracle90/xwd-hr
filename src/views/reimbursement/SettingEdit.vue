@@ -53,7 +53,7 @@
 					</a-row>
 					<a-row :gutter="12">
 						<a-col :span="16">
-							<a-form-item label="返费标准(元/工时)" :label-col="{ span: 6 }">
+							<a-form-item label="返费标准(元/小时)" :label-col="{ span: 6 }">
 								<a-input
 									:disabled="type === '0'"
 									v-decorator="[

@@ -211,18 +211,18 @@
 							</a-form-item>
 						</a-col>
 						<a-col :span="12">
-							<a-form-item label="收费标准(元/工时)" :label-col="{ span: 6 }">
+							<a-form-item label="收费标准(元/小时)" :label-col="{ span: 6 }">
 								<a-input
 									:disabled="type === '0'"
 									v-decorator="[
 										`chargeStandard`,
 										{
 											rules: [
-												{ required: true, message: '请输入收费标准(元/工时)!' },
+												{ required: true, message: '请输入收费标准(元/小时)!' },
 											],
 										},
 									]"
-									placeholder="请输入收费标准(元/工时)"
+									placeholder="请输入收费标准(元/小时)"
 								/>
 							</a-form-item>
 						</a-col>

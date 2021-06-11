@@ -150,10 +150,19 @@
 							</a-form-item>
 						</a-col>
 						<a-col :span="12">
-							<a-form-item label="男女比例" :label-col="{ span: 6 }">
+							<a-form-item
+								label="男女比例"
+								:label-col="{ span: 6 }"
+								help="例如：3:1或不限制"
+							>
 								<a-input
 									:disabled="type === '0'"
-									v-decorator="[`demandRatio`]"
+									v-decorator="[
+										`demandRatio`,
+										{
+											rules: [{ required: true, message: '请输入男女比例!' }],
+										},
+									]"
 									placeholder="请输入男女比例"
 								/>
 							</a-form-item>
