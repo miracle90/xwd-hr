@@ -259,7 +259,11 @@ export default {
 	methods: {
 		handleChange(info) {
 			if (info.file.status === 'done') {
-				this.$message.success('上传成功')
+				if (info.file.response.code === '0') {
+					this.$message.success('上传成功')
+				} else {
+					this.$message.error(info.file.response.msg)
+				}
 			} else if (info.file.status === 'error') {
 				this.$message.error('上传失败')
 			}

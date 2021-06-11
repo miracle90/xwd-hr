@@ -28,6 +28,7 @@
         <a-button @click="exportOpt" style="margin-right: 5px;">导出</a-button>
         <a-upload
           :action="`${$http.baseURL}/data/agent/import`"
+          :headers="headers"
           :showUploadList="false"
           name="file"
           :before-upload="beforeUpload"
@@ -147,6 +148,9 @@ const columns = [
 export default {
   data () {
     return {
+      headers: {
+				token: window.localStorage.getItem('token'),
+			},
       customerList: [],
       supplierList: [],
       queryOnJobDateStartTime: '',
@@ -174,11 +178,15 @@ export default {
   },
   methods: {
     handleChange (info) {
-      if (info.file.status === 'done') {
-        this.$message.success('上传成功')
-      } else if (info.file.status === 'error') {
-        this.$message.error('上传失败')
-      }
+			if (info.file.status === 'done') {
+				if (info.file.response.code === '0') {
+					this.$message.success('上传成功')
+				} else {
+					this.$message.error(info.file.response.msg)
+				}
+			} else if (info.file.status === 'error') {
+				this.$message.error('上传失败')
+			}
     },
     beforeUpload (file) {
       const { name } = file
