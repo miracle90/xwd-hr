@@ -195,4 +195,18 @@ export default {
 		box-sizing: border-box;
 	}
 }
+
+ &::-webkit-scrollbar {
+      width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 6px;
+      background: rgba(144, 147, 153, 0.5);
+    }
+    &::-webkit-scrollbar-track {
+      border-radius: 5px;
+      background: transparent;
+    }
+// overflow-x:hidden 隐藏横向滚动条
 </style>

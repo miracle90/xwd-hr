@@ -386,6 +386,10 @@ export default {
 			// 2 保存，/data/demand/saveOrUpdate
 			this.form.validateFields(async (error, values) => {
 				if (!error) {
+					const supplierIdsArr = this.selectedRows.map((item) => item.id)
+					if (!supplierIdsArr || !supplierIdsArr.length) {
+						return	this.$message.error('请选择要发送的供应商')
+					}
 					const { demandBeginDate, demandEndDate, replyEndDate } = values
 					const param = {
 						...values,

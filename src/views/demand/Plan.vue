@@ -30,15 +30,13 @@
 				<a-button @click="add" type="primary" style="margin-right: 5px"
 					>新增</a-button
 				>
-				<!-- <a-button @click="submit" type="primary" style="margin-right: 20px;">提交</a-button> -->
-				<!-- <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-right: 20px;">修改</a-button> -->
 				<a-button
 					@click="deletePlan"
-					:disabled="!selectedIds.length"
+					:disabled="!selectedIds.length || !!selectedRows.filter(item => ([2, 3].includes(item.status) && item.demandType === '客户需求')).length"
 					type="danger"
 					style="margin-right: 5px"
 					>删除</a-button
-				>
+				>（已确认、已回复的客户需求不能删除）
 			</a-col>
 		</a-row>
 		<a-row style="margin-bottom: 20px">
