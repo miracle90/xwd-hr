@@ -246,9 +246,6 @@ export default {
 				this.customerList = res.data
 			}
 		},
-		onPickerChange(date, dateString) {
-			console.log(date, dateString)
-		},
 		async submit(record) {
 			console.log(record)
 			const {
@@ -372,10 +369,8 @@ export default {
 			const res = await this.$http.get('/data/demand/list', {
 				page,
 				limit,
-				demandBeginDate: rangePicker
-					? rangePicker[0].format('YYYY-MM-DD')
-					: null,
-				demandEndDate: rangePicker ? rangePicker[1].format('YYYY-MM-DD') : null,
+				demandBeginDate: rangePicker && rangePicker.length ? rangePicker[0].format('YYYY-MM-DD') : null,
+				demandEndDate: rangePicker && rangePicker.length ? rangePicker[1].format('YYYY-MM-DD') : null,
 				status,
 			})
 			this.spinning = false

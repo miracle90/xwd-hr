@@ -218,117 +218,6 @@ export default {
 		this.handleSearch()
 	},
 	methods: {
-		// beforeUpload (file) {
-		//   console.log('file ', file)
-		//   return true
-		// },
-		/**
-		 * 导出
-		 */
-		// exportOpt () {
-		//   this.$confirm({
-		//     title: '导出',
-		//     content: '确定要进行数据导出吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.form.validateFields(async (error, values) => {
-		//         if (!error) {
-		//           const { date, queryEmployeeNumber, queryEmployeeName } = values
-		//           const param = {
-		//             queryEmployeeNumber,
-		//             queryEmployeeName,
-		//             yearMonth: date ? date.format('YYYY-MM') : null
-		//           }
-		//           this.spinning = true
-		//           const res = await this.$http.get('/data/monthAttence/export', param)
-		//           this.spinning = false
-		//           if (res) {
-		//             const { data } = res
-		//             window.open(data)
-		//             this.$message.success('导出成功')
-		//           }
-		//         }
-		//       })
-		//     }
-		//   })
-		// },
-		/**
-		 * 离职
-		 */
-		// dimission () {
-		//   this.$confirm({
-		//     title: '离职提示',
-		//     content: '确定对员工进行离职操作吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/employee/resign/${id}`)
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('离职操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/employee/batchResign', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量离职操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     }
-		//   })
-		// },
-		/**
-		 * 自离
-		 */
-		// selfDimission () {
-		//   this.$confirm({
-		//     title: '自离提示',
-		//     content: '确定对员工进行自离操作吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('自离操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/employee/batchResignBySelf', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量自离操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     }
-		//   })
-		// },
 		/**
 		 * 数据下载
 		 */
@@ -348,94 +237,9 @@ export default {
 				},
 			})
 		},
-		/**
-		 * 模板下载
-		 */
-		// downloadTemplet () {
-		//   this.$confirm({
-		//     title: '模板下载',
-		//     content: '确定要进行模板下载吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       const res = await this.$http.get('/data/monthAttence/downloadTemplet')
-		//       this.spinning = false
-		//       if (res) {
-		//         this.$message.success('模板下载成功!')
-		//       }
-		//     }
-		//   })
-		// },
-		// onPickerChange (date, dateString) {
-		//   console.log(date, dateString)
-		// },
 		reset() {
 			this.form.resetFields()
 		},
-		// async findCustomerList () {
-		//   const res = await this.$http.get('/data/customer/find')
-		//   if (res) {
-		//     this.customerList = res.data
-		//   }
-		// },
-		// async findSuppliersList () {
-		//   const res = await this.$http.get('/data/supplier/find')
-		//   if (res) {
-		//     this.supplierList = res.data
-		//   }
-		// },
-		/**
-		 * 删除
-		 */
-		// deleteData () {
-		//   this.$confirm({
-		//     title: '删除提示',
-		//     content: '确定要删除所勾选的记录吗？',
-		//     okText: '确定',
-		//     okType: 'danger',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/monthAttence/delete/${id}`)
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('删除考勤数据成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/monthAttence/batchDel', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量删除考勤数据成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     },
-		//     onCancel: () => {
-		//       console.log('Cancel')
-		//     }
-		//   })
-		// },
-		// onSelectChange (selectedRowKeys, selectedRows) {
-		//   this.selectedRowKeys = selectedRowKeys
-		//   this.selectedRows = selectedRows
-		//   this.selectedIds = selectedRows.map(item => item.id)
-		// },
-		// add () {
-		//   this.$router.push('/monthedit')
-		// },
-		// query () {
-		//   this.page = 1
-		//   this.getList()
-		// },
 		onChange(page) {
 			this.page = page
 			this.handleSearch()
@@ -445,23 +249,6 @@ export default {
 			this.limit = limit
 			this.handleSearch()
 		},
-		// async getList () {
-		//   this.spinning = true
-		//   const { page, limit, queryOnJobDateStartTime, queryOnJobDateEndTime, status } = this
-		//   const res = await this.$http.get('/data/employee/list', {
-		//     page,
-		//     limit,
-		//     queryOnJobDateStartTime,
-		//     queryOnJobDateEndTime,
-		//     status
-		//   })
-		//   this.spinning = false
-		//   if (res) {
-		//     const { count, data } = res
-		//     this.data = data
-		//     this.total = count
-		//   }
-		// },
 		handleSearch(e) {
 			if (e) e.preventDefault()
 			this.form.validateFields(async (error, values) => {

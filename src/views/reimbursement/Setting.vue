@@ -311,12 +311,6 @@ export default {
         }
       })
     },
-    onPickerChange (date, dateString) {
-      console.log(date, dateString)
-    },
-    submit () {
-      //
-    },
     reset () {
       this.form.resetFields()
     },

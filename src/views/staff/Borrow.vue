@@ -44,9 +44,6 @@
 			<a-col>
 				<a-button @click="add">新增</a-button>
 				<a-button @click="exportOpt" style="margin-left: 5px">导出</a-button>
-				<!-- <a-button @click="modify" :disabled="selectedIds.length !== 1" style="margin-left: 5px;">修改</a-button>
-        <a-button @click="dimission" :disabled="!selectedIds.length" style="margin-left: 5px;">离职</a-button>
-        <a-button @click="selfDimission" :disabled="!selectedIds.length" style="margin-left: 5px;">自离</a-button> -->
 			</a-col>
 		</a-row>
 		<a-row style="margin-bottom: 20px">
@@ -57,12 +54,6 @@
 					:data-source="data"
 					:rowKey="(record, index) => index"
 				>
-					<!-- <router-link
-            slot="employeeNumber"
-            slot-scope="text, record"
-            style="color: #1890ff"
-            :to="{ path: '/archivesedit', query: { id: record.id, type: 0 }}"
-          >{{ text }}</router-link> -->
 					<span slot="action" slot-scope="record">
 						<router-link
 							style="color: #1890ff"
@@ -176,8 +167,6 @@ const columns = [
 export default {
 	data() {
 		return {
-			// customerList: [],
-			// supplierList: [],
 			queryOnJobDateStartTime: '',
 			queryOnJobDateEndTime: '',
 			spinning: false,
@@ -197,15 +186,9 @@ export default {
 		//
 	},
 	mounted() {
-		// this.findCustomerList()
-		// this.findSuppliersList()
 		this.handleSearch()
 	},
 	methods: {
-		// beforeUpload (file) {
-		//   console.log('file ', file)
-		//   return true
-		// },
 		/**
 		 * 导出
 		 */
@@ -222,8 +205,8 @@ export default {
 							const param = {
 								employeeNumber,
 								employeeName,
-								borrowStartDate: date ? date[0].format('YYYY-MM-DD') : null,
-								borrowEndDate: date ? date[1].format('YYYY-MM-DD') : null,
+								borrowStartDate: date && date.length ? date[0].format('YYYY-MM-DD') : null,
+								borrowEndDate: date && date.length ? date[1].format('YYYY-MM-DD') : null,
 							}
 							this.spinning = true
 							const res = await this.$http.get('/data/borrow/export', param)
@@ -238,82 +221,6 @@ export default {
 				},
 			})
 		},
-		/**
-		 * 离职
-		 */
-		// dimission () {
-		//   this.$confirm({
-		//     title: '离职提示',
-		//     content: '确定对员工进行离职操作吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/employee/resign/${id}`)
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('离职操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/employee/batchResign', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量离职操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     }
-		//   })
-		// },
-		/**
-		 * 自离
-		 */
-		// selfDimission () {
-		//   this.$confirm({
-		//     title: '自离提示',
-		//     content: '确定对员工进行自离操作吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('自离操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/employee/batchResignBySelf', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量自离操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     }
-		//   })
-		// },
 		/**
 		 * 数据推送
 		 */
@@ -352,27 +259,9 @@ export default {
 				},
 			})
 		},
-		onPickerChange(date, dateString) {
-			console.log(date, dateString)
-		},
-		submit() {
-			//
-		},
 		reset() {
 			this.form.resetFields()
 		},
-		// async findCustomerList () {
-		//   const res = await this.$http.get('/data/customer/find')
-		//   if (res) {
-		//     this.customerList = res.data
-		//   }
-		// },
-		// async findSuppliersList () {
-		//   const res = await this.$http.get('/data/supplier/find')
-		//   if (res) {
-		//     this.supplierList = res.data
-		//   }
-		// },
 		deleteBorrow(id) {
 			this.$confirm({
 				title: '删除提示',
@@ -404,10 +293,6 @@ export default {
 		add() {
 			this.$router.push('/borrowedit')
 		},
-		// query () {
-		//   this.page = 1
-		//   this.getList()
-		// },
 		onChange(page) {
 			this.page = page
 			this.handleSearch()
@@ -417,23 +302,6 @@ export default {
 			this.limit = limit
 			this.handleSearch()
 		},
-		// async getList () {
-		//   this.spinning = true
-		//   const { page, limit, queryOnJobDateStartTime, queryOnJobDateEndTime, status } = this
-		//   const res = await this.$http.get('/data/employee/list', {
-		//     page,
-		//     limit,
-		//     queryOnJobDateStartTime,
-		//     queryOnJobDateEndTime,
-		//     status
-		//   })
-		//   this.spinning = false
-		//   if (res) {
-		//     const { count, data } = res
-		//     this.data = data
-		//     this.total = count
-		//   }
-		// },
 		handleSearch(e) {
 			if (e) e.preventDefault()
 			this.form.validateFields(async (error, values) => {
@@ -445,8 +313,8 @@ export default {
 						limit,
 						employeeNumber,
 						employeeName,
-						borrowStartDate: date ? date[0].format('YYYY-MM-DD') : null,
-						borrowEndDate: date ? date[1].format('YYYY-MM-DD') : null,
+						borrowStartDate: date && date.length ? date[0].format('YYYY-MM-DD') : null,
+						borrowEndDate: date && date.length ? date[1].format('YYYY-MM-DD') : null,
 					}
 					this.spinning = true
 					const res = await this.$http.get('/data/borrow/list', param)

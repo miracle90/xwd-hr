@@ -146,11 +146,6 @@
 
 <script>
 const columns = [
-	// {
-	// 	title: '序号',
-	// 	key: 'sort',
-	// 	scopedSlots: { customRender: 'sort' },
-	// },
 	{
 		title: '供应商',
 		dataIndex: 'supplierName',
@@ -289,12 +284,6 @@ export default {
 				this.customerList = res.data
 			}
 		},
-		onPickerChange(date, dateString) {
-			console.log(date, dateString)
-		},
-		submit() {
-			//
-		},
 		reset() {
 			this.status = ''
 			this.rangePicker = null
@@ -372,10 +361,8 @@ export default {
 			const res = await this.$http.get('/data/demand/list4Reply', {
 				page,
 				limit,
-				demandBeginDate: rangePicker
-					? rangePicker[0].format('YYYY-MM-DD')
-					: null,
-				demandEndDate: rangePicker ? rangePicker[1].format('YYYY-MM-DD') : null,
+				demandBeginDate: rangePicker && rangePicker.length ? rangePicker[0].format('YYYY-MM-DD') : null,
+				demandEndDate: rangePicker && rangePicker.length ? rangePicker[1].format('YYYY-MM-DD') : null,
 				status,
 			})
 			this.spinning = false

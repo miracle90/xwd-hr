@@ -116,10 +116,6 @@
 						:to="{ path: '/archivesedit', query: { id: record.id, type: 0 } }"
 						>{{ text }}</router-link
 					>
-					<!-- <span slot="customerId" slot-scope="text">{{ customerList.find(item => item.id === text) ? customerList.find(item => item.id === text).customerName : '' }}</span> -->
-					<!-- <span slot="jobType" slot-scope="text">{{
-						['', '学生工', '农民工', '社会工', '正式工'][text]
-					}}</span> -->
 				</a-table>
 			</a-col>
 		</a-row>
@@ -319,8 +315,8 @@ export default {
 								employeeNumber,
 								employeeName,
 								employStateArr,
-								onJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-								onJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null,
+								onJobDateStartTime: date && date.length ? date[0].format('YYYY-MM-DD') : null,
+								onJobDateEndTime: date && date.length ? date[1].format('YYYY-MM-DD') : null,
 							}
 							this.spinning = true
 							const res = await this.$http.get('/data/employee/export', param)
@@ -459,54 +455,6 @@ export default {
 		reset() {
 			this.form.resetFields()
 		},
-		// async findCustomerList () {
-		//   const res = await this.$http.get('/data/customer/find')
-		//   if (res) {
-		//     this.customerList = res.data
-		//   }
-		// },
-		// async findSuppliersList () {
-		//   const res = await this.$http.get('/data/supplier/find')
-		//   if (res) {
-		//     this.supplierList = res.data
-		//   }
-		// },
-		// deletePlan () {
-		//   this.$confirm({
-		//     title: '删除提示',
-		//     content: '确定要删除所勾选的记录吗？',
-		//     okText: '确定',
-		//     okType: 'danger',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/supplier/delete/${id}`)
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('删除供应商成功!')
-		//           this.getList()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/supplier/batchDel', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量删除供应商成功!')
-		//           this.getList()
-		//         }
-		//       }
-		//     },
-		//     onCancel: () => {
-		//       console.log('Cancel')
-		//     }
-		//   })
-		// },
 		modify() {
 			const id = this.selectedIds[0]
 			// 修改type为1，详情type为0
@@ -520,10 +468,6 @@ export default {
 		add() {
 			this.$router.push('/archivesedit')
 		},
-		// query () {
-		//   this.page = 1
-		//   this.getList()
-		// },
 		onChange(page) {
 			this.page = page
 			this.handleSearch()
@@ -533,23 +477,6 @@ export default {
 			this.limit = limit
 			this.handleSearch()
 		},
-		// async getList () {
-		//   this.spinning = true
-		//   const { page, limit, queryOnJobDateStartTime, queryOnJobDateEndTime, status } = this
-		//   const res = await this.$http.get('/data/employee/list', {
-		//     page,
-		//     limit,
-		//     queryOnJobDateStartTime,
-		//     queryOnJobDateEndTime,
-		//     status
-		//   })
-		//   this.spinning = false
-		//   if (res) {
-		//     const { count, data } = res
-		//     this.data = data
-		//     this.total = count
-		//   }
-		// },
 		handleSearch(e) {
 			if (e) e.preventDefault()
 			this.form.validateFields(async (error, values) => {
@@ -562,8 +489,8 @@ export default {
 						employeeNumber,
 						employeeName,
 						employStateArr,
-						onJobDateStartTime: date ? date[0].format('YYYY-MM-DD') : null,
-						onJobDateEndTime: date ? date[1].format('YYYY-MM-DD') : null,
+						onJobDateStartTime: date && date.length ? date[0].format('YYYY-MM-DD') : null,
+						onJobDateEndTime: date && date.length ? date[1].format('YYYY-MM-DD') : null,
 					}
 					this.spinning = true
 					const res = await this.$http.get('/data/employee/list', param)
