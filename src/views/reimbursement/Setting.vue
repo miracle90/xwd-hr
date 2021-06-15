@@ -1,8 +1,8 @@
 <template>
   <a-spin class="page-wrapper" :spinning="spinning">
-    <a-form :form="form" @submit="() => {
+    <a-form :form="form" @submit.prevent="e => {
         page = 1;
-        handleSearch();
+        handleSearch(e);
       }" layout="horizontal">
       <a-row :gutter="24">
         <a-col :span="6">

@@ -3,9 +3,9 @@
 		<a-form
 			:form="form"
 			@submit="
-				() => {
+				e => {
 					page = 1
-					handleSearch()
+					handleSearch(e)
 				}
 			"
 			layout="horizontal"

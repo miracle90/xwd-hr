@@ -1,8 +1,6 @@
 <template>
   <a-spin class="page-wrapper" :spinning="spinning">
-    <a-form :form="form" @submit="() => {
-        cal();
-      }" layout="horizontal">
+    <a-form :form="form" @submit="cal" layout="horizontal">
       <a-row :gutter="24">
         <a-col :span="6">
           <a-form-item label="核算月份">
@@ -380,7 +378,7 @@ export default {
     //   }
     // },
     cal (e) {
-      if (e) e.preventDefault()
+      e.preventDefault()
       this.form.validateFields(async (error, values) => {
         if (!error) {
           const { yearMonth } = values
@@ -394,18 +392,12 @@ export default {
           const res = await this.$http.get('/data/supplierRebate/cal', param)
           this.spinning = false
           if (res) {
-            const { count, data } = res
-            console.log(count)
-            console.log(data)
             this.handleSearch()
-            // this.data = data
-            // this.total = count
           }
         }
       })
     },
-    handleSearch (e) {
-      if (e) e.preventDefault()
+    handleSearch () {
       this.form.validateFields(async (error, values) => {
         if (!error) {
           const { yearMonth } = values

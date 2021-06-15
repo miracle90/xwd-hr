@@ -11,8 +11,6 @@
   import moment from 'moment'
   import 'moment/locale/zh-cn'
 
-  console.log(zh_CN)
-
   moment.locale('zh-cn')
 
   export default {

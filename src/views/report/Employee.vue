@@ -3,9 +3,9 @@
 		<a-form
 			:form="form"
 			@submit="
-				() => {
+				e => {
 					page = 1
-					handleSearch()
+					handleSearch(e)
 				}
 			"
 			layout="horizontal"
@@ -18,9 +18,9 @@
 							placeholder="请选择雇佣状态"
 							mode="multiple"
 						>
-							<a-select-option value="1">在职</a-select-option>
-							<a-select-option value="2">离职</a-select-option>
-							<a-select-option value="3">自离</a-select-option>
+							<a-select-option value="在职">在职</a-select-option>
+							<a-select-option value="离职">离职</a-select-option>
+							<a-select-option value="自离">自离</a-select-option>
 						</a-select>
 					</a-form-item>
 				</a-col>

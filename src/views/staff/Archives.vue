@@ -2,12 +2,7 @@
 	<a-spin class="page-wrapper" :spinning="spinning">
 		<a-form
 			:form="form"
-			@submit="
-				() => {
-					page = 1
-					handleSearch()
-				}
-			"
+			@submit.prevent="submit"
 			layout="horizontal"
 		>
 			<a-row :gutter="24">
@@ -35,9 +30,9 @@
 							v-decorator="['employStateArr']"
 							placeholder="请选择雇佣状态"
 						>
-							<a-select-option value="1">在职</a-select-option>
-							<a-select-option value="2">离职</a-select-option>
-							<a-select-option value="3">自离</a-select-option>
+							<a-select-option value="在职">在职</a-select-option>
+							<a-select-option value="离职">离职</a-select-option>
+							<a-select-option value="自离">自离</a-select-option>
 						</a-select>
 					</a-form-item>
 				</a-col>
@@ -261,6 +256,11 @@ export default {
 		this.handleSearch()
 	},
 	methods: {
+		submit(e) {
+			e.preventDefault()
+			this.page = 1
+			this.handleSearch()
+		},
 		handleChange(info) {
 			if (info.file.status === 'done') {
 				if (info.file.response.code === '0') {
@@ -477,8 +477,7 @@ export default {
 			this.limit = limit
 			this.handleSearch()
 		},
-		handleSearch(e) {
-			if (e) e.preventDefault()
+		handleSearch() {
 			this.form.validateFields(async (error, values) => {
 				if (!error) {
 					const { date, employeeNumber, employeeName, employStateArr } = values
