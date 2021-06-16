@@ -327,8 +327,8 @@ export default {
 					deptName,
 					borrowAmount,
 					borrowCause,
-					isDeduct: isDeduct === 'true',
-					isReceive: isReceive === 'true',
+					isDeduct: isDeduct === '是',
+					isReceive: isReceive === '是',
 					receiveDate: receiveDate ? Moment(receiveDate) : null,
 					deductYearMonth: deductYearMonth ? Moment(deductYearMonth) : null,
 				})
@@ -337,7 +337,7 @@ export default {
 		handleSearch() {
 			this.form.validateFields(async (error, values) => {
 				if (!error) {
-					const { borrowDate, receiveDate, deductYearMonth } = values
+					const { borrowDate, receiveDate, deductYearMonth, isReceive, isDeduct } = values
 					const param = {
 						...values,
 						borrowDate: borrowDate
@@ -355,6 +355,8 @@ export default {
 								? deductYearMonth
 								: deductYearMonth.format('YYYY-MM')
 							: '',
+						isReceive: isReceive ? '是' : '否',
+						isDeduct: isDeduct ? '是' : '否'
 					}
 					this.spinning = true
 					if (this.id) param.id = this.id
