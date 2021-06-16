@@ -5,7 +5,6 @@
 			<a-col style="margin-right: 30px">
 				<a-range-picker
 					v-model="rangePicker"
-					@change="onPickerChange"
 				/>
 			</a-col>
 			<a-col style="display: flex; align-items: center">状态：</a-col>
@@ -47,8 +46,8 @@
 								: ''
 						}}
 					</span>
-					<span slot="status" slot-scope="record">
-						{{ ['待提交', '待回复', '已回复', '已确认'][record.status] }}
+					<span slot="replyStatus" slot-scope="record">
+						{{ ['待提交', '待回复', '已回复', '已确认'][+record.status] }}
 					</span>
 					<span slot="action" slot-scope="record">
 						<router-link
@@ -67,9 +66,9 @@
 							:to="{
 								path: '/planedit',
 								query: { id: record.demandId, type: 0 },
-							}"
-							>查看</router-link
-						>
+							}">
+							查看
+						</router-link>
 						<!-- 客户需求 + 已审核，跳转审核页面查看详情 -->
 						<router-link
 							v-if="record.demandType === '客户需求' && record.status === 3"
@@ -80,9 +79,9 @@
 							}"
 							>查看</router-link
 						>
-						<a-divider v-if="record.status === 1" type="vertical" />
+						<a-divider v-if="record.status === 1 || record.status === 2" type="vertical" />
 						<router-link
-							v-if="record.status === 1"
+							v-if="record.status === 1 || record.status === 2"
 							style="color: #1890ff"
 							:to="{
 								path: '/reply',
@@ -198,8 +197,9 @@ const columns = [
 	},
 	{
 		title: '状态',
-		key: 'status',
-		scopedSlots: { customRender: 'status' },
+		key: 'replyStatus',
+		// dataIndex: 'replyStatus'
+		scopedSlots: { customRender: 'replyStatus' },
 	},
 	{
 		title: '撤离日期',

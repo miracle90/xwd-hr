@@ -5,7 +5,6 @@
 			<a-col>
         <a-range-picker
           v-model="rangePicker"
-          @change="onPickerChange"
         /></a-col>
 		</a-row>
 		<a-row type="flex" style="margin-bottom: 20px">
