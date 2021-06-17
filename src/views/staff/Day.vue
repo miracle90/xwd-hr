@@ -14,7 +14,7 @@
 				<a-col :span="5">
 					<a-form-item label="出勤年月">
 						<a-month-picker
-							v-decorator="[`monthDay`]"
+							v-decorator="[`yearMonth`]"
 							placeholder="请选择出勤年月"
 						/>
 					</a-form-item>
@@ -222,19 +222,35 @@ export default {
 		 * 数据下载
 		 */
 		syncData() {
-			this.$confirm({
-				title: '数据同步',
-				content: '确定要进行数据同步吗？',
-				okText: '确定',
-				cancelText: '取消',
-				onOk: async () => {
-					this.spinning = true
-					const res = await this.$http.get('/data/dayAttence/syncData')
-					this.spinning = false
-					if (res) {
-						this.$message.success('正在同步数据，请稍后刷新页面查看!')
+			this.form.validateFields(async (error, values) => {
+				if (!error) {
+					let { yearMonth } = values
+					if (!yearMonth) {
+						return this.$message.error('请选择要同步的出勤年月')
 					}
-				},
+					yearMonth = yearMonth.format('YYYY-MM')
+					this.spinning = true
+					const res = await this.$http.get('/data/dayAttence/syncCheckDataExist', {
+						yearMonth
+					})
+					this.spinning = false
+					this.$confirm({
+						title: '数据同步',
+						content: res ? '确定要进行数据同步吗？' : `【${yearMonth}】数据已存在，是否进行同步覆盖`,
+						okText: '确定',
+						cancelText: '取消',
+						onOk: async () => {
+							this.spinning = true
+							const response = await this.$http.get('/data/dayAttence/syncData', {
+								yearMonth
+							})
+							this.spinning = false
+							if (response) {
+								this.$message.success('正在同步数据，请稍后刷新页面查看!')
+							}
+						},
+					})
+				}
 			})
 		},
 		reset() {
@@ -253,14 +269,14 @@ export default {
 			if (e) e.preventDefault()
 			this.form.validateFields(async (error, values) => {
 				if (!error) {
-					const { monthDay, employeeNumber, employeeName } = values
+					const { yearMonth, employeeNumber, employeeName } = values
 					const { page, limit } = this
 					const param = {
 						page,
 						limit,
 						employeeNumber,
 						employeeName,
-						monthDay: monthDay ? monthDay.format('YYYY-MM') : null,
+						yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null,
 					}
 					this.spinning = true
 					const res = await this.$http.get('/data/dayAttence/list', param)
