@@ -97,14 +97,18 @@ export default {
 		// }
 	},
 	mounted() {
-		// console.log('1')
 		this.getMenuList()
 	},
 	methods: {
 		async getMenuList() {
 			const res = await this.$http.get('/data/user/menu')
 			if (res) {
-				this.menuList = res.data
+				if (res.data && res.data.length) {
+					this.menuList = res.data
+				} else {
+					this.$message.warning('暂无页面权限，请联系管理员添加！')
+					this.$router.push('/')
+				}
 			}
 		},
 		handleOk() {
