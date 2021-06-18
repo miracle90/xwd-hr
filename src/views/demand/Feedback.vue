@@ -47,7 +47,7 @@
 						}}
 					</span>
 					<span slot="replyStatus" slot-scope="record">
-						{{ ['待提交', '待回复', '已回复', '已确认'][+record.status] }}
+						{{ ['待提交', '待回复', '已回复', '已确认'][+record.replyStatus] }}
 					</span>
 					<span slot="action" slot-scope="record">
 						<router-link
@@ -79,9 +79,9 @@
 							}"
 							>查看</router-link
 						>
-						<a-divider v-if="record.status === 1 || record.status === 2" type="vertical" />
+						<a-divider v-if="(record.status === 1 || record.status === 2) && record.demandType === '客户需求'" type="vertical" />
 						<router-link
-							v-if="record.status === 1 || record.status === 2"
+							v-if="(record.status === 1 || record.status === 2) && record.demandType === '客户需求'"
 							style="color: #1890ff"
 							:to="{
 								path: '/reply',
@@ -198,7 +198,6 @@ const columns = [
 	{
 		title: '状态',
 		key: 'replyStatus',
-		// dataIndex: 'replyStatus'
 		scopedSlots: { customRender: 'replyStatus' },
 	},
 	{

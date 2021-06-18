@@ -194,7 +194,7 @@ export default {
 						// limit,
 						// queryEmployeeNumber,
 						// queryEmployeeName,
-						employStateArr: employStateArr.join(','),
+						employStateArr: employStateArr && employStateArr.length ? employStateArr.join(',') : null,
 						supplierId,
 						deptName,
 						onJobDateStartTime: date && date.length ? date[0].format('YYYY-MM-DD') : null,
