@@ -162,13 +162,10 @@ export default {
 
 <style lang="less">
 .ant-layout-content {
-	// min-height: auto !important;
-	.page-wrapper {
-		height: 100%;
-	}
+	min-height: auto !important;
 }
 .index {
-	height: 100%;
+	min-height: 100%;
 	.title {
 		margin: 15px 0;
 		text-align: center;

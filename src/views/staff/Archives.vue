@@ -89,36 +89,34 @@
 				>
 			</a-col>
 		</a-row>
-		<a-row style="flex: 1; margin-bottom: 20px">
-			<a-col>
-				<a-table
-					:scroll="{
-						x: 2000,
-						y: '100%',
-						scrollToFirstRowOnChange: true
-					}"
-					:pagination="false"
-					:columns="columns"
-					:data-source="data"
-					:row-selection="{
-						selectedRowKeys,
-						selectedRows,
-						onChange: (selectedRowKeys, selectedRows) =>
-							onSelectChange(selectedRowKeys, selectedRows),
-					}"
-					:rowKey="(record, index) => index"
+		<div style="flex: 1;">
+			<a-table
+				:scroll="{
+					x: 2000,
+					y: tableHeight,
+					scrollToFirstRowOnChange: true
+				}"
+				:pagination="false"
+				:columns="columns"
+				:data-source="data"
+				:row-selection="{
+					selectedRowKeys,
+					selectedRows,
+					onChange: (selectedRowKeys, selectedRows) =>
+						onSelectChange(selectedRowKeys, selectedRows),
+				}"
+				:rowKey="(record, index) => index"
+			>
+				<router-link
+					slot="employeeNumber"
+					slot-scope="text, record"
+					style="color: #1890ff"
+					:to="{ path: '/archivesedit', query: { id: record.id, type: 0 } }"
+					>{{ text }}</router-link
 				>
-					<router-link
-						slot="employeeNumber"
-						slot-scope="text, record"
-						style="color: #1890ff"
-						:to="{ path: '/archivesedit', query: { id: record.id, type: 0 } }"
-						>{{ text }}</router-link
-					>
-				</a-table>
-			</a-col>
-		</a-row>
-		<a-row style="margin-bottom: 20px">
+			</a-table>
+		</div>
+		<a-row>
 			<a-col>
 				<a-pagination
 					v-model="page"
@@ -190,6 +188,7 @@ const columns = [
 		title: '所在部门',
 		dataIndex: 'deptName',
 		key: 'deptName',
+		ellipsis: true,
 	},
 	{
 		title: '本人电话',
@@ -231,6 +230,7 @@ const columns = [
 export default {
 	data() {
 		return {
+			tableHeight: document.documentElement.clientHeight - 420 + 'px',
 			headers: {
 				token: window.localStorage.getItem('token'),
 			},
@@ -257,6 +257,9 @@ export default {
 	mounted() {
 		// this.findCustomerList()
 		// this.findSuppliersList()
+		window.onresize = function () {
+      this.tableHeight = document.documentElement.clientHeight - 260 + 'px'
+    }
 		this.handleSearch()
 	},
 	methods: {

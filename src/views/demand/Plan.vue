@@ -38,10 +38,10 @@
 				>（已确认、已回复的客户需求不能删除）
 			</a-col>
 		</a-row>
-		<a-row style="margin-bottom: 20px">
+		<a-row style="flex: 1; margin-bottom: 20px">
 			<a-col>
 				<a-table
-					:scroll="{ x: 2000 }"
+					:scroll="{ x: 2000, y: tableHeight }"
 					:pagination="false"
 					:columns="columns"
 					:data-source="data"
@@ -103,7 +103,7 @@
 				</a-table>
 			</a-col>
 		</a-row>
-		<a-row style="margin-bottom: 20px">
+		<a-row>
 			<a-col>
 				<a-pagination
 					v-model="page"
@@ -215,6 +215,7 @@ const columns = [
 export default {
 	data() {
 		return {
+			tableHeight: document.documentElement.clientHeight - 420 + 'px',
 			customerList: [],
 			rangePicker: null,
 			status: '',
@@ -235,6 +236,10 @@ export default {
 		//
 	},
 	mounted() {
+		/** 控制table的高度 */
+    window.onresize = function () {
+      this.tableHeight = document.documentElement.clientHeight - 420 + 'px'
+    }
 		this.getList()
 		this.findCustomerList()
 	},
@@ -384,4 +389,12 @@ export default {
 </script>
 
 <style lang="less">
+.page-wrapper {
+	height: 100%;
+	.ant-spin-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+}
 </style>

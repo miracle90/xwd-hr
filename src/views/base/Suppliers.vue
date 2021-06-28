@@ -33,7 +33,7 @@
 				>
 			</a-col>
 		</a-row>
-		<a-row style="margin-bottom: 20px">
+		<a-row style="flex: 1; margin-bottom: 20px">
 			<a-col>
 				<!-- <Drag-Table
 					:data="data"
@@ -48,7 +48,7 @@
 					>
 				</Drag-Table> -->
 				<a-table
-					:scroll="{ x: 1500 }"
+					:scroll="{ x: 1500, y: tableHeight }"
 					:pagination="false"
 					:columns="columns"
 					:data-source="data"
@@ -70,7 +70,7 @@
 				</a-table>
 			</a-col>
 		</a-row>
-		<a-row style="margin-bottom: 20px">
+		<a-row>
 			<a-col>
 				<a-pagination
 					v-model="page"
@@ -156,6 +156,7 @@ export default {
 	},
 	data() {
 		return {
+			tableHeight: document.documentElement.clientHeight - 380 + 'px',
 			spinning: false,
 			delayTime: 500,
 			selectedRowKeys: [],
@@ -174,8 +175,10 @@ export default {
 		//
 	},
 	mounted() {
+		window.onresize = function () {
+      this.tableHeight = document.documentElement.clientHeight - 380 + 'px'
+    }
 		this.getList()
-		// this.findList()
 	},
 	methods: {
 		/**
@@ -289,4 +292,12 @@ export default {
 </script>
 
 <style lang="less">
+.page-wrapper {
+	height: 100%;
+	.ant-spin-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+}
 </style>

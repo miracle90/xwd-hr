@@ -50,10 +50,10 @@
 				>
 			</a-col>
 		</a-row>
-		<a-row style="margin-bottom: 20px">
+		<a-row style="flex: 1; margin-bottom: 20px">
 			<a-col>
 				<a-table
-					:scroll="{ x: 1600 }"
+					:scroll="{ x: 1600, y: tableHeight }"
 					:pagination="false"
 					:columns="columns"
 					:data-source="data"
@@ -73,7 +73,7 @@
 				</a-table>
 			</a-col>
 		</a-row>
-		<a-row style="margin-bottom: 20px">
+		<a-row>
 			<a-col>
 				<a-pagination
 					v-model="page"
@@ -189,6 +189,7 @@ const columns = [
 export default {
 	data() {
 		return {
+			tableHeight: document.documentElement.clientHeight - 420 + 'px',
 			headers: {
 				token: window.localStorage.getItem('token'),
 			},
@@ -213,6 +214,9 @@ export default {
 		//
 	},
 	mounted() {
+		window.onresize = function () {
+      this.tableHeight = document.documentElement.clientHeight - 420 + 'px'
+    }
 		// this.findCustomerList()
 		// this.findSuppliersList()
 		this.handleSearch()
@@ -294,4 +298,12 @@ export default {
 </script>
 
 <style lang="less">
+.page-wrapper {
+	height: 100%;
+	.ant-spin-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+}
 </style>

@@ -19,9 +19,10 @@
         <a-button @click="deleteCustomer" :disabled="!selectedIds.length" type="danger" style="margin-right: 20px;">删除</a-button>
       </a-col>
     </a-row>
-    <a-row style="margin-bottom: 20px;">
+    <a-row style="flex: 1; margin-bottom: 20px;">
       <a-col>
         <a-table
+          :scroll="{ y: tableHeight }"
           :pagination="false"
           :columns="columns"
           :data-source="data"
@@ -41,7 +42,7 @@
         </a-table>
       </a-col>
     </a-row>
-    <a-row style="margin-bottom: 20px;">
+    <a-row>
       <a-col>
         <a-pagination
           v-model="page"
@@ -107,6 +108,7 @@ const columns = [
 export default {
   data () {
     return {
+      tableHeight: document.documentElement.clientHeight - 380 + 'px',
       spinning: false,
       delayTime: 500,
       selectedRowKeys: [],
@@ -125,6 +127,9 @@ export default {
     //
   },
   mounted () {
+    window.onresize = function () {
+      this.tableHeight = document.documentElement.clientHeight - 380 + 'px'
+    }
     this.getList()
     // this.findList()
   },
@@ -216,6 +221,12 @@ export default {
 </script>
 
 <style lang="less">
-  .page-wrapper {
-  }
+.page-wrapper {
+	height: 100%;
+	.ant-spin-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+}
 </style>
