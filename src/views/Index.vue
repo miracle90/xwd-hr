@@ -162,7 +162,10 @@ export default {
 
 <style lang="less">
 .ant-layout-content {
-	min-height: auto !important;
+	// min-height: auto !important;
+	.page-wrapper {
+		height: 100%;
+	}
 }
 .index {
 	height: 100%;
@@ -175,7 +178,6 @@ export default {
 	}
 	.header {
 		display: flex;
-		// justify-content: flex-start;
 		justify-content: space-between;
 		align-items: center;
 		padding: 0 20px;
@@ -212,5 +214,4 @@ export default {
       border-radius: 5px;
       background: transparent;
     }
-// overflow-x:hidden 隐藏横向滚动条
 </style>

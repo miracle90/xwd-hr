@@ -89,10 +89,14 @@
 				>
 			</a-col>
 		</a-row>
-		<a-row style="margin-bottom: 20px">
+		<a-row style="flex: 1; margin-bottom: 20px">
 			<a-col>
 				<a-table
-					:scroll="{ x: 2000 }"
+					:scroll="{
+						x: 2000,
+						y: '100%',
+						scrollToFirstRowOnChange: true
+					}"
 					:pagination="false"
 					:columns="columns"
 					:data-source="data"
@@ -507,4 +511,9 @@ export default {
 </script>
 
 <style lang="less">
+.ant-spin-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
 </style>
