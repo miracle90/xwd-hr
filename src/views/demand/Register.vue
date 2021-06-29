@@ -264,11 +264,14 @@
 						</a-col>
 						<a-col :span="12">
 							<a-form-item label="民族" :label-col="{ span: 6 }">
-								<a-input
-									:disabled="type === '0'"
-									v-decorator="[`nation`]"
-									placeholder="请输入民族"
-								/>
+								<a-select
+                  :disabled="type === '0'"
+                  v-decorator="[`nation`]"
+                  placeholder="请选择民族"
+                  show-search
+                >
+                  <a-select-option :value="item.value" v-for="item in nationList" :key="item.key">{{ item.key }}</a-select-option>
+                </a-select>
 							</a-form-item>
 						</a-col>
 						<a-col :span="12">
@@ -311,6 +314,7 @@ const columns = [
 export default {
 	data() {
 		return {
+			nationList: [],
 			deptList: [],
 			customerList: [],
 			selectedRowKeys: [],
@@ -328,6 +332,7 @@ export default {
 	},
 	mounted() {
 		const { id, demandId, type } = this.$route.query
+		this.getNation()
 		this.findCustomerList()
 		this.findSuppliersList()
 		if (id) {
@@ -339,6 +344,12 @@ export default {
 		}
 	},
 	methods: {
+		async getNation() {
+			const res = await this.$http.get('/data/employee/findNation')
+			if (res) {
+				this.nationList = res.data
+			}
+		},
 		// async findSupplier (id) {
 		//   const res = await this.$http.get(`/data/demand/findSupplier/${id}`)
 		//   if (res) {
