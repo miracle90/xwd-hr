@@ -1,5 +1,5 @@
-const path = require("path")
-const webpack = require("webpack")
+const path = require('path')
+const webpack = require('webpack')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 function resolve(dir) {
@@ -7,13 +7,13 @@ function resolve(dir) {
 }
 
 module.exports = {
-  // devServer: {
-  //   port: 8888
-  // },
+  devServer: {
+    port: 9999
+  },
   productionSourceMap: false,
   chainWebpack: config => {
     config.resolve.alias
-      .set("@", resolve("src"))
+      .set('@', resolve('src'))
       // .set("assets", resolve("src/assets"))
       // .set("components", resolve("src/components"))
       // .set("base", resolve("baseConfig"))

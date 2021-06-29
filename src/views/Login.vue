@@ -2,7 +2,7 @@
 	<div class="login-page">
 		<transition name="form-fade" mode="in-out">
 			<a-spin class="form-contianer" v-show="showLogin" :spinning="spinning">
-				<h1 class="manage-tip">人力资源供应系统</h1>
+				<h1 class="manage-tip">云劳务管理系统</h1>
 				<a-form :layout="formLayout" :form="form" @submit="handleSubmit">
 					<a-form-item
 						label="用户名"
