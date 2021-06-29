@@ -1,7 +1,7 @@
 <template>
 	<a-layout class="index">
 		<a-layout-sider class="container">
-			<h1 class="title">人力供应系统</h1>
+			<h1 class="title">云劳务管理系统</h1>
 			<a-menu
 				:default-selected-keys="[$route.meta.selectKey]"
 				:default-open-keys="[$route.meta.openKey]"

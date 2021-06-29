@@ -78,7 +78,7 @@
                   placeholder="请选择民族"
                   show-search
                 >
-                  <a-select-option :value="item.value" v-for="item in nationList" :key="item.key">{{ item.key }}</a-select-option>
+                  <a-select-option :value="item.value" v-for="item in nationList" :key="item.value">{{ item.value }}</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>

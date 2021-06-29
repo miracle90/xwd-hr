@@ -21,6 +21,7 @@ module.exports = {
     'Unexpected-trailing-comma': 0,
     'comma-dangle': 0,
     'camelcase': 0,
-    'indent': 0
+    'indent': 0,
+    'import/no-duplicates': 0
   }
 }
