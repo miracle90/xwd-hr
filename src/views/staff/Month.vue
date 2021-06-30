@@ -23,7 +23,7 @@
 				<a-col :span="5">
 					<a-form-item label="工号">
 						<a-input
-							v-decorator="[`queryEmployeeNumber`]"
+							v-decorator="[`employeeNumber`]"
 							placeholder="请输入工号"
 						/>
 					</a-form-item>
@@ -31,7 +31,7 @@
 				<a-col :span="5">
 					<a-form-item label="姓名">
 						<a-input
-							v-decorator="[`queryEmployeeName`]"
+							v-decorator="[`employeeName`]"
 							placeholder="请输入姓名"
 						/>
 					</a-form-item>
