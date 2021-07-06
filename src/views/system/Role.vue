@@ -41,8 +41,8 @@
             <a-divider type="vertical" />
             <a v-if="record.status === 1" @click="use(0, record.id)">停用</a>
             <a v-else @click="use(1, record.id)">启用</a>
-            <!-- <a-divider type="vertical" /> -->
-            <!-- <a  @click="deleteData(1, record.id)" style="color: red">删除</a> -->
+            <a-divider type="vertical" />
+            <a  @click="deleteData(record.id)" style="color: red">删除</a>
           </span>
           <!-- <router-link
             slot="employeeNumber"
@@ -179,127 +179,127 @@ export default {
         }
       })
     },
-    handleChange (info) {
-      if (info.file.status === 'done') {
-        this.$message.success('上传成功')
-      } else if (info.file.status === 'error') {
-        this.$message.error('上传失败')
-      }
-    },
-    beforeUpload (file) {
-      const { name } = file
-      const type = name.split('.').pop()
-      if (['xlsx', 'xls', 'xltx', 'xlt', 'xlsm', 'xlsm', 'xlsb', 'xltm', 'csv'].includes(type)) {
-        return true
-      }
-      this.$message.error('请上传正确格式的表格文件')
-      return false
-    },
+    // handleChange (info) {
+    //   if (info.file.status === 'done') {
+    //     this.$message.success('上传成功')
+    //   } else if (info.file.status === 'error') {
+    //     this.$message.error('上传失败')
+    //   }
+    // },
+    // beforeUpload (file) {
+    //   const { name } = file
+    //   const type = name.split('.').pop()
+    //   if (['xlsx', 'xls', 'xltx', 'xlt', 'xlsm', 'xlsm', 'xlsb', 'xltm', 'csv'].includes(type)) {
+    //     return true
+    //   }
+    //   this.$message.error('请上传正确格式的表格文件')
+    //   return false
+    // },
     /**
      * 导出
      */
-    exportOpt () {
-      this.$confirm({
-        title: '导出',
-        content: '确定要进行数据导出吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.form.validateFields(async (error, values) => {
-            if (!error) {
-              const { keyword } = values
-              const param = {
-                keyword
-              }
-              this.spinning = true
-              const res = await this.$http.get('/data/role/export', param)
-              this.spinning = false
-              if (res) {
-                const { data } = res
-                window.open(data)
-                this.$message.success('导出成功')
-              }
-            }
-          })
-        }
-      })
-    },
+    // exportOpt () {
+    //   this.$confirm({
+    //     title: '导出',
+    //     content: '确定要进行数据导出吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.form.validateFields(async (error, values) => {
+    //         if (!error) {
+    //           const { keyword } = values
+    //           const param = {
+    //             keyword
+    //           }
+    //           this.spinning = true
+    //           const res = await this.$http.get('/data/role/export', param)
+    //           this.spinning = false
+    //           if (res) {
+    //             const { data } = res
+    //             window.open(data)
+    //             this.$message.success('导出成功')
+    //           }
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
     /**
      * 离职
      */
-    dimission () {
-      this.$confirm({
-        title: '离职提示',
-        content: '确定对员工进行离职操作吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.spinning = true
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/employee/resign/${id}`)
-            this.spinning = false
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('离职操作成功!')
-              this.handleSearch()
-            }
-          } else {
-            const res = await this.$http.post('/data/employee/batchResign', {
-              idsArr: this.selectedIds
-            })
-            this.spinning = false
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('批量离职操作成功!')
-              this.handleSearch()
-            }
-          }
-        }
-      })
-    },
+    // dimission () {
+    //   this.$confirm({
+    //     title: '离职提示',
+    //     content: '确定对员工进行离职操作吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       if (this.selectedIds.length === 1) {
+    //         const id = this.selectedIds[0]
+    //         const res = await this.$http.post(`/data/employee/resign/${id}`)
+    //         this.spinning = false
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('离职操作成功!')
+    //           this.handleSearch()
+    //         }
+    //       } else {
+    //         const res = await this.$http.post('/data/employee/batchResign', {
+    //           idsArr: this.selectedIds
+    //         })
+    //         this.spinning = false
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('批量离职操作成功!')
+    //           this.handleSearch()
+    //         }
+    //       }
+    //     }
+    //   })
+    // },
     /**
      * 自离
      */
-    selfDimission () {
-      this.$confirm({
-        title: '自离提示',
-        content: '确定对员工进行自离操作吗？',
-        okText: '确定',
-        cancelText: '取消',
-        onOk: async () => {
-          this.spinning = true
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
-            this.spinning = false
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('自离操作成功!')
-              this.handleSearch()
-            }
-          } else {
-            const res = await this.$http.post('/data/employee/batchResignBySelf', {
-              idsArr: this.selectedIds
-            })
-            this.spinning = false
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('批量自离操作成功!')
-              this.handleSearch()
-            }
-          }
-        }
-      })
-    },
+    // selfDimission () {
+    //   this.$confirm({
+    //     title: '自离提示',
+    //     content: '确定对员工进行自离操作吗？',
+    //     okText: '确定',
+    //     cancelText: '取消',
+    //     onOk: async () => {
+    //       this.spinning = true
+    //       if (this.selectedIds.length === 1) {
+    //         const id = this.selectedIds[0]
+    //         const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
+    //         this.spinning = false
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('自离操作成功!')
+    //           this.handleSearch()
+    //         }
+    //       } else {
+    //         const res = await this.$http.post('/data/employee/batchResignBySelf', {
+    //           idsArr: this.selectedIds
+    //         })
+    //         this.spinning = false
+    //         if (res) {
+    //           this.selectedIds = []
+    //           this.selectedRowKeys = []
+    //           this.selectedRows = []
+    //           this.$message.success('批量自离操作成功!')
+    //           this.handleSearch()
+    //         }
+    //       }
+    //     }
+    //   })
+    // },
     /**
      * 数据推送
      */
@@ -353,7 +353,7 @@ export default {
     //     this.supplierList = res.data
     //   }
     // },
-    deletePlan () {
+    deleteData (id) {
       this.$confirm({
         title: '删除提示',
         content: '确定要删除所勾选的记录吗？',
@@ -361,44 +361,43 @@ export default {
         okType: 'danger',
         cancelText: '取消',
         onOk: async () => {
-          if (this.selectedIds.length === 1) {
-            const id = this.selectedIds[0]
-            const res = await this.$http.post(`/data/supplier/delete/${id}`)
+          // if (this.selectedIds.length === 1) {
+            const res = await this.$http.post(`/data/role/delete/${id}`)
             if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('删除供应商成功!')
-              this.getList()
+              // this.selectedIds = []
+              // this.selectedRowKeys = []
+              // this.selectedRows = []
+              this.$message.success('角色删除成功!')
+              this.handleSearch()
             }
-          } else {
-            const res = await this.$http.post('/data/supplier/batchDel', {
-              idsArr: this.selectedIds
-            })
-            if (res) {
-              this.selectedIds = []
-              this.selectedRowKeys = []
-              this.selectedRows = []
-              this.$message.success('批量删除供应商成功!')
-              this.getList()
-            }
-          }
+          // } else {
+          //   const res = await this.$http.post('/data/supplier/batchDel', {
+          //     idsArr: this.selectedIds
+          //   })
+          //   if (res) {
+          //     this.selectedIds = []
+          //     this.selectedRowKeys = []
+          //     this.selectedRows = []
+          //     this.$message.success('批量删除供应商成功!')
+          //     this.getList()
+          //   }
+          // }
         },
         onCancel: () => {
           //
         }
       })
     },
-    modify () {
-      const id = this.selectedIds[0]
-      // 修改type为1，详情type为0
-      this.$router.push({ path: '/archivesedit', query: { id, type: 1 } })
-    },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-      this.selectedIds = selectedRows.map(item => item.id)
-    },
+    // modify () {
+    //   const id = this.selectedIds[0]
+    //   // 修改type为1，详情type为0
+    //   this.$router.push({ path: '/archivesedit', query: { id, type: 1 } })
+    // },
+    // onSelectChange (selectedRowKeys, selectedRows) {
+    //   this.selectedRowKeys = selectedRowKeys
+    //   this.selectedRows = selectedRows
+    //   this.selectedIds = selectedRows.map(item => item.id)
+    // },
     add () {
       this.$router.push('/roleedit')
     },
