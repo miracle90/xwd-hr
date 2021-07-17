@@ -202,11 +202,9 @@ export default {
                 yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null
               }
               this.spinning = true
-              const res = await this.$http.get('/data/supplierRebate/export', param)
+              const res = await this.$http.download('/data/supplierRebate/export', '返费计算-导出', param)
               this.spinning = false
               if (res) {
-                const { data } = res
-                window.open(data)
                 this.$message.success('导出成功')
               }
             }

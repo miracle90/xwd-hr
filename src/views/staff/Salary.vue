@@ -312,11 +312,9 @@ export default {
 								yearMonths: date ? date.format('YYYY-MM') : null,
 							}
 							this.spinning = true
-							const res = await this.$http.get('/data/payRoll/export', param)
+							const res = await this.$http.download('/data/payRoll/export', '工资核算-导出', param)
 							this.spinning = false
 							if (res) {
-								const { data } = res
-								window.open(data)
 								this.$message.success('导出成功')
 							}
 						}
@@ -324,101 +322,6 @@ export default {
 				},
 			})
 		},
-		/**
-		 * 离职
-		 */
-		// dimission () {
-		//   this.$confirm({
-		//     title: '离职提示',
-		//     content: '确定对员工进行离职操作吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/employee/resign/${id}`)
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('离职操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/employee/batchResign', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量离职操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     }
-		//   })
-		// },
-		/**
-		 * 自离
-		 */
-		// selfDimission () {
-		//   this.$confirm({
-		//     title: '自离提示',
-		//     content: '确定对员工进行自离操作吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('自离操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/employee/batchResignBySelf', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量自离操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     }
-		//   })
-		// },
-		/**
-		 * 数据推送
-		 */
-		// dataPush () {
-		//   this.$confirm({
-		//     title: '数据推送',
-		//     content: '确定要进行数据推送吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       const res = await this.$http.post('/data/employee/dataPush')
-		//       this.spinning = false
-		//       if (res) {
-		//         this.$message.success('数据推送成功!')
-		//       }
-		//     }
-		//   })
-		// },
 		/**
 		 * 模板下载
 		 */
@@ -430,13 +333,12 @@ export default {
 				cancelText: '取消',
 				onOk: async () => {
 					this.spinning = true
-					const res = await this.$http.get('/data/payRoll/downloadTemplet')
+					const res = await this.$http.download('/data/payRoll/downloadTemplet', '工资核算-模板下载')
 					this.spinning = false
 					if (res) {
-						window.open(res.data)
-						this.$message.success('模板下载成功!')
+						this.$message.success('模板下载成功！')
 					}
-				},
+				}
 			})
 		},
 		reset() {

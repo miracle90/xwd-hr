@@ -326,12 +326,10 @@ export default {
 								onJobDateEndTime: date && date.length ? date[1].format('YYYY-MM-DD') : null,
 							}
 							this.spinning = true
-							const res = await this.$http.get('/data/employee/export', param)
+							const res = await this.$http.download('/data/employee/export', '员工档案-导出', param)
 							this.spinning = false
 							if (res) {
-								const { data } = res
-								window.open(data)
-								this.$message.success('导出成功')
+								this.$message.success('导出成功！')
 							}
 						}
 					})
@@ -420,7 +418,7 @@ export default {
 			})
 		},
 		/**
-		 * 数据下载
+		 * 数据同步
 		 */
 		dataPush() {
 			this.$confirm({
@@ -449,12 +447,10 @@ export default {
 				cancelText: '取消',
 				onOk: async () => {
 					this.spinning = true
-					const res = await this.$http.get('/data/employee/downloadTemplet')
+					const res = await this.$http.download('/data/employee/downloadTemplet', '员工档案-模板下载')
 					this.spinning = false
 					if (res) {
-						const { data } = res
-						window.open(data)
-						this.$message.success('模板下载成功!')
+						this.$message.success('模板下载成功！')
 					}
 				},
 			})

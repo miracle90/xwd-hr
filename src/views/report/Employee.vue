@@ -201,11 +201,9 @@ export default {
 						onJobDateEndTime: date && date.length ? date[1].format('YYYY-MM-DD') : null,
 					}
 					this.spinning = true
-					const res = await this.$http.get('/data/employee/export', param)
+					const res = await this.$http.download('/data/employee/export', '员工花名册-导出', param)
 					this.spinning = false
 					if (res) {
-						const { data } = res
-						window.open(data)
 						this.$message.success('导出成功')
 					}
 				}

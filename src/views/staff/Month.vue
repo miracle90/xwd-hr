@@ -303,15 +303,10 @@ export default {
 								yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null,
 							}
 							this.spinning = true
-							const res = await this.$http.get(
-								'/data/monthAttence/export',
-								param
-							)
+							const res = await this.$http.download('/data/monthAttence/export', '月考勤数据-导出', param)
 							this.spinning = false
 							if (res) {
-								const { data } = res
-								window.open(data)
-								this.$message.success('导出成功')
+								this.$message.success('导出成功！')
 							}
 						}
 					})
@@ -319,83 +314,7 @@ export default {
 			})
 		},
 		/**
-		 * 离职
-		 */
-		// dimission () {
-		//   this.$confirm({
-		//     title: '离职提示',
-		//     content: '确定对员工进行离职操作吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/employee/resign/${id}`)
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('离职操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/employee/batchResign', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量离职操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     }
-		//   })
-		// },
-		/**
-		 * 自离
-		 */
-		// selfDimission () {
-		//   this.$confirm({
-		//     title: '自离提示',
-		//     content: '确定对员工进行自离操作吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       if (this.selectedIds.length === 1) {
-		//         const id = this.selectedIds[0]
-		//         const res = await this.$http.post(`/data/employee/resignBySelf/${id}`)
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('自离操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       } else {
-		//         const res = await this.$http.post('/data/employee/batchResignBySelf', {
-		//           idsArr: this.selectedIds
-		//         })
-		//         this.spinning = false
-		//         if (res) {
-		//           this.selectedIds = []
-		//           this.selectedRowKeys = []
-		//           this.selectedRows = []
-		//           this.$message.success('批量自离操作成功!')
-		//           this.handleSearch()
-		//         }
-		//       }
-		//     }
-		//   })
-		// },
-		/**
-		 * 数据下载
+		 * 数据同步
 		 */
 		syncData() {
 			this.form.validateFields(async (error, values) => {
@@ -430,25 +349,6 @@ export default {
 			})
 		},
 		/**
-		 * 数据推送
-		 */
-		// dataPush () {
-		//   this.$confirm({
-		//     title: '数据推送',
-		//     content: '确定要进行数据推送吗？',
-		//     okText: '确定',
-		//     cancelText: '取消',
-		//     onOk: async () => {
-		//       this.spinning = true
-		//       const res = await this.$http.post('/data/monthAttence/dataPush')
-		//       this.spinning = false
-		//       if (res) {
-		//         this.$message.success('数据推送成功!')
-		//       }
-		//     }
-		//   })
-		// },
-		/**
 		 * 模板下载
 		 */
 		downloadTemplet() {
@@ -459,13 +359,18 @@ export default {
 				cancelText: '取消',
 				onOk: async () => {
 					this.spinning = true
-					const res = await this.$http.get('/data/monthAttence/downloadTemplet')
+					const res = await this.$http.download('/data/monthAttence/downloadTemplet', '月考勤数据-模板下载')
 					this.spinning = false
 					if (res) {
-						const { data } = res
-						window.open(data)
-						this.$message.success('模板下载成功!')
+						this.$message.success('模板下载成功！')
 					}
+					// const res = await this.$http.get('/data/monthAttence/downloadTemplet')
+					// this.spinning = false
+					// if (res) {
+					// 	const { data } = res
+					// 	window.open(data)
+					// 	this.$message.success('模板下载成功!')
+					// }
 				},
 			})
 		},

@@ -81,7 +81,32 @@ const http = {
           resolve()
         })
     })
-  }
+  },
+  download: (url, name, params = {}) => new Promise((resolve, reject) => {
+    axios.get(url, {
+      params,
+      responseType: 'blob'
+    })
+      .then((response) => {
+        console.log(response.data)
+        resolve(response.data)
+        // 处理文档流
+        const blob = new Blob([response.data])
+        const fileName = `${name}.xlsx`
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href) // 释放URL 对象
+        document.body.removeChild(elink)
+    })
+      .catch(() => {
+        message.error('网络异常')
+        resolve()
+      })
+  })
 }
 
 export default http

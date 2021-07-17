@@ -32,8 +32,6 @@
 			style="display: flex; justify-content: space-between; margin-bottom: 10px"
 		>
 			<a-col>
-				<!-- <a-button @click="dataPush" style="margin-right: 5px;">数据推送</a-button> -->
-				<!-- <a-button @click="downloadTemplet" style="margin-right: 5px;">模板下载</a-button> -->
 				<a-button @click="add" style="margin-right: 5px">新增用户</a-button>
 				<a-button
 					@click="deleteData(2)"
@@ -397,44 +395,6 @@ export default {
 				},
 			})
 		},
-		/**
-		 * 数据推送
-		 */
-		// dataPush() {
-		// 	this.$confirm({
-		// 		title: '数据推送',
-		// 		content: '确定要进行数据推送吗？',
-		// 		okText: '确定',
-		// 		cancelText: '取消',
-		// 		onOk: async () => {
-		// 			this.spinning = true
-		// 			const res = await this.$http.post('/data/employee/dataPush')
-		// 			this.spinning = false
-		// 			if (res) {
-		// 				this.$message.success('数据推送成功!')
-		// 			}
-		// 		},
-		// 	})
-		// },
-		/**
-		 * 模板下载
-		 */
-		// downloadTemplet() {
-		// 	this.$confirm({
-		// 		title: '模板下载',
-		// 		content: '确定要进行模板下载吗？',
-		// 		okText: '确定',
-		// 		cancelText: '取消',
-		// 		onOk: async () => {
-		// 			this.spinning = true
-		// 			const res = await this.$http.get('/data/employee/downloadTemplet')
-		// 			this.spinning = false
-		// 			if (res) {
-		// 				this.$message.success('模板下载成功!')
-		// 			}
-		// 		},
-		// 	})
-		// },
 		submit() {
 			//
 		},

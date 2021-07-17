@@ -193,15 +193,13 @@ export default {
 				onOk: async () => {
 					const { keyword } = this
 					this.spinning = true
-					const res = await this.$http.get('/data/supplier/export', {
+          const res = await this.$http.download('/data/supplier/export', '供应商管理', {
 						keyword
 					})
-					this.spinning = false
-					if (res) {
-						const { data } = res
-						window.open(data)
-						this.$message.success('导出成功')
-					}
+          this.spinning = false
+          if (res) {
+            this.$message.success('导出成功！')
+          }
 				}
 			})
 		},

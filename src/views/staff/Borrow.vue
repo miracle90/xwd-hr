@@ -216,11 +216,9 @@ export default {
 								borrowEndDate: date && date.length ? date[1].format('YYYY-MM-DD') : null,
 							}
 							this.spinning = true
-							const res = await this.$http.get('/data/borrow/export', param)
+							const res = await this.$http.download('/data/borrow/export', '预支管理-导出', param)
 							this.spinning = false
 							if (res) {
-								const { data } = res
-								window.open(data)
 								this.$message.success('导出成功')
 							}
 						}
@@ -243,25 +241,6 @@ export default {
 					this.spinning = false
 					if (res) {
 						this.$message.success('下载公众号预支申请成功!')
-					}
-				},
-			})
-		},
-		/**
-		 * 模板下载
-		 */
-		downloadTemplet() {
-			this.$confirm({
-				title: '模板下载',
-				content: '确定要进行模板下载吗？',
-				okText: '确定',
-				cancelText: '取消',
-				onOk: async () => {
-					this.spinning = true
-					const res = await this.$http.get('/data/employee/downloadTemplet')
-					this.spinning = false
-					if (res) {
-						this.$message.success('模板下载成功!')
 					}
 				},
 			})
