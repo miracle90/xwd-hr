@@ -4,7 +4,8 @@ import {
   message
 } from 'ant-design-vue'
 
-const baseURL = 'http://hrsys.zero-yun.com'
+const baseURL = 'https://ehr.sunwoda.com'
+// const baseURL = 'http://hrsys.zero-yun.com'
 
 axios.defaults.baseURL = baseURL
 
