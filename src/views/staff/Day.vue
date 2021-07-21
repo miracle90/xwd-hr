@@ -280,7 +280,7 @@ export default {
 						limit,
 						employeeNumber,
 						employeeName,
-						yearMonth: yearMonth ? yearMonth.format('YYYY-MM') : null,
+						monthDay: yearMonth ? yearMonth.format('YYYY-MM') : null,
 					}
 					this.spinning = true
 					const res = await this.$http.get('/data/dayAttence/list', param)
