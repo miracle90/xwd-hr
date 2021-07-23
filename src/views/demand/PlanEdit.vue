@@ -387,7 +387,7 @@ export default {
 			this.form.validateFields(async (error, values) => {
 				if (!error) {
 					const supplierIdsArr = this.selectedRows.map((item) => item.id)
-					if (!supplierIdsArr || !supplierIdsArr.length) {
+					if (type === 1 && (!supplierIdsArr || !supplierIdsArr.length)) {
 						return	this.$message.error('请选择要发送的供应商')
 					}
 					const { demandBeginDate, demandEndDate, replyEndDate } = values
