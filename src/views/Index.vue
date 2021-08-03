@@ -1,15 +1,16 @@
 <template>
-	<a-layout class="index">
+	<a-layout class="index" :spinning="spinning">
 		<a-layout-sider class="container">
 			<h1 class="title">云劳务管理系统</h1>
 			<a-menu
-				:default-selected-keys="[$route.meta.selectKey]"
-				:default-open-keys="[$route.meta.openKey]"
+				v-if="menuList.length"
+				:default-selected-keys="[$route.meta.selectKey || '']"
+				:default-open-keys="[$route.meta.openKey || '']"
 				mode="inline"
 				theme="dark"
 				:inline-collapsed="collapsed"
 			>
-				<a-sub-menu v-for="(menu, index) in menuList" :key="`sub${index + 1}`">
+				<a-sub-menu v-for="menu in menuList" :key="menu.icon">
 					<span slot="title">
 						<a-icon :type="menu.icon" />
 						<span>{{ menu.title }}</span></span
@@ -81,6 +82,7 @@
 export default {
 	data() {
 		return {
+			spinning: false,
 			form: this.$form.createForm(this, { name: 'psd' }),
 			visible: false,
 			confirmLoading: false,
@@ -97,14 +99,21 @@ export default {
 		// }
 	},
 	mounted() {
+		console.log(this.$route)
 		this.getMenuList()
 	},
 	methods: {
 		async getMenuList() {
+			this.spinning = true
 			const res = await this.$http.get('/data/user/menu')
+			this.spinning = false
 			if (res) {
 				if (res.data && res.data.length) {
 					this.menuList = res.data
+					if (this.menuList[0].list && this.menuList[0].list.length) {
+						const { name } = this.menuList[0].list[0]
+						this.$router.push(`/${name}`)
+					}
 				} else {
 					this.$message.warning('暂无页面权限，请联系管理员添加！')
 					this.$router.push('/')

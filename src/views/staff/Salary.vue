@@ -232,8 +232,8 @@ export default {
 			headers: {
 				token: window.localStorage.getItem('token'),
 			},
-			customerList: [],
-			supplierList: [],
+			// customerList: [],
+			// supplierList: [],
 			queryOnJobDateStartTime: '',
 			queryOnJobDateEndTime: '',
 			spinning: false,
@@ -256,8 +256,8 @@ export default {
 		window.onresize = function () {
       this.tableHeight = document.documentElement.clientHeight - 420 + 'px'
     }
-		this.findCustomerList()
-		this.findSuppliersList()
+		// this.findCustomerList()
+		// this.findSuppliersList()
 		this.handleSearch()
 	},
 	methods: {
@@ -344,14 +344,14 @@ export default {
 		reset() {
 			this.form.resetFields()
 		},
-		async findCustomerList() {
-			const res = await this.$http.get('/data/customer/find')
-			this.customerList = res.data
-		},
-		async findSuppliersList() {
-			const res = await this.$http.get('/data/supplier/find')
-			this.supplierList = res.data
-		},
+		// async findCustomerList() {
+		// 	const res = await this.$http.get('/data/customer/find')
+		// 	this.customerList = res.data
+		// },
+		// async findSuppliersList() {
+		// 	const res = await this.$http.get('/data/supplier/find')
+		// 	this.supplierList = res.data
+		// },
 		/**
 		 * 删除
 		 */

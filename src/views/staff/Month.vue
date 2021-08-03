@@ -223,7 +223,7 @@ export default {
 			headers: {
 				token: window.localStorage.getItem('token'),
 			},
-			customerList: [],
+			// customerList: [],
 			supplierList: [],
 			queryOnJobDateStartTime: '',
 			queryOnJobDateEndTime: '',
@@ -247,7 +247,7 @@ export default {
 		window.onresize = function () {
       this.tableHeight = document.documentElement.clientHeight - 420 + 'px'
     }
-		this.findCustomerList()
+		// this.findCustomerList()
 		this.findSuppliersList()
 		this.handleSearch()
 	},
@@ -377,12 +377,12 @@ export default {
 		reset() {
 			this.form.resetFields()
 		},
-		async findCustomerList() {
-			const res = await this.$http.get('/data/customer/find')
-			if (res) {
-				this.customerList = res.data
-			}
-		},
+		// async findCustomerList() {
+		// 	const res = await this.$http.get('/data/customer/find')
+		// 	if (res) {
+		// 		this.customerList = res.data
+		// 	}
+		// },
 		async findSuppliersList() {
 			const res = await this.$http.get('/data/supplier/find')
 			if (res) {

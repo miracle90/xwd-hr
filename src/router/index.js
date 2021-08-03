@@ -24,14 +24,14 @@ const routes = [
     component: () => import('../views/Login.vue')
   },
   {
-    path: '/',
+    path: '/index',
     component: () => import('../views/Index.vue'),
     children: [
       {
         path: '/suppliers',
         component: () => import('../views/base/Suppliers.vue'),
         meta: {
-          openKey: 'sub1',
+          openKey: 'radar-chart',
           selectKey: '/suppliers',
           bread: ['基础数据', '供应商管理']
         }
@@ -41,7 +41,7 @@ const routes = [
         name: 'suppliersedit',
         component: () => import('../views/base/SuppliersEdit.vue'),
         meta: {
-          openKey: 'sub1',
+          openKey: 'radar-chart',
           selectKey: '/suppliers',
           bread: ['基础数据', '供应商管理-详情']
         }
@@ -50,7 +50,7 @@ const routes = [
         path: '/customer',
         component: () => import('../views/base/Customer.vue'),
         meta: {
-          openKey: 'sub1',
+          openKey: 'radar-chart',
           selectKey: '/customer',
           bread: ['基础数据', '客户管理']
         }
@@ -60,7 +60,7 @@ const routes = [
         name: 'customeredit',
         component: () => import('../views/base/CustomerEdit.vue'),
         meta: {
-          openKey: 'sub1',
+          openKey: 'radar-chart',
           selectKey: '/customer',
           bread: ['基础数据', '客户管理-详情']
         }
@@ -69,7 +69,7 @@ const routes = [
         path: '/plan',
         component: () => import('../views/demand/Plan.vue'),
         meta: {
-          openKey: 'sub2',
+          openKey: 'control',
           selectKey: '/plan',
           bread: ['供需协同', '需求计划']
         }
@@ -79,7 +79,7 @@ const routes = [
         name: 'planedit',
         component: () => import('../views/demand/PlanEdit.vue'),
         meta: {
-          openKey: 'sub2',
+          openKey: 'control',
           selectKey: '/plan',
           bread: ['供需协同', '需求计划-详情']
         }
@@ -89,7 +89,7 @@ const routes = [
         name: 'planaudit',
         component: () => import('../views/demand/PlanAudit.vue'),
         meta: {
-          openKey: 'sub2',
+          openKey: 'control',
           selectKey: '/plan',
           bread: ['供需协同', '需求计划-审核']
         }
@@ -98,7 +98,7 @@ const routes = [
         path: '/feedback',
         component: () => import('../views/demand/Feedback.vue'),
         meta: {
-          openKey: 'sub2',
+          openKey: 'control',
           selectKey: '/feedback',
           bread: ['供需协同', '需求反馈']
         }
@@ -107,7 +107,7 @@ const routes = [
         path: '/register',
         component: () => import('../views/demand/Register.vue'),
         meta: {
-          openKey: 'sub2',
+          openKey: 'control',
           selectKey: '/feedback',
           bread: ['供需协同', '需求反馈-需求登记']
         }
@@ -116,7 +116,7 @@ const routes = [
         path: '/reply',
         component: () => import('../views/demand/Reply.vue'),
         meta: {
-          openKey: 'sub2',
+          openKey: 'control',
           selectKey: '/feedback',
           bread: ['供需协同', '需求反馈-需求回复']
         }
@@ -125,7 +125,7 @@ const routes = [
         path: '/archives',
         component: () => import('../views/staff/Archives.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/archives',
           bread: ['员工管理', '员工档案']
         }
@@ -134,7 +134,7 @@ const routes = [
         path: '/archivesedit',
         component: () => import('../views/staff/ArchivesEdit.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/archives',
           bread: ['员工管理', '员工档案-详情']
         }
@@ -143,7 +143,7 @@ const routes = [
         path: '/month',
         component: () => import('../views/staff/Month.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/month',
           bread: ['员工管理', '月考勤数据']
         }
@@ -152,7 +152,7 @@ const routes = [
         path: '/monthedit',
         component: () => import('../views/staff/MonthEdit.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/month',
           bread: ['员工管理', '月考勤数据-详情']
         }
@@ -161,7 +161,7 @@ const routes = [
         path: '/day',
         component: () => import('../views/staff/Day.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/day',
           bread: ['员工管理', '日考勤数据']
         }
@@ -170,7 +170,7 @@ const routes = [
         path: '/salary',
         component: () => import('../views/staff/Salary.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/salary',
           bread: ['员工管理', '工资核算']
         }
@@ -179,7 +179,7 @@ const routes = [
         path: '/salaryedit',
         component: () => import('../views/staff/SalaryEdit.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/salary',
           bread: ['员工管理', '工资核算-详情']
         }
@@ -188,7 +188,7 @@ const routes = [
         path: '/borrow',
         component: () => import('../views/staff/Borrow.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/borrow',
           bread: ['员工管理', '预支管理']
         }
@@ -197,7 +197,7 @@ const routes = [
         path: '/borrowedit',
         component: () => import('../views/staff/BorrowEdit.vue'),
         meta: {
-          openKey: 'sub3',
+          openKey: 'user',
           selectKey: '/borrow',
           bread: ['员工管理', '预支管理-详情']
         }
@@ -206,7 +206,7 @@ const routes = [
         path: '/setting',
         component: () => import('../views/reimbursement/Setting.vue'),
         meta: {
-          openKey: 'sub4',
+          openKey: 'pay-circle',
           selectKey: '/setting',
           bread: ['返费管理', '返费设定']
         }
@@ -215,7 +215,7 @@ const routes = [
         path: '/settingedit',
         component: () => import('../views/reimbursement/SettingEdit.vue'),
         meta: {
-          openKey: 'sub4',
+          openKey: 'pay-circle',
           selectKey: '/setting',
           bread: ['返费管理', '返费设定-详情']
         }
@@ -224,7 +224,7 @@ const routes = [
         path: '/calculate',
         component: () => import('../views/reimbursement/Calculate.vue'),
         meta: {
-          openKey: 'sub4',
+          openKey: 'pay-circle',
           selectKey: '/calculate',
           bread: ['返费管理', '返费计算']
         }
@@ -233,7 +233,7 @@ const routes = [
         path: '/calculateedit',
         component: () => import('../views/reimbursement/CalculateEdit.vue'),
         meta: {
-          openKey: 'sub4',
+          openKey: 'pay-circle',
           selectKey: '/calculate',
           bread: ['返费管理', '返费计算-详情']
         }
@@ -242,7 +242,7 @@ const routes = [
         path: '/employee',
         component: () => import('../views/report/Employee.vue'),
         meta: {
-          openKey: 'sub5',
+          openKey: 'bar-chart',
           selectKey: '/employee',
           bread: ['报表分析', '员工花名册']
         }
@@ -251,7 +251,7 @@ const routes = [
         path: '/hirer',
         component: () => import('../views/system/Hirer.vue'),
         meta: {
-          openKey: 'sub6',
+          openKey: 'appstore',
           selectKey: '/hirer',
           bread: ['系统管理', '租户管理']
         }
@@ -260,7 +260,7 @@ const routes = [
         path: '/hireredit',
         component: () => import('../views/system/HirerEdit.vue'),
         meta: {
-          openKey: 'sub6',
+          openKey: 'appstore',
           selectKey: '/hirer',
           bread: ['系统管理', '租户管理-详情']
         }
@@ -269,7 +269,7 @@ const routes = [
         path: '/user',
         component: () => import('../views/system/User.vue'),
         meta: {
-          openKey: 'sub6',
+          openKey: 'appstore',
           selectKey: '/user',
           bread: ['系统管理', '用户管理']
         }
@@ -278,7 +278,7 @@ const routes = [
         path: '/useredit',
         component: () => import('../views/system/UserEdit.vue'),
         meta: {
-          openKey: 'sub6',
+          openKey: 'appstore',
           selectKey: '/user',
           bread: ['系统管理', '用户管理'],
           isDetail: true
@@ -288,7 +288,7 @@ const routes = [
         path: '/role',
         component: () => import('../views/system/Role.vue'),
         meta: {
-          openKey: 'sub6',
+          openKey: 'appstore',
           selectKey: '/role',
           bread: ['系统管理', '角色管理']
         }
@@ -297,7 +297,7 @@ const routes = [
         path: '/roleedit',
         component: () => import('../views/system/RoleEdit.vue'),
         meta: {
-          openKey: 'sub6',
+          openKey: 'appstore',
           selectKey: '/role',
           bread: ['系统管理', '角色管理'],
           isDetail: true

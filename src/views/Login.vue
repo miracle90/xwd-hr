@@ -78,7 +78,7 @@ export default {
 						const { token, id } = res.data
 						window.localStorage.setItem('token', token)
 						window.localStorage.setItem('xwdid', id)
-						this.$router.replace('/suppliers')
+						this.$router.replace('/index')
 					}
 				}
 			})

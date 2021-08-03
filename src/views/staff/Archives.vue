@@ -216,6 +216,11 @@ const columns = [
 		key: 'payrollCardInfo',
 	},
 	{
+		title: '身份证号码',
+		dataIndex: 'idCard',
+		key: 'idCard',
+	},
+	{
 		title: '性别',
 		dataIndex: 'sex',
 		key: 'sex',

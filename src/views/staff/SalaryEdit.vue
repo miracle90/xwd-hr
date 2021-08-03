@@ -357,7 +357,6 @@ import Moment from 'moment'
 export default {
 	data() {
 		return {
-			customerList: [],
 			supplierList: [],
 			previewVisible: false,
 			previewImage: '',
@@ -372,7 +371,6 @@ export default {
 		//
 	},
 	mounted() {
-		this.findCustomerList()
 		this.findSuppliersList()
 		const { id, type } = this.$route.query
 		if (id) {
@@ -413,12 +411,6 @@ export default {
 					deptName,
 					payrollCardInfo,
 				})
-			}
-		},
-		async findCustomerList() {
-			const res = await this.$http.get('/data/customer/find')
-			if (res) {
-				this.customerList = res.data
 			}
 		},
 		async findSuppliersList() {
